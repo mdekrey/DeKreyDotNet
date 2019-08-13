@@ -22,13 +22,14 @@ export class NavMenu extends Component<{}, { collapsed: boolean }> {
 
   render() {
     return (
-      <header>
-        <Link to="/">DeKreyDotNet</Link>
-        <ul className="navbar-nav flex-grow">
+      <header className="NavMenu">
+        {/*  */}
+        <Link to="/">DeKrey.Net</Link>
+        {/* <ul>
           <li>
-            <Link className="text-dark" to="/">Home</Link>
+            <Link to="/">Home</Link>
           </li>
-        </ul>
+        </ul> */}
       </header>
     );
   }

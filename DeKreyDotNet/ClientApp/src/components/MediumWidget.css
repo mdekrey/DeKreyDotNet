@@ -1,0 +1,6 @@
+.medium-widget-article__row .medium-widget-article__item {
+    border: 1px solid darkgray;
+    margin: 5px;
+    background-color: #fff;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.25);
+}
