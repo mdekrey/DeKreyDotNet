@@ -1,19 +1,20 @@
-import React, { Component } from 'react';
-import { Route } from 'react-router';
+import React from 'react';
+import { Route, Redirect, Switch } from 'react-router';
 import { Layout } from './components/Layout';
-import { Home } from './pages/Home';
+import { PaddedContainer } from './components/Container';
+import { RecentArticles } from './pages/RecentArticles';
+import { About } from './pages/About';
 
 import './custom.css'
-import { PaddedContainer } from './components/Container';
 
-export default class App extends Component {
-  static displayName = App.name;
-
-  render () {
-    return (
-      <Layout>
-        <Route exact path='/' render={() => <PaddedContainer><Home /></PaddedContainer>} />
-      </Layout>
-    );
-  }
+export default function App() {
+  return (
+    <Layout>
+      <Switch>
+        <Route exact path='/' render={() => <PaddedContainer><RecentArticles /></PaddedContainer>} />
+        <Route exact path='/about' render={() => <PaddedContainer><About /></PaddedContainer>} />
+        <Redirect to='/' />
+      </Switch>
+    </Layout>
+  );
 }
