@@ -1,6 +1,6 @@
 import React from 'react';
 import './Home.css';
-import { MediumWidget } from './MediumWidget';
+import { MediumWidget } from '../components/MediumWidget';
 
 
 export function Home() {
