@@ -7,7 +7,7 @@ import { Card, PaddedContainer } from '../components/Container';
 
 
 export function RecentArticles() {
-  const sorted = articles.map(_ => _).sort((a, b) => a.date.localeCompare(b.date));
+  const sorted = articles.map(_ => _).sort((a, b) => b.date.localeCompare(a.date));
 
   return (
     <div className="RecentArticles">
