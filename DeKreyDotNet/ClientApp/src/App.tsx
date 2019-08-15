@@ -11,10 +11,15 @@ export default function App() {
   return (
     <Layout>
       <Switch>
+        {renderArticleLinks()}
         <Route exact path='/' render={() => <PaddedContainer><RecentArticles /></PaddedContainer>} />
         <Route exact path='/about' render={() => <PaddedContainer><About /></PaddedContainer>} />
         <Redirect to='/' />
       </Switch>
     </Layout>
   );
+}
+
+function renderArticleLinks() {
+  return null;
 }

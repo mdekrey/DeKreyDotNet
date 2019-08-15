@@ -4,3 +4,53 @@
     padding: 1rem 0;
     opacity: 85%;
 }
+
+.RecentArticles .articleGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 0;
+    padding: 0;
+    grid-gap: 0.5rem;
+}
+
+.RecentArticles .CardLink {
+    display: block;
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.RecentArticles .CardLink > * {
+    height: 100%;
+}
+
+.RecentArticles .ArticleCard {
+    display: grid;
+    grid-template-rows: 1fr auto auto;
+}
+
+.RecentArticles .ArticleCard .image {
+    margin: 1rem;
+    background-color: #fff;
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    min-height: 20vw;
+}
+.RecentArticles .ArticleCard .textContent {
+    min-height: 2.8rem;
+    display: grid;
+    grid-template-rows: 1fr auto;
+}
+.RecentArticles .ArticleCard .title {
+    display: block;
+    min-height: 2rem;
+    font-weight: bold;
+    font-size: 0.9rem;
+    line-height: 1.2rem;
+}
+.RecentArticles .ArticleCard .date {
+    display: block;
+    opacity: 0.8;
+    font-size: 0.6rem;
+    text-align: right;
+}
