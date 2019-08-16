@@ -1,3 +1,6 @@
+.About {
+  max-width: 800px;
+}
 .About img.profile-photo {
   width: 3rem;
   height: 3rem;
@@ -14,4 +17,9 @@
     font-size: 2rem;
     padding: 1rem 0;
     opacity: 85%;
+}
+
+.About p {
+  font-size: 0.9rem;
+  line-height: 1.5em;
 }
