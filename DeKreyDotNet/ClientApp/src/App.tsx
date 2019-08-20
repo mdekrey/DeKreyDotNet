@@ -7,7 +7,7 @@ import { About } from './pages/About';
 
 import './custom.css'
 
-export default function App() {
+export function App() {
   return (
     <Layout>
       <Switch>
