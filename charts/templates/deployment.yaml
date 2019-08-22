@@ -1,0 +1,35 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: dekrey-dot-net
+  labels:
+    app: dekrey-dot-net
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dekrey-dot-net
+  template:
+    metadata:
+      labels:
+        app: dekrey-dot-net
+    spec:
+      imagePullSecrets:
+        - name: dekreyimages-registry
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+        - name: web
+          image: "dekreydotnet.azurecr.io/dekreydotnet:latest"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 3001
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http

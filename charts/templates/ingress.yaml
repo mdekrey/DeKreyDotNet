@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: dekrey-dot-net
+  labels:
+    app: dekrey-dot-net
+spec:
+  tls:
+    - hosts:
+      - dekrey.net
+      - www.dekrey.net
+      secretName: dekrey-net-tls
+  rules:
+    - host: dekrey.net
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: dekrey-dot-net
+              servicePort: 80
+    - host: www.dekrey.net
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: dekrey-dot-net
+              servicePort: 80
