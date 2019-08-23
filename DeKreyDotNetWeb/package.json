@@ -51,7 +51,9 @@
     "test": "cross-env CI=true react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "eslint ./src/",
-    "serve": "node ./server/bundle.js"
+    "serve": "node ./server/bundle.js",
+    "build-docker": "docker build . -t dekreydotnet.azurecr.io/dekreydotnet",
+    "start-docker": "docker run --rm -p3001:3001 dekreydotnet.azurecr.io/dekreydotnet:latest"
   },
   "browserslist": {
     "production": [
