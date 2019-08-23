@@ -2,11 +2,11 @@ FROM node:10 AS builder
 
 WORKDIR /src
 ADD package*.json ./
-RUN npm i
+RUN npm ci
 ADD . ./
 RUN npm run build-dist
 WORKDIR /src/dist
-RUN npm install --production
+RUN npm ci --production
 
 FROM node:10
 
