@@ -2,12 +2,11 @@ DeKrey.Net has so far been manually deployed, sorry the "charts" folder was a te
 
 # Basic namespace
 
-    kubectl create namespace basic
-
-WARNING: I was having issues running the following command, [similar issues as others have had](https://github.com/jetstack/cert-manager/issues/1255). I added the version number to bypass, as described in the ticket.
-
-    helm install --namespace basic --name letsencrypt stable/cert-manager --set ingressShim.defaultIssuerName=letsencrypt-staging --set ingressShim.defaultIssuerKind=ClusterIssuer --version 0.5.2
-    helm install --name nginx stable/nginx-ingress --namespace basic
+    kubectl create namespace cert-manager
+    kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml
+    helm repo add jetstack https://charts.jetstack.io  --version 0.14.0
+    helm install --namespace cert-manager --name cert-manager jetstack/cert-manager
+    helm install  --namespace nginx --name nginx stable/nginx-ingress
 
 # DeKrey-Dot-Net namespace
 
@@ -23,9 +22,9 @@ Using the output there, then run this:
 
 Then:
 
-    kubectl create -n dekrey-dot-net -f ./templates/deployment.yaml
-    kubectl create -n dekrey-dot-net -f ./templates/ingress.yaml
-    kubectl create -n dekrey-dot-net -f ./templates/service.yaml
-    kubectl create -n dekrey-dot-net -f ./templates/web-certificate.yaml
-    kubectl create -n dekrey-dot-net -f ./templates/production-issuer.yaml
+    kubectl -n dekrey-dot-net apply -f ./templates/deployment.yaml
+    kubectl -n dekrey-dot-net apply -f ./templates/ingress.yaml
+    kubectl -n dekrey-dot-net apply -f ./templates/service.yaml
+    kubectl -n dekrey-dot-net apply -f ./templates/production-issuer.yaml
+    kubectl -n dekrey-dot-net apply -f ./templates/web-certificate.yaml
 
