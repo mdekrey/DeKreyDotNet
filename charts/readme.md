@@ -18,7 +18,7 @@ Setting up the container registry:
 
 Using the output there, then run this:
 
-    kubectl create secret docker-registry <secret-name> --docker-server "<ContainerRegistry>.azurecr.io" --docker-username=<appId> --docker-password <password> -n dekrey-dot-net
+    kubectl -n dekrey-dot-net create secret docker-registry <secret-name> --docker-server "<ContainerRegistry>.azurecr.io" --docker-username=<appId> --docker-password <password>
 
 Then:
 
