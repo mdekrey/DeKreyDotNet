@@ -9,7 +9,7 @@ import React from "react"
 import { useStaticQuery, graphql } from "gatsby"
 
 import Header from "./header"
-import "./layout.css"
+import { Footer } from "./footer"
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const data = useStaticQuery(graphql`
@@ -23,23 +23,15 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   `)
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen font-sans text-gray-900">
       <Header siteTitle={data.site.siteMetadata.title} />
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: `0 1.0875rem 1.45rem`,
-        }}
-      >
-        <main>{children}</main>
-        <footer>
-          © {new Date().getFullYear()}, Built with
-          {` `}
-          <a href="https://www.gatsbyjs.org">Gatsby</a>
-        </footer>
-      </div>
-    </>
+
+      <main className="flex-1 w-full max-w-4xl px-4 py-8 mx-auto md:px-8 md:py-16">
+        {children}
+      </main>
+
+      <Footer />
+    </div>
   )
 }
 

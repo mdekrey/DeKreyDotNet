@@ -1,0 +1,83 @@
+---
+title: "Error Handling and your (REST) API"
+date: "2018-03-14"
+draft: false
+author: Matthew DeKrey
+tags:
+  - api
+  - error-handling
+  - debugging
+source: https://medium.com/@matt.dekrey/error-handling-and-your-rest-api-6473fb6bfbfe
+---
+
+Designing an API is not an easy thing. You need to make it easy to use. You want to make it provide all the information the consumer(s) need and keep it efficient for your server. You have all those semantic bits of your communication medium, too: if it's over the wire, REST is common, but if it's a library you need to consider your object references and who then is allowed to change the object and who owns it. Self-documenting, atomic vs eventual consistency, concurrency... And then you have the afterthought of most APIs: error handling.
+
+In a REST API, it's easy to say that it'll simply follow the HTTP status codes and be done with it ' but remember that every spec can be interpreted differently. 4XX error codes are when the user can fix it, but how involved is that? Do they need to use the login API first (401 Unauthorized, aka Not Authenticated?) Do they need to talk to the system admin and get their privileges escalated (403 Forbidden?) Do they need to wait some time (429 Too Many Requests?) Maybe make their request simpler (408 Request Timeout?) But wait, that last one is usually given as 502 Bad Gateway if you have a proxy server that timed out instead. So, which do _you_ use, and when, and how the API consumer could handle it starts to become an issue that needs to become documented, and probably use the response body that doesn't get defined for you. And then, of course, there's the generic 500 Internal Server Error.
+
+If you're writing a library for the same language, you usually have the advantage of being able to use various exception classes to group your errors; it's pretty trivial for a C# library consumer to tell the difference between a `NotImplementedException` and a `SqlException`. But class names should not be included in serialization layers and often aren't included in language interop layers. Even if the class name is included, the hierarchy won't be, and it'll be difficult to distinguish between the various expected exceptions.
+
+So, what is the API architect supposed to do?
+
+The common decision is to provide an error message. Most exception classes have a constructor parameter for them, and it makes it really easy to read the exception as a developer. Unfortunately, once you're writing text in your code, you have to think about your audience: Does it need to be localized? Is it meant for your internal engineers to debug, or your API consumer to debug, or is it meant for the user using the application designed by your API consumer? If it's not the latter, you need the API consumer to be able to distinguish between them to provide a message for the user. But, what about parameterized values? "The username field is required" is not an easy thing to parse... nor was it intended to be. The reality is that, even if your documentation states that exception messages are for the API consumers, not the end-users, if you give error messages like that, even if there's another way to do it, it'll still get displayed to the end-user.
+
+So, the next decision is often to swing the full opposite direction, since almost all developers have seen it elsewhere already: numeric error codes with a dictionary (or map) of additional data.
+
+![](./qvWMvdRY5jfcM2aC.png)
+
+How many of us like using CLI tools for more than simple scripting via Perl or Powershell? (Image from Ferris Bueller's Day Off.)
+
+Those are _obviously_ bad user experience to display, right? But then you have the API consumer nightmare of looking up the error codes in your documentation to figure out what they mean, and you have the internal developer nightmare of keeping track of what numbers are already used and maintaining the separate documentation. Error code 1001 is nowhere near as easy to understand. So much for self-documenting. There's got to be a better way!
+
+Developer-Readable Error Codes
+------------------------------
+
+Fortunately, we're developers. We read code all the time. `CamelCased`, `kebab-cased`, `snake_cased`, `mixedCase`\- it really doesn't matter to us, we can read it, and we already know we don't want to send it to the user. (Some of us do anyway. Don't be that developer.) These will often be immediately recognizable to API consumers (so long as they're speaking the language your documentation is written in), and can be easily handled. You can provide an additional dictionary along with it for more information such that your error message becomes something like the following.
+
+```
+{
+  "errorCode": "RequiredFieldMissing",
+  "data": { "field": "username" }
+}
+```
+
+Developers can switch based on those fields and come up with a great translation for users and customize it to their application. (Even better if your error code's `field` value matches your actual field name in the API, such as using C#'s `nameof` operator.)
+
+Don't forget about multiple errors! You may have a required field missing in one spot, but an invalid field elsewhere. Make providing an array standard at least for validation.
+
+What about the inheritance model? For that, I'd recommend looking at URNs.
+
+![](./zW4gs19G-9rgWW8R.jpg)
+
+No, I'm not suggesting checking out some pottery. ([Image thanks to Wikipedia user Txhorns79](https://commons.wikimedia.org/wiki/File:Selection_of_Undecorated_Newcomb_College_Pieces.jpg).)
+
+I mean [Universal Resource Names](https://en.wikipedia.org/wiki/Uniform_Resource_Name). If you're reading this, you know what a URL is, and your language of choice has probably started calling them URI's. URNs are the other side of that. (For more information, [Wikipedia has a great breakdown of URIs](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier), URNs, and URLs.) It'd be safe to assume the first part of a URN would be the same for every one of your error codes, so I typically just use their definition of a "namespace-specific string", or NSS. As a result, my error responses look more like the following:
+
+```
+\[
+  {
+    "errorCode": "validation:requiredFieldMissing",
+    "data": { "field": "newPassword" }
+  },
+  {
+    "errorCode": "validation:fieldInvalid",
+    "data": { "field": "email" }
+  }
+\]
+```
+
+An application that doesn't want to display error messages can highlight the fields according to the field property using any `validation:*` error codes that are received. For applications that do translation, they can remap not just the base message but also the field names. Also, a generic message could be used for any unhandled `validation`\-namespaced codes so that when the `validation:alreadyInUse` message pops up for email or username, we won't be left with an overly vague message.
+
+Gotchas
+-------
+
+There's a few catches that I've noticed to this approach.
+
+*   Do try to find a way to capture what error codes are used in your application. I'd recommend a simple class `new ErrorCode("validation:fieldInvalid")` that serializes as its string value so you can do a code inspection for those error codes to auto-document them.
+*   Don't use an enumeration class. While this solves how to capture the error codes for documentation, it breaks package dependency and specificity rules almost immediately (you need to put it in your core package, but it has specific messages to the leaf packages...) and becomes a nightmare to maintain as two developers modify it at the same time, causing constant merge conflicts.
+
+But, after all that, we have an error code system that is API-consumer-readable, allows for an application-specific message to be sent to the end-user, is self-documenting, and even allows for multiple issues to be handled. I think we have a winner!
+
+Thoughts, questions?
+--------------------
+
+Leave me a comment. If this helped you, please be sure to clap for it, as it'll help others find this article!
