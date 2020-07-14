@@ -1,9 +1,0 @@
-.Layout {
-    display: grid;
-    grid-template-rows: 2rem 1fr;
-    max-height: 100vh;
-}
-
-.Layout .content {
-    overflow: auto;
-}

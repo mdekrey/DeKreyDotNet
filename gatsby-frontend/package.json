@@ -37,8 +37,10 @@
     "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
-  },
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
+    "build-docker": "docker build . -t dekreydotnet.azurecr.io/dekreydotnet",
+    "start-docker": "docker run --rm -ti -p3001:80 dekreydotnet.azurecr.io/dekreydotnet:latest"
+ },
   "repository": {
     "type": "git",
     "url": "https://github.com/mdekrey/DeKreyDotNet.git"

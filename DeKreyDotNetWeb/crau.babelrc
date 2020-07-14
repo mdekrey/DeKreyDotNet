@@ -1,3 +1,0 @@
-{
-    "presets": ["babel-preset-react-app", "babel-preset-cra-universal"]
-  }
