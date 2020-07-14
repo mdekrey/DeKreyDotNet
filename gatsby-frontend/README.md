@@ -1,5 +1,4 @@
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
-cra-universal was also added for SSR.
+This project was made with GatsbyJS.
 
 To build the docker image:
 
