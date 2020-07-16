@@ -3,6 +3,8 @@
  *
  * See: https://www.gatsbyjs.org/docs/node-apis/
  */
+const { createFilePath } = require(`gatsby-source-filesystem`);
+const path = require('path');
 
 // You can delete this file if you're not using it
 exports.onCreateWebpackConfig = ({ stage, actions }) => {
@@ -15,4 +17,43 @@ exports.onCreateWebpackConfig = ({ stage, actions }) => {
       },
     })
   }
+}
+
+exports.onCreateNode = ({ node, getNode, actions }) => {
+  const { createNodeField } = actions;
+  if (node.internal.type === 'MarkdownRemark') {
+    const slug = path.dirname(createFilePath({ node, getNode, basePath: `pages` }));
+    createNodeField({ node, name: `slug`, value: slug, });
+    createNodeField({ node, name: `path`, value: `/articles${slug}/`, });
+  }
+}
+
+exports.createPages = async ({ graphql, actions }) => {
+  const { createPage } = actions;
+  const result = await graphql(`
+    query {
+      allMarkdownRemark {
+        edges {
+          node {
+            fields {
+              slug
+              path
+            }
+          }
+        }
+      }
+    }
+  `);
+
+  result.data.allMarkdownRemark.edges.forEach(({ node }) => {
+    createPage({
+      path: node.fields.path,
+      component: path.resolve(`./src/templates/article.tsx`),
+      context: {
+        // Data passed to context is available
+        // in page queries as GraphQL variables.
+        slug: node.fields.slug,
+      },
+    })
+  });
 }

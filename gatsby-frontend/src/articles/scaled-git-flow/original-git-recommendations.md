@@ -79,19 +79,19 @@ The primary types of branches are as follows:
 
 *   **Feature**. These represent the basic unit of business work that can be included or excluded from a release. In your ticketing system, they may correspond to epics, stories, bugs, or any other number of nomenclatures. They last until they are released, as bug fixes are applied directly to the features that the bug resulted from.
 
-![](./iAozYipX-cxXaDIw0lxGhQ.png)
+<img src="./iAozYipX-cxXaDIw0lxGhQ.png" alt="A feature branch with several commits branched from a service line." />
 
 Features are indicated as blue lines with small commit dots, with special commits being large dots.
 
 *   **Release Candidate**. These progress from being release candidates to released versions. No work should be done directly on a release candidate.
 
-![](./sfHAQiSu3nXZN1GY_wO0TQ.png)
+<img src="./sfHAQiSu3nXZN1GY_wO0TQ.png" alt="Two feature branches with several commits are repeatedly merged into a release candidate." />
 
 Release candidates are purple, and have their release version prefixed with \`rc\`.
 
 *   **Service Line**. These represent released versions of the product where patch releases and hotfixes are supported. When a product only needs one of these, it is often referred to as "master". No work should be done directly on a service line.
 
-![](./TA4m5vKPQXLMaM8ecuHskg.png)
+<img src="./TA4m5vKPQXLMaM8ecuHskg.png" alt="A release candidate is renamed into a service line. The service line is tagged 1.1.0. A new release candidate is branched from the service line, receives several commits, then merged into the service line and deleted. The service line is tagged 1.1.1" />
 
 Service lines are green and usually only have fast-forwards to them, so we don't put commit dots. These are also commits that are tagged with the release number. Red X's are used to indicate when a branch is deleted.
 
@@ -102,19 +102,27 @@ Secondary Branch Types
 
 *   **Hot Fix**. These are patches to an existing service line that can get tested individually. They act as a feature and release candidate as one, and are intended for quick individual fixes.
 
-![](./Ncasw2KGf-ZhXP8Gh6R6_w.png)
-
+<figure>
+<img src="./Ncasw2KGf-ZhXP8Gh6R6_w.png" alt="A hotfix is branched from a service line, has several commits, is merged to the service line and deleted. The service line is tagged 1.1.2." />
+<figcaption>
 Hotfixes are orange and labelled as such.
+</figcaption>
+</figure>
+
 
 *   **Infrastructure**. These are for development not tied to a specific feature, but can assist multiple features. These branches are be tied to a specific need of the development team, such as a database change, a framework update, etc. that has cross-cutting concerns, but may not have any business value and may not be tracked directly by management for QA. As a result, infrastructure does not release without a host feature and often releases in association with multiple features. (Some teams prefer to have other names, such as "framework" or "architecture" for these types of branches, especially given various business methodologies.)
 
-![](./UZn9If6gIy1w2HTX-32jew.png)
-
+<figure>
+<img src="./UZn9If6gIy1w2HTX-32jew.png" alt="An infrastructure branch has several commits, and a few features are branched from it, each with their own commits." />
+<figcaption>
 Infrastructure branches are blue in these examples, just like features
+</figcaption>
+</figure>
+
 
 *   **Integration**. These are for multiple features that have overlapping functionality, especially in the cases of merge conflicts, but also when there are special cases, such as bugs, that only occur when two or more specific branches (feature, infrastructure, or another integration branch) are merged together. Only these special cases should be worked on an integration branch.
 
-![](./KvSFtaogtuBlw05gz6bA8A.png)
+<img src="./KvSFtaogtuBlw05gz6bA8A.png" alt="A feature is merged into a release candidate. A merge conflict is detected on another feature branch, and so an integration branch is created between the two features, where they are merged together. The integration branch is merged into the release candidate." />
 
 Integration branches are grey, and the red circles show the branch that was attempted to be merged that had conflicts. The conflicting merge is cancelled, and a new integration branch is made immediately.
 
@@ -123,13 +131,13 @@ The Main Flow
 
 This is a basic summary of the whole flow, with more detailed information in the relevant sections.
 
-1.  The developer creates a feature branch from a service branch, infrastructure branch, prerequisite feature branch, or integration branch if multiple branches are required. (See [_Selecting a Starting Branch_](#bdc9).)
+1.  The developer creates a feature branch from a service branch, infrastructure branch, prerequisite feature branch, or integration branch if multiple branches are required. (See [_Selecting a Starting Branch_](#selecting-a-starting-branch).)
 2.  The developer makes all changes necessary for their feature in the feature branch. QA may happen on the feature branch directly to test the feature in isolation.
-3.  The developer merges the feature branch into the release candidate branch targeted for the feature if there are no conflicts. If there are conflicts, the developer needs to make an integration branch and merge that into the release candidate. (See [_Updating a Release Candidate_](#2691)_._)
-4.  If further changes need to be made on the feature, such as bug fixes unrelated to another feature, the changes should be done on the original branch and merged again into the release candidate. (See [_Updating a Release Candidate_](#2691)  and [_Creating a Release Candidate_](#abb1)_.)_
-5.  When the release candidate is approved (See [_Approving a Release Candidate_](#cb2b)) and is merged into a service line (note that if things are done right, this should be a fast-forward merge), the feature branch (and any infrastructure or integration branches that were in the service line) should be deleted from the remote. Other outstanding release candidate branches should be populated immediately with the service line updates if they were based on the release candidate.
+3.  The developer merges the feature branch into the release candidate branch targeted for the feature if there are no conflicts. If there are conflicts, the developer needs to make an integration branch and merge that into the release candidate. (See [_Updating a Release Candidate_](#updating-a-release-candidate)_._)
+4.  If further changes need to be made on the feature, such as bug fixes unrelated to another feature, the changes should be done on the original branch and merged again into the release candidate. (See [_Updating a Release Candidate_](#updating-a-release-candidate)  and [_Creating a Release Candidate_](#creating-a-release-candidate)_.)_
+5.  When the release candidate is approved (See [_Approving a Release Candidate_](#approving-a-release-candidate)) and is merged into a service line (note that if things are done right, this should be a fast-forward merge), the feature branch (and any infrastructure or integration branches that were in the service line) should be deleted from the remote. Other outstanding release candidate branches should be populated immediately with the service line updates if they were based on the release candidate.
 
-![](./rxmD7787HtwdgOrpT6Fj_g.png)
+<img src="./rxmD7787HtwdgOrpT6Fj_g.png" alt="A diagram indicating a service line 1.0, with an infrastructure branch, and a few features, where the feature branches are merged into a new release candidate. The release candidate is renamed to a service line 1.1, tagged as 1.1.0. Finally the infrastructure, features, and release candidate branches are deleted." />
 
 Selecting a Starting Branch
 ===========================
@@ -142,7 +150,7 @@ This is likely the most difficult part of this branching strategy for most devel
 4.  If no features are required, branch from an infrastructure branch if one is needed. The new branch should be kept branch up-to-date with the upstream branch.
 5.  If no infrastructure or other feature is required, branch from a service line. The service line should either be the latest (for new work) or the service line that the feature will go into (for enhancing previous work or lower versions,) but there are other service line strategies. The new branch should be kept up-to-date with the upstream branch.
 
-![](./pciRIsGsof-u6KdUEYETSA.png)
+<img src="./pciRIsGsof-u6KdUEYETSA.png" alt="Feature A and an infastructure branch are merged together in an integration branch. Feature B is created from the integration branch. A commit is applied to the infrastructure branch, which is merged to the integration branch, and then the integration branch is merged into feature B." />
 
 Integrating multiple branches before branching from them keeps feature-b isolated from conflicts between feature-a and the infrastructure.
 
@@ -156,7 +164,7 @@ Creating a release candidate is fortunately fairly straightforward.
 1.  Branch from either a service line or a preceding release candidate if one is still in progress when you need to begin preparing for the next release. (When getting started with this flow, a release candidate may be created from any feature, too.)
 2.  Merge any and all other branches that are being considered for the release, preferring integration branches. (Infrastructure branches should not be directly merged for release candidates, as they are not related to business needs; instead, merge the features that include them.) If any conflicts occur, an integration branch must be made first.
 
-![](./DzKKEAaU05OzLyR5QxB0fA.png)
+<img src="./DzKKEAaU05OzLyR5QxB0fA.png" alt="A release candidate 1.0.1 is created from a service line 1.0. A release candidate 1.1.0 is also created from the 1.0.1 release candidate. 1.0.1 is merged into service line 1.0 and deleted. The service line is tagged 1.0.1 and merged into the release candidate 1.1.0. A few more commits are added, and the release candidate 1.1.0 is renamed into service line 1.1 and tagged as 1.1.0." />
 
 You can prepare for multiple upcoming releases at the same time, splitting features between release candidates. (Features omitted for brevity.)
 
@@ -165,15 +173,15 @@ Updating a Release Candidate
 
 Anytime a release candidate is updated with fresh feature code, follow this process.
 
-1.  Downstream release candidates should be immediately merged into with the new changes. (Note: conflicts may arise here; if they do, create integration branches again with the conflicting features. See [_Rebuilding a Release Candidate_](#2bae).)
+1.  Downstream release candidates should be immediately merged into with the new changes. (Note: conflicts may arise here; if they do, create integration branches again with the conflicting features. See [_Rebuilding a Release Candidate_](#rebuilding-a-release-candidate).)
 
 Release candidates should have no other types of downstream branches.
 
-![](./ukH4c5Bt5avuZrOXaYAtBA.png)
+<img src="./ukH4c5Bt5avuZrOXaYAtBA.png" alt="Three feature branches (A, B, and C) exist, as does release candidate 1.0.1. A new release candidate 1.1.0 is created from release candidate 1.0.1. Feature C is merged into 1.1.0. Feature A is merged into 1.0.1 which is in turn merged into 1.1.0." />
 
 Keep propagating downstream.
 
-To remove code from a release candidate, see [_Rebuilding a Release Candidate_](#2bae).
+To remove code from a release candidate, see [_Rebuilding a Release Candidate_](#rebuilding-a-release-candidate).
 
 Approving a Release Candidate
 =============================
@@ -184,9 +192,9 @@ After any business practices required to approve a release candidate, such as QA
 2.  The code tagged gets merged into the corresponding service line. (Note that if things are done correctly, this will be a fast-forward merge.)
 3.  Delete any branches that were in the release candidate. Also delete the release candidate itself.
 4.  Treat anything that was based on the release candidate as now being based upon the new service line.
-5.  Follow the instructions in [_Updating a Service Line_](#af57). Don't forget anything that was previously based on the old release candidate, such as other release candidates.
+5.  Follow the instructions in [_Updating a Service Line_](#updating-a-service-line). Don't forget anything that was previously based on the old release candidate, such as other release candidates.
 
-![](./2doZrjJ5-Tuca4R3kQrCvQ.png)
+<img src="./2doZrjJ5-Tuca4R3kQrCvQ.png" alt="A feature is merged into a Release Candidate. The release candidate is merged into the service line and the service line is tagged. Both the feature and the release candidate branches are deleted." />
 
 Here, the tag is shown on the service line instead of the commit, but it's also a fast-forward; all tags end up on a service line eventually, so it's just easier to visualize them there.
 
@@ -198,9 +206,9 @@ Because there's lots of code based off of a service line, the process of updatin
 1.  The direct downstream service lines should be immediately merged into with the new changes.(Note: Conflicts may arise here, and should be reviewed by developers that made the change to determine how to solve it in the later service line.)
 2.  If there are integration branches that have had all but one of their features included in the service branch update (for example, integration of features A and B when the service line update includes A, or integration of features A, B, and C when the service line update includes A and B), the integration branch should be merged into the remaining feature and then deleted. (This allows us to resolve the conflicts the same way as we did before without having to do them again. You may still get other conflicts from the next step, but not the same ones as were in a known integration branch.)
 3.  Any downstream integration or feature branches should be immediately merged into with the new changes. (Note: conflicts may arise here. Those should be left to the developers of the integration/feature branches.)
-4.  Any downstream release candidates from an updated service line should be immediately merged with the new changes. (Note: conflicts may arise here. If supporting being able to drop features from a release candidate, see [_Rebuilding a Release Candidate_](#2bae).)
+4.  Any downstream release candidates from an updated service line should be immediately merged with the new changes. (Note: conflicts may arise here. If supporting being able to drop features from a release candidate, see [_Rebuilding a Release Candidate_](#rebuilding-a-release-candidate).)
 
-![](./QHu5giKSn_b9kn4aT6yWDA.png)
+<img src="./QHu5giKSn_b9kn4aT6yWDA.png" alt="A complex branching diagram, showing conflicts with integration branches, simultaneous service lines, and re-integration of integration branches." />
 
 Step 1 is displayed from 1.0 to 1.1. Step 2 is represented with integration-a-c into feature-c. Step 3 is shown for 1.0 to feature-c. Step 4 is indicated by 1.0 to rc1.0.3.
 
@@ -210,10 +218,10 @@ Hotfixes
 When working a hotfix:
 
 1.  The developer creates a hotfix branch from the earliest service line branch to which the hotfix applies.
-2.  The developer makes all changes necessary for the hotfix. QA may happen on the hotfix branch, assuming only one hotfix is being made for the release. Otherwise, a new release candidate branch should be made and the hotfix branches get treated like feature branches. (See [_The Main Flow_](#49e4) instead.)
-3.  When the hotfix is approved, it works as a release candidate: it is merged into the service line (again, note that if things are done correctly, this should be a fast-forward merge) and removed. (See [_Updating a Service Line_](#af57).)
+2.  The developer makes all changes necessary for the hotfix. QA may happen on the hotfix branch, assuming only one hotfix is being made for the release. Otherwise, a new release candidate branch should be made and the hotfix branches get treated like feature branches. (See [_The Main Flow_](#the-main-flow) instead.)
+3.  When the hotfix is approved, it works as a release candidate: it is merged into the service line (again, note that if things are done correctly, this should be a fast-forward merge) and removed. (See [_Updating a Service Line_](#updating-a-service-line).)
 
-![](./Ncasw2KGf-ZhXP8Gh6R6_w.png)
+<img src="./Ncasw2KGf-ZhXP8Gh6R6_w.png" alt="A hotfix is branched from a service line, has several commits, is merged to the service line and deleted. The service line is tagged 1.1.2." />
 
 Rebuilding a Release Candidate
 ==============================
@@ -222,10 +230,10 @@ Rebuilding a release candidate is costly without automation, but is the surest w
 
 1.  Delete the old release candidate.
 2.  Recreate the release candidate from the same parent branch.
-3.  Merge all the desired features and integration branches in. These should not conflict if developers have been making the appropriate integration branches along the way. If there are conflicts, exclude the branch and require an integration branch, as in [_The Main Flow_](#49e4).
+3.  Merge all the desired features and integration branches in. These should not conflict if developers have been making the appropriate integration branches along the way. If there are conflicts, exclude the branch and require an integration branch, as in [_The Main Flow_](#the-main-flow).
 4.  Rebuild all downstream release candidates, if any. Consider adding the excluded features in one of the downstream release candidates.
 
-![](./joL429eoIXN4xaZeC64j3A.png)
+<img src="./joL429eoIXN4xaZeC64j3A.png" alt="A release candidate is deleted when one of the features is removed from the release and the release candidate is rebuilt from the original branches." />
 
 Eliminating feature-c from release version 1.0.0 allowed us to get the release out to customers according to our marketing release schedule. Afterwards, the beta was no longer needed, so we removed the service line, and kept the merge conflict resolution we already had between feature-b and feature-c without maintaining the extra branch.
 
@@ -234,7 +242,7 @@ Switching Over
 
 Starting out with a branching strategy is easiest, but only happens so often. The reality is that this process is pretty easy to adopt: you can start with a single branch (such as your old `develop` branch) and treat it as infrastructure. From that point on, branch from it as though it were infrastructure, and start building up to release lines. A full example is below.
 
-![](./T1--Vq3kSk8MgrXtcqMgGA.png)
+<img src="./T1--Vq3kSk8MgrXtcqMgGA.png" alt="A long branching diagram that covers much of what we've already gone through, starting from a single 'infrastructure' branch that may or may not have previously been called develop." />
 
 Yep, there's a lot going on here, but it's all covered!
 

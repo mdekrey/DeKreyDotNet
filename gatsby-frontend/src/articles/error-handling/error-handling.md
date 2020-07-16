@@ -22,18 +22,23 @@ The common decision is to provide an error message. Most exception classes have 
 
 So, the next decision is often to swing the full opposite direction, since almost all developers have seen it elsewhere already: numeric error codes with a dictionary (or map) of additional data.
 
-![](./qvWMvdRY5jfcM2aC.png)
 
+<figure>
+<img src="./qvWMvdRY5jfcM2aC.png" alt="Classroom of kids looking inattentive and bored" />
+<figcaption>
 How many of us like using CLI tools for more than simple scripting via Perl or Powershell? (Image from Ferris Bueller's Day Off.)
+</figcaption>
+</figure>
+
 
 Those are _obviously_ bad user experience to display, right? But then you have the API consumer nightmare of looking up the error codes in your documentation to figure out what they mean, and you have the internal developer nightmare of keeping track of what numbers are already used and maintaining the separate documentation. Error code 1001 is nowhere near as easy to understand. So much for self-documenting. There's got to be a better way!
 
 Developer-Readable Error Codes
 ------------------------------
 
-Fortunately, we're developers. We read code all the time. `CamelCased`, `kebab-cased`, `snake_cased`, `mixedCase`\- it really doesn't matter to us, we can read it, and we already know we don't want to send it to the user. (Some of us do anyway. Don't be that developer.) These will often be immediately recognizable to API consumers (so long as they're speaking the language your documentation is written in), and can be easily handled. You can provide an additional dictionary along with it for more information such that your error message becomes something like the following.
+Fortunately, we're developers. We read code all the time. `CamelCased`, `kebab-cased`, `snake_cased`, `mixedCase` - it really doesn't matter to us, we can read it, and we already know we don't want to send it to the user. (Some of us do anyway. Don't be that developer.) These will often be immediately recognizable to API consumers (so long as they're speaking the language your documentation is written in), and can be easily handled. You can provide an additional dictionary along with it for more information such that your error message becomes something like the following.
 
-```
+```json
 {
   "errorCode": "RequiredFieldMissing",
   "data": { "field": "username" }
@@ -46,14 +51,17 @@ Don't forget about multiple errors! You may have a required field missing in one
 
 What about the inheritance model? For that, I'd recommend looking at URNs.
 
-![](./zW4gs19G-9rgWW8R.jpg)
-
-No, I'm not suggesting checking out some pottery. ([Image thanks to Wikipedia user Txhorns79](https://commons.wikimedia.org/wiki/File:Selection_of_Undecorated_Newcomb_College_Pieces.jpg).)
+<figure>
+<img src="./zW4gs19G-9rgWW8R.jpg" alt="Pottery" />
+<figcaption>
+No, I'm not suggesting checking out some pottery. (<a href="https://commons.wikimedia.org/wiki/File:Selection_of_Undecorated_Newcomb_College_Pieces.jpg">[Image thanks to Wikipedia user Txhorns79]</a>.)
+</figcaption>
+</figure>
 
 I mean [Universal Resource Names](https://en.wikipedia.org/wiki/Uniform_Resource_Name). If you're reading this, you know what a URL is, and your language of choice has probably started calling them URI's. URNs are the other side of that. (For more information, [Wikipedia has a great breakdown of URIs](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier), URNs, and URLs.) It'd be safe to assume the first part of a URN would be the same for every one of your error codes, so I typically just use their definition of a "namespace-specific string", or NSS. As a result, my error responses look more like the following:
 
-```
-\[
+```json
+[
   {
     "errorCode": "validation:requiredFieldMissing",
     "data": { "field": "newPassword" }
@@ -62,7 +70,7 @@ I mean [Universal Resource Names](https://en.wikipedia.org/wiki/Uniform_Resource
     "errorCode": "validation:fieldInvalid",
     "data": { "field": "email" }
   }
-\]
+]
 ```
 
 An application that doesn't want to display error messages can highlight the fields according to the field property using any `validation:*` error codes that are received. For applications that do translation, they can remap not just the base message but also the field names. Also, a generic message could be used for any unhandled `validation`\-namespaced codes so that when the `validation:alreadyInUse` message pops up for email or username, we won't be left with an overly vague message.

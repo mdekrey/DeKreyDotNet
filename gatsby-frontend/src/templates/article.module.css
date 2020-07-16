@@ -1,0 +1,42 @@
+.article {
+    @apply mx-auto;
+    @screen md {
+        @apply w-10/12;
+    }
+}
+.header {
+    & h1 {
+        @apply font-serif font-normal;
+    }
+}
+.subheader {
+    @apply text-gray-500 text-sm;
+}
+.markdown {
+    & p, & li {
+        @apply font-serif font-normal;
+    }
+
+    & p, & h5, & li {
+        @apply text-xl;
+    }
+
+    & h1 {
+        @apply mt-8;
+    }
+
+    & figcaption {
+        @apply mt-2 text-center text-gray-600 text-sm;
+    }
+
+    & ol {
+        @apply list-decimal ml-16;
+    }
+    & ul {
+        @apply list-disc ml-16;
+    }
+
+    & pre {
+        @apply my-8;
+    }
+}

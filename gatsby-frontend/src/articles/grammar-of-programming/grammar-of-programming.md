@@ -15,16 +15,20 @@ The problem that's been on my mind lately has been naming, and I like solving it
 
 Many of the same terms get used in slightly different ways between various languages, and even language types. So why is that? Well, interestingly, it comes down to language... and I really mean spoken language, not coded language.
 
-![](./VrNJvO2hYP_SKuuw.png)
+<figure>
+<img src="./VrNJvO2hYP_SKuuw.png" alt="Man: If you learned to speak Lojban, your communication would be completely unambiguous and logical. Man in black hat: Yeah, but it would all be with the kind of people who learn Lojban." />
+<figcaption>
+If you learned to write (insert language here)... Source: <a href="https://xkcd.com/191/">https://xkcd.com/191/</a>
+</figcaption>
+</figure>
 
-If you learned to write (insert language here)... Source: [https://xkcd.com/191/](https://xkcd.com/191/)
 
 What's in a Language?
 ---------------------
 
 Personally, I like my software to actually be able to read like a list of instructions that could be read out loud and make sense:
 
-```
+```js
 if (system.hasErred()) {
     system.recover();
 } else {
@@ -36,7 +40,7 @@ In this completely arbitrary example, you still need to understand the syntax im
 
 My first struggle with functional languages was that I felt like I was speaking like Yoda when I read it out loud:
 
-```
+```fsharp
 if(hasErred(system), recover(system), handle(command, system))
 ```
 
@@ -44,7 +48,7 @@ But, then I remembered some of my language background outside of computer scienc
 
 There is a type of statement in English where the subject takes the background and the object gets more focus: they're imperative statements. As it turns out, another name for procedural languages is "imperative" languages. "Imperative" statements in English leave out the implied subject: "you". In this case, "you" refers to the processor, program, or system at large, since we are instructing the computer.
 
-```
+```js
 if (hasErred(system)) {
   recover(system);
 } else {
