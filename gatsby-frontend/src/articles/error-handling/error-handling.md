@@ -54,7 +54,7 @@ What about the inheritance model? For that, I'd recommend looking at URNs.
 <figure>
 <img src="./zW4gs19G-9rgWW8R.jpg" alt="Pottery" />
 <figcaption>
-No, I'm not suggesting checking out some pottery. (<a href="https://commons.wikimedia.org/wiki/File:Selection_of_Undecorated_Newcomb_College_Pieces.jpg">[Image thanks to Wikipedia user Txhorns79]</a>.)
+No, I'm not suggesting checking out some pottery. (<a href="https://commons.wikimedia.org/wiki/File:Selection_of_Undecorated_Newcomb_College_Pieces.jpg">Image thanks to Wikipedia user Txhorns79</a>.)
 </figcaption>
 </figure>
 

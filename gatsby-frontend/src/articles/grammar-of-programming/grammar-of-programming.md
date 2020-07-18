@@ -1,6 +1,6 @@
 ---
 title: "Grammar of Programming"
-date: "2018-03-14"
+date: "2017-05-29"
 draft: false
 author: Matthew DeKrey
 tags: []

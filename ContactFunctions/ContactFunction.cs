@@ -21,14 +21,6 @@ namespace ContactFunctions
             .AddEnvironmentVariables()
             .Build();
 
-        public struct ContactForm
-        {
-            [JsonProperty("name")] public string Name { get; set; }
-            [JsonProperty("email")] public string Email { get; set; }
-            [JsonProperty("body")] public string Body { get; set; }
-        }
-
-
         [FunctionName("ContactMatt")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
