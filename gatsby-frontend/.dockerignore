@@ -70,3 +70,5 @@ yarn-error.log
 
 README.md
 .dockerignore
+Dockerfille
+azure-pipelines.yml
