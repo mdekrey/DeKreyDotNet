@@ -30,7 +30,7 @@ namespace ContactFunctions
             {
                 var client = new SendGridClient(config["SendGridApiKey"]);
                 var from = new EmailAddress("contact@dekrey.net", "Contact Form");
-                var subject = $"{req.Form["name"]} via DeKrey.Net Contact Form";
+                var subject = $"{req.Form["name"]} via DeKrey.NET Contact Form";
                 var to = new EmailAddress("mattdekrey@gmail.com", "Matt DeKrey");
                 var plainTextContent = $@"{req.Form["name"]} <{req.Form["email"]}> writes...
 

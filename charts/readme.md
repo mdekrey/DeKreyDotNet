@@ -1,4 +1,4 @@
-DeKrey.Net has so far been manually deployed, sorry the "charts" folder was a tease.
+DeKrey.NET has so far been manually deployed, sorry the "charts" folder was a tease.
 
 # Basic namespace
 

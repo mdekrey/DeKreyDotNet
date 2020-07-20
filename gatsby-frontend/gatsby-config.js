@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
-    title: `DeKrey.Net`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
+    title: `DeKrey.NET`,
+    description: `Personal articles and profile of Matt DeKrey`,
     author: `@mdekrey`
   },
   plugins: [
