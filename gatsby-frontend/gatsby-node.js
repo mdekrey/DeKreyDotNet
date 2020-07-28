@@ -5,6 +5,7 @@
  */
 const { createFilePath } = require(`gatsby-source-filesystem`);
 const path = require('path');
+const { fmImagesToRelative } = require('gatsby-remark-relative-images');
 
 exports.onCreateWebpackConfig = ({ stage, actions }) => {
   if (stage.startsWith("develop")) {
@@ -19,6 +20,8 @@ exports.onCreateWebpackConfig = ({ stage, actions }) => {
 }
 
 exports.onCreateNode = ({ node, getNode, actions }) => {
+  fmImagesToRelative(node);
+
   const { createNodeField } = actions;
   if (node.internal.type === 'MarkdownRemark') {
     const slug = path.dirname(createFilePath({ node, getNode, basePath: `pages` }));

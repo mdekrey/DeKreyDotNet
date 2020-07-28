@@ -2,12 +2,15 @@ import React from "react"
 import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import articleStyles from "./article.module.css"
+import SEO from "../components/seo";
 
 
 export default function Article({ data }: { data: any }) {
   const post = data.markdownRemark;
+  console.log(post);
   return (
     <Layout>
+      <SEO title={post.frontmatter.title} image={post.frontmatter.image?.publicURL} />
       <article className={articleStyles.article}>
         <header className={articleStyles.header}>
             <h1>{post.frontmatter.title}</h1>
@@ -30,6 +33,9 @@ export const query = graphql`
         author
         source
         tags
+        image {
+          publicURL
+        }
       }
     }
   }

@@ -13,12 +13,13 @@ const AboutPage = () => {
               ...GatsbyImageSharpFluid
             }
           }
+          publicURL
         }
       }
 `);
     return (
         <Layout>
-            <SEO title="About Matt DeKrey" />
+            <SEO title="About Matt DeKrey" image={data.headshot.publicURL} />
 
             <Img fluid={data.headshot.childImageSharp.fluid} className="w-20 h-20 rounded-full inline-flex items-center justify-center float-left m-2" alt="Matt DeKrey headshot" />
 

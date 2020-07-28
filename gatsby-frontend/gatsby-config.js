@@ -29,6 +29,7 @@ module.exports = {
         plugins: [
           `@weknow/gatsby-remark-twitter`,
           `gatsby-remark-slug`,
+          `gatsby-remark-relative-images`,
           {
             resolve: `gatsby-remark-images`,
             options: {

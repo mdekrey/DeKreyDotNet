@@ -9,7 +9,16 @@ import React from "react"
 import { Helmet } from "react-helmet"
 import { useStaticQuery, graphql } from "gatsby"
 
-function SEO({ description, lang, meta = [], title }: { description?: string, lang?: string, meta?: { name: string, content: string }[], title: string }) {
+function SEO({ description, lang, meta = [], title, image: metaImage }: {
+  description?: string;
+  lang?: string;
+  meta?: {
+    name: string;
+    content: string
+  }[];
+  title: string;
+  image?: string;
+}) {
   const { site } = useStaticQuery(
     graphql`
       query {
@@ -24,7 +33,8 @@ function SEO({ description, lang, meta = [], title }: { description?: string, la
     `
   )
 
-  const metaDescription = description || site.siteMetadata.description
+  const metaDescription = description || site.siteMetadata.description;
+  console.log({metaImage});
 
   return (
     <Helmet
@@ -46,6 +56,10 @@ function SEO({ description, lang, meta = [], title }: { description?: string, la
           property: `og:description`,
           content: metaDescription,
         },
+        ...(metaImage ? [{
+          property: `og:image`,
+          content: metaImage,
+        }] : []),
         {
           property: `og:type`,
           content: `website`,

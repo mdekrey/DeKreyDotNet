@@ -6,6 +6,7 @@ author: Matthew DeKrey
 tags:
   - serverless
   - signalr
+image: ./games-architecture.png
 ---
 
 I enjoy classical games. Simple rules that combine in interesting ways are the

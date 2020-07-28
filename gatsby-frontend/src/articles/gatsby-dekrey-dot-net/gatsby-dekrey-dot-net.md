@@ -9,6 +9,7 @@ tags:
   - gatsbyjs
   - react
   - markdown
+image: ./architecture.png
 ---
 
 I don't like maintenance. I prefer to make things that can just continue to run
