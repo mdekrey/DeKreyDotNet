@@ -32,6 +32,8 @@ h5 {
     @apply text-lg;
 }
 
-main p, main ul, main ol {
-    @apply my-4;
+main {
+    & p, & ul, & ol, & li {
+        @apply my-4;
+    }
 }

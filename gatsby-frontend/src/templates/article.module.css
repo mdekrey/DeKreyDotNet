@@ -39,4 +39,8 @@
     & pre {
         @apply my-8;
     }
+
+    :global(.twitter-tweet-rendered) {
+        @apply mx-auto;
+    }
 }

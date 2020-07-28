@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "author": "Matt DeKrey <matt.dekrey@gmail.com>",
   "dependencies": {
+    "@weknow/gatsby-remark-twitter": "^0.2.3",
     "gatsby": "^2.23.12",
     "gatsby-cli": "^2.12.62",
     "gatsby-image": "^2.4.9",
