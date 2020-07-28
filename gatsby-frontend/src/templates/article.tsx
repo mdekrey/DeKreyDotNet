@@ -7,7 +7,6 @@ import SEO from "../components/seo";
 
 export default function Article({ data }: { data: any }) {
   const post = data.markdownRemark;
-  console.log(post);
   return (
     <Layout>
       <SEO title={post.frontmatter.title} image={post.frontmatter.image?.publicURL} />

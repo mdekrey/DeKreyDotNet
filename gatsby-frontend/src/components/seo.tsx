@@ -27,14 +27,15 @@ function SEO({ description, lang, meta = [], title, image: metaImage }: {
             title
             description
             author
+            url
           }
         }
       }
     `
   )
 
+  const rootUrl = (site.siteMetadata.url as string).replace(/\/$/, "");
   const metaDescription = description || site.siteMetadata.description;
-  console.log({metaImage});
 
   return (
     <Helmet
@@ -58,7 +59,7 @@ function SEO({ description, lang, meta = [], title, image: metaImage }: {
         },
         ...(metaImage ? [{
           property: `og:image`,
-          content: metaImage,
+          content: rootUrl + metaImage,
         }] : []),
         {
           property: `og:type`,
