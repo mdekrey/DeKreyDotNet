@@ -73,7 +73,7 @@ namespace ContactFunctions
         {
             var client = new SendGridClient(config["SendGridApiKey"]);
             var response = await client.SendEmailAsync(msg).ConfigureAwait(false);
-            var isSuccess = response.StatusCode != System.Net.HttpStatusCode.Accepted;
+            var isSuccess = response.StatusCode == System.Net.HttpStatusCode.Accepted;
             if (!isSuccess)
             {
                 var responseBody = await response.Body.ReadAsStringAsync();
