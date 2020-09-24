@@ -120,7 +120,7 @@ This is bad!
 
 Why is this bad? 0.1.1 was not in 0.2 before, but it gets merged into 0.2 with hotfix-2. If there were serious merge conflicts with hotfix-1 like we described above (the code was moved away), we'd need to handle that again when we do hotfix-2, without the clarity of it coming from the original hotfix-1. On top of that, it could be months away, with a change in the dev team!
 
-Git is built specifically to handle these cases better than the preceeding versioning systems. So, please make sure your hotfix tree looks like this:
+Git is built specifically to handle these cases better than the preceding versioning systems. So, please make sure your hotfix tree looks like this:
 
 <figure>
 <img src="./-VEkzpicHphO4lXgfKOlIQ.png" alt="A new main line 0.2 is created from 0.1. A hotfix is then created from 0.1 and merged into 0.1. 0.1 is then merged to 0.2. Another hotfix is created from 0.1 and merged into 0.1. 0.1 is then merged to 0.2." />
