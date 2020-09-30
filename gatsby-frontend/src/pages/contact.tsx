@@ -4,7 +4,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { useStaticQuery, graphql } from "gatsby";
 import { load } from "recaptcha-v3";
-
+import { isSSR } from "../utils/isSSR";
 
 const ContactPage = () => {
     const recaptchaInput = useRef<HTMLInputElement | null>(null);
@@ -17,13 +17,13 @@ const ContactPage = () => {
         }
       }
 `);
-    const recaptchaPromise = useMemo(() => load('6LdfwM8ZAAAAAOt9J_lEGUcHeWsTGpYBOaSpZB4x'), []);
+    const recaptchaPromise = useMemo(() => isSSR() ? undefined : load('6LdfwM8ZAAAAAOt9J_lEGUcHeWsTGpYBOaSpZB4x'), []);
 
     const getRecaptchaAndSubmit = useCallback(async () => {
         if (!form.current) return;
         if (!recaptchaInput.current) return;
 
-        const recaptcha = await recaptchaPromise;
+        const recaptcha = await recaptchaPromise!;
         const token = await recaptcha.execute('submit');
         recaptchaInput.current.value = token;
         form.current.submit();
