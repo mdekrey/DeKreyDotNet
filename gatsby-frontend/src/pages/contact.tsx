@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react"
+import React, { useCallback, useRef, useMemo } from "react"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
@@ -17,15 +17,17 @@ const ContactPage = () => {
         }
       }
 `);
+    const recaptchaPromise = useMemo(() => load('6LdfwM8ZAAAAAOt9J_lEGUcHeWsTGpYBOaSpZB4x'), []);
+
     const getRecaptchaAndSubmit = useCallback(async () => {
         if (!form.current) return;
         if (!recaptchaInput.current) return;
 
-        const recaptcha = await load('6LdfwM8ZAAAAAOt9J_lEGUcHeWsTGpYBOaSpZB4x');
+        const recaptcha = await recaptchaPromise;
         const token = await recaptcha.execute('submit');
         recaptchaInput.current.value = token;
         form.current.submit();
-    }, [form, recaptchaInput]);
+    }, [form, recaptchaInput, recaptchaPromise]);
 
     const submitForm = useCallback((ev: React.SyntheticEvent) => {
         ev.preventDefault();
@@ -46,7 +48,7 @@ const ContactPage = () => {
                     <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Contact Me</h1>
                     <p className="lg:w-2/3 mx-auto leading-relaxed text-base">Hey, you clicked the link above. You know what to do.</p>
                 </div>
-                <form action="http://contact-dekrey.azurewebsites.net/api/ContactMatt?" ref={form} onSubmit={submitForm} method="post" className="lg:w-1/2 md:w-2/3 mx-auto pb-8 border-b border-gray-200">
+                <form action="https://contact-dekrey.azurewebsites.net/api/ContactMatt?" ref={form} onSubmit={submitForm} method="post" className="lg:w-1/2 md:w-2/3 mx-auto pb-8 border-b border-gray-200">
                     <input type="hidden" ref={recaptchaInput} name="g-recaptcha-response" id="g-recaptcha-response" />
                     <div className="flex flex-wrap -m-2">
                         <div className="p-2 md:w-1/2 w-full">
