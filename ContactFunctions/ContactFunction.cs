@@ -15,28 +15,15 @@ using System.Net.Http;
 
 namespace ContactFunctions
 {
-    public struct RecaptchaResponse
+    public class GoogleRecaptchaResponseBody
     {
-        private RecaptchaResponse(bool isSuccess, string content)
-        {
-            IsSuccess = isSuccess;
-            Content = content;
-        }
+        public bool Success { get; set; }
+        public string Challenge_ts { get; set; }
+        public string Hostname { get; set; }
+        public float Score { get; set; }
+        public string Action { get; set; }
 
-        public bool IsSuccess { get; }
-        public string Content { get; }
-
-        public static implicit operator RecaptchaResponse(bool isSuccess)
-        {
-            if (isSuccess)
-                throw new InvalidOperationException("Must have content for success");
-            return new RecaptchaResponse(false, null);
-        }
-
-        public static implicit operator RecaptchaResponse(string content)
-        {
-            return new RecaptchaResponse(true, content);
-        }
+        public override string ToString() => JsonConvert.SerializeObject(this, Formatting.Indented);
     }
 
     public static class ContactFunction
@@ -46,6 +33,7 @@ namespace ContactFunctions
             .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
             .AddEnvironmentVariables()
             .Build();
+        private const float scoreThreshold = 0; // TODO - set to some reasonable value
 
         [FunctionName("ContactMatt")]
         public static async Task<IActionResult> Run(
@@ -56,8 +44,11 @@ namespace ContactFunctions
             try
             {
                 var recaptchaResponse = await VerifyRecaptcha(req.Form["g-recaptcha-response"], log);
-                if (!recaptchaResponse.IsSuccess)
+                if (recaptchaResponse == null || !recaptchaResponse.Success || recaptchaResponse.Score <= scoreThreshold)
+                {
+                    log.LogError($"Recaptcha failed. {recaptchaResponse}");
                     return RedirectFailure(referrer);
+                }
                 if (!await SendMessage(CreateMessage(req, recaptchaResponse), log).ConfigureAwait(false))
                     return RedirectFailure(referrer);
 
@@ -80,18 +71,18 @@ namespace ContactFunctions
             return new RedirectResult(new UriBuilder(referrer) { Path = "/contact/failure/" }.Uri.OriginalString);
         }
 
-        private static async Task<RecaptchaResponse> VerifyRecaptcha(string response, ILogger log)
+        private static async Task<GoogleRecaptchaResponseBody> VerifyRecaptcha(string response, ILogger log)
         {
             var recaptchaUrl = $"https://www.google.com/recaptcha/api/siteverify?secret={config["RecaptchaSecretKey"]}&response={response}";
             var verificationResponse = await recaptchaHttpClient.GetAsync(recaptchaUrl);
-            var verificationContent = await verificationResponse.Content.ReadAsStringAsync();
 
             if (!verificationResponse.IsSuccessStatusCode)
             {
-                log.LogError($"Error while sending request to reCAPTCHA service. {verificationContent}");
-                return false;
+                var body = await verificationResponse.Content.ReadAsStringAsync();
+                log.LogError($"Error while sending request to reCAPTCHA service. {body}");
+                return null;
             }
-            return verificationContent;
+            return await verificationResponse.Content.ReadAsAsync<GoogleRecaptchaResponseBody>();
         }
 
         private static async Task<bool> SendMessage(SendGridMessage msg, ILogger log)
@@ -108,7 +99,7 @@ namespace ContactFunctions
             return isSuccess;
         }
 
-        private static SendGridMessage CreateMessage(HttpRequest req, RecaptchaResponse recaptchaResponse)
+        private static SendGridMessage CreateMessage(HttpRequest req, GoogleRecaptchaResponseBody recaptchaResponse)
         {
             var from = new EmailAddress("contact@dekrey.net", "Contact Form");
             var subject = $"{req.Form["name"]} via DeKrey.NET Contact Form";
@@ -117,8 +108,8 @@ namespace ContactFunctions
 
 {req.Form["message"]}
 
-{recaptchaResponse.Content}";
-            var htmlContent = $"<p>{req.Form["name"]} &lt;{req.Form["email"]}&gt; writes...</p><p>{req.Form["message"]}</p><pre>{recaptchaResponse.Content}</pre>";
+{recaptchaResponse}";
+            var htmlContent = $"<p>{req.Form["name"]} &lt;{req.Form["email"]}&gt; writes...</p><p>{req.Form["message"]}</p><pre>{recaptchaResponse}</pre>";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             msg.ReplyTo = new EmailAddress(req.Form["email"], req.Form["name"]);
             return msg;
