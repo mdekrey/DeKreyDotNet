@@ -2,11 +2,11 @@ import React, { useCallback, useRef, useMemo } from "react"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import { useStaticQuery, graphql } from "gatsby";
-import { load } from "recaptcha-v3";
+import { useStaticQuery, graphql, navigateTo } from "gatsby";
+import { load, ReCaptchaInstance } from "recaptcha-v3";
 import { isSSR } from "../utils/isSSR";
 
-const ContactPage = () => {
+const ContactPage = ({ recaptchaSSR }: { recaptchaSSR?: Promise<ReCaptchaInstance> }) => {
     const recaptchaInput = useRef<HTMLInputElement | null>(null);
     const form = useRef<HTMLFormElement | null>(null);
     const fieldset = useRef<HTMLFieldSetElement | null>(null);
@@ -17,16 +17,25 @@ const ContactPage = () => {
         }
       }
 `);
-    const recaptchaPromise = useMemo(() => isSSR() ? undefined : load('6LdfwM8ZAAAAAOt9J_lEGUcHeWsTGpYBOaSpZB4x'), []);
+    const recaptchaPromise = useMemo(() =>
+        isSSR()
+            ? (recaptchaSSR || new Promise<ReCaptchaInstance>(() => { /* intentionally never resolve */ }))
+            : load('6LdfwM8ZAAAAAOt9J_lEGUcHeWsTGpYBOaSpZB4x'),
+        [recaptchaSSR]
+    );
 
     const getRecaptchaAndSubmit = useCallback(async () => {
         if (!form.current) return;
         if (!recaptchaInput.current) return;
 
-        const recaptcha = await recaptchaPromise!;
-        const token = await recaptcha.execute('submit');
-        recaptchaInput.current.value = token;
-        form.current.submit();
+        try {
+            const recaptcha = await recaptchaPromise;
+            const token = await recaptcha.execute('submit');
+            recaptchaInput.current.value = token;
+            form.current.submit();
+        } catch (ex) {
+            navigateTo('/contact/failure');
+        }
     }, [form, recaptchaInput, recaptchaPromise]);
 
     const submitForm = useCallback((ev: React.SyntheticEvent) => {
