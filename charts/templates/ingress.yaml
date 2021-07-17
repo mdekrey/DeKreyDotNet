@@ -1,10 +1,15 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: dekrey-dot-net
+  namespace: dekrey-dot-net
+  annotations:
+    acme.cert-manager.io/http01-edit-in-place: "true"
+    cert-manager.io/issuer: letsencrypt
   labels:
     app: dekrey-dot-net
 spec:
+  ingressClassName: nginx
   tls:
     - hosts:
       - dekrey.net
@@ -15,13 +20,19 @@ spec:
       http:
         paths:
           - path: /
+            pathType: ImplementationSpecific
             backend:
-              serviceName: dekrey-dot-net
-              servicePort: 80
+              service:
+                name: dekrey-dot-net
+                port:
+                  number: 80
     - host: www.dekrey.net
       http:
         paths:
           - path: /
+            pathType: ImplementationSpecific
             backend:
-              serviceName: dekrey-dot-net
-              servicePort: 80
+              service:
+                name: dekrey-dot-net
+                port:
+                  number: 80
