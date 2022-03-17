@@ -9,7 +9,9 @@ const AboutPage = () => {
         <Layout>
             <SEO title="About Matt DeKrey" image={headshotUrl.src} />
 
-            <Image src={headshotUrl} className="w-20 h-20 rounded-full inline-flex items-center justify-center float-left m-2" alt="Matt DeKrey headshot" />
+            <div className="w-20 h-20 inline-flex items-center justify-center float-left m-2">
+                <Image src={headshotUrl} className="rounded-full" alt="Matt DeKrey headshot" />
+            </div>
 
             <h1>About Matt DeKrey</h1>
 
