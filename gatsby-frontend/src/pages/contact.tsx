@@ -1,22 +1,17 @@
 import React, { useCallback, useRef, useMemo } from "react"
+import headshotUrl from 'src/images/headshot.jpg';
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import { useStaticQuery, graphql, navigateTo } from "gatsby";
 import { load, ReCaptchaInstance } from "recaptcha-v3";
 import { isSSR } from "../utils/isSSR";
+import { useRouter } from "next/router";
 
 const ContactPage = ({ recaptchaSSR }: { recaptchaSSR?: Promise<ReCaptchaInstance> }) => {
+    const router = useRouter()
     const recaptchaInput = useRef<HTMLInputElement | null>(null);
     const form = useRef<HTMLFormElement | null>(null);
     const fieldset = useRef<HTMLFieldSetElement | null>(null);
-    const data = useStaticQuery(graphql`
-      query {
-        headshot: file(relativePath: { eq: "headshot.jpg" }) {
-          publicURL
-        }
-      }
-`);
     const recaptchaPromise = useMemo(() =>
         isSSR()
             ? (recaptchaSSR || new Promise<ReCaptchaInstance>(() => { /* intentionally never resolve */ }))
@@ -34,7 +29,7 @@ const ContactPage = ({ recaptchaSSR }: { recaptchaSSR?: Promise<ReCaptchaInstanc
             recaptchaInput.current.value = token;
             form.current.submit();
         } catch (ex) {
-            navigateTo('/contact/failure');
+            router.push('/contact/failure');
         }
     }, [form, recaptchaInput, recaptchaPromise]);
 
@@ -51,7 +46,7 @@ const ContactPage = ({ recaptchaSSR }: { recaptchaSSR?: Promise<ReCaptchaInstanc
 
     return (
         <Layout>
-            <SEO title="Contact Matt DeKrey" image={data.headshot.publicURL} />
+            <SEO title="Contact Matt DeKrey" image={headshotUrl.src} />
             <section className="text-gray-700">
                 <div className="flex flex-col text-center w-full mb-12">
                     <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Contact Me</h1>

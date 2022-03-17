@@ -1,0 +1,40 @@
+.article {
+    @apply mx-auto md:w-10/12;
+}
+.header  h1 {
+    @apply font-serif font-normal;
+}
+.subheader {
+    @apply text-gray-500 text-sm;
+}
+
+.markdown p, .markdown li {
+    @apply font-serif font-normal;
+}
+
+.markdown p, .markdown h5, .markdown li {
+    @apply text-xl;
+}
+
+.markdown h1 {
+    @apply mt-8;
+}
+
+.markdown figcaption {
+    @apply mt-2 text-center text-gray-600 text-sm;
+}
+
+.markdown ol {
+    @apply list-decimal ml-16;
+}
+.markdown ul {
+    @apply list-disc ml-16;
+}
+
+.markdown pre {
+    @apply my-8;
+}
+
+.markdown :global(.twitter-tweet-rendered) {
+    @apply mx-auto;
+}

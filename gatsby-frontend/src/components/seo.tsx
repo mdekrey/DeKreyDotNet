@@ -6,83 +6,48 @@
  */
 
 import React from "react"
-import { Helmet } from "react-helmet"
-import { useStaticQuery, graphql } from "gatsby"
+import Head from "next/head";
+import siteMetadata from "../siteMetadata";
 
-function SEO({ description, lang, meta = [], title, image: metaImage }: {
-  description?: string;
-  lang?: string;
-  meta?: {
-    name: string;
-    content: string
-  }[];
+function SEO({ title, image: metaImage }: {
   title: string;
   image?: string;
 }) {
-  const { site } = useStaticQuery(
-    graphql`
-      query {
-        site {
-          siteMetadata {
-            title
-            description
-            author
-            url
-          }
-        }
-      }
-    `
-  )
-
-  const rootUrl = (site.siteMetadata.url as string).replace(/\/$/, "");
-  const metaDescription = description || site.siteMetadata.description;
+  const rootUrl = (siteMetadata.url as string).replace(/\/$/, "");
+  const metaDescription = siteMetadata.description;
 
   return (
-    <Helmet
-      htmlAttributes={{
-        lang,
-      }}
-      title={title}
-      titleTemplate={`%s | ${site.siteMetadata.title}`}
-      meta={[
-        {
-          name: `description`,
-          content: metaDescription,
-        },
-        {
-          property: `og:title`,
-          content: title,
-        },
-        {
-          property: `og:description`,
-          content: metaDescription,
-        },
-        ...(metaImage ? [{
-          property: `og:image`,
-          content: rootUrl + metaImage,
-        }] : []),
-        {
-          property: `og:type`,
-          content: `website`,
-        },
-        {
-          name: `twitter:card`,
-          content: `summary`,
-        },
-        {
-          name: `twitter:creator`,
-          content: site.siteMetadata.author,
-        },
-        {
-          name: `twitter:title`,
-          content: title,
-        },
-        {
-          name: `twitter:description`,
-          content: metaDescription,
-        },
-      ].concat(meta)}
-    />
+    <Head>
+      <title>{title} | {siteMetadata.title}</title>
+        <meta
+          name={`description`}
+          content={metaDescription} />
+        <meta
+          property={`og:title`}
+          content={title} />
+        <meta
+          property={`og:description`}
+          content={metaDescription} />
+        {metaImage ? <meta
+          property={`og:image`}
+          content={rootUrl + metaImage}
+        /> : null},
+        <meta
+          property={`og:type`}
+          content={`website`} />
+        <meta
+          name={`twitter:card`}
+          content={`summary`} />
+        <meta
+          name={`twitter:creator`}
+          content={siteMetadata.author} />
+        <meta
+          name={`twitter:title`}
+          content={title} />
+        <meta
+          name={`twitter:description`}
+          content={metaDescription} />
+    </Head>
   )
 }
 

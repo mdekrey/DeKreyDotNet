@@ -1,5 +1,5 @@
 import React from "react"
-import { Link } from "gatsby";
+import Link from "next/link";
 
 const Header = ({ siteTitle = "" }: { siteTitle: string }) => {
   const [isExpanded, toggleExpansion] = React.useState(false);
@@ -7,7 +7,7 @@ const Header = ({ siteTitle = "" }: { siteTitle: string }) => {
   return (
     <header>
       <div className="flex flex-wrap items-center justify-between max-w-4xl p-4 mx-auto md:p-8">
-        <Link to="/">
+        <Link href="/">
           <h1 className="flex items-center no-underline">
             <span className="text-xl font-bold tracking-tight">
               {siteTitle}
@@ -45,11 +45,13 @@ const Header = ({ siteTitle = "" }: { siteTitle: string }) => {
             },
           ].map((link) => (
             <Link
-              className="block mt-4 no-underline md:inline-block md:mt-0 md:ml-6"
+
               key={link.title}
-              to={link.route}
+              href={link.route}
             >
-              {link.title}
+              <a className="block mt-4 no-underline md:inline-block md:mt-0 md:ml-6">
+                {link.title}
+              </a>
             </Link>
           ))}
         </nav>

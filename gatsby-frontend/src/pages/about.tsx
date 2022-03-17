@@ -1,27 +1,15 @@
 import React from "react"
-import Img from 'gatsby-image';
-import { useStaticQuery, graphql } from "gatsby";
+import Image from 'next/image';
+import headshotUrl from 'src/images/headshot.jpg';
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 
 const AboutPage = () => {
-    const data = useStaticQuery(graphql`
-      query {
-        headshot: file(relativePath: { eq: "headshot.jpg" }) {
-          childImageSharp {
-            fluid(maxWidth: 300) {
-              ...GatsbyImageSharpFluid
-            }
-          }
-          publicURL
-        }
-      }
-`);
     return (
         <Layout>
-            <SEO title="About Matt DeKrey" image={data.headshot.publicURL} />
+            <SEO title="About Matt DeKrey" image={headshotUrl.src} />
 
-            <Img fluid={data.headshot.childImageSharp.fluid} className="w-20 h-20 rounded-full inline-flex items-center justify-center float-left m-2" alt="Matt DeKrey headshot" />
+            <Image src={headshotUrl} className="w-20 h-20 rounded-full inline-flex items-center justify-center float-left m-2" alt="Matt DeKrey headshot" />
 
             <h1>About Matt DeKrey</h1>
 

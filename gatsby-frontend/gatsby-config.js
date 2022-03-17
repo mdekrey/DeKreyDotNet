@@ -1,10 +1,4 @@
 module.exports = {
-  siteMetadata: {
-    title: `DeKrey.NET`,
-    description: `Personal articles and profile of Matt DeKrey`,
-    author: `@mdekrey`,
-    url: `https://dekrey.net`
-  },
   plugins: [
     `gatsby-plugin-postcss`,
     `gatsby-plugin-react-helmet`,
