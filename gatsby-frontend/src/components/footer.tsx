@@ -8,11 +8,13 @@ export const Footer = () => {
             <div className="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col w-full max-w-4xl">
                 <Link href="/">
                     <a className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
-                        <Image src={require('src/images/headshot.jpg')} className="w-10 h-10 rounded-full inline-flex items-center justify-center" alt="Matt DeKrey headshot" />
+                        <div className="w-10 h-10 inline-block">
+                            <Image src={require('src/images/headshot.jpg')} className="rounded-full inline-flex items-center justify-center" alt="Matt DeKrey headshot" />
+                        </div>
                         <span className="ml-3 text-xl">DeKrey.net</span>
                     </a>
                 </Link>
-                <p className="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">© 2020 Matt DeKrey —
+                <p className="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">© 2022 Matt DeKrey —
                 <a href="https://twitter.com/mdekrey" className="text-gray-600 ml-1" rel="noopener noreferrer" target="_blank">@mdekrey</a>
                 </p>
                 <span className="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
