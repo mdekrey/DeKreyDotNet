@@ -1,5 +1,5 @@
 
-import { MDXProvider } from '@mdx-js/react';
+import { MDXProvider, useMDXComponents } from '@mdx-js/react';
 import React, { useMemo } from "react"
 import Layout from "src/components/layout"
 import articleStyles from "./article.module.css"
@@ -9,6 +9,7 @@ import { BlogPost, getAllPosts, getPostBySlug } from "src/articles/utils";
 import { MDXRemote } from 'next-mdx-remote';
 import Image from 'next/image';
 
+import {getMDXComponent} from 'mdx-bundler/client';
 
 type ArticleProps = {
     data: { markdownRemark: BlogPost }
@@ -17,17 +18,19 @@ type ArticleProps = {
 export default function Article({ data }: ArticleProps) {
     const post = data.markdownRemark;
 
-    const components = useMemo((): React.ComponentProps<typeof MDXProvider>['components'] => ({
+
+    const pathedComponents = useMemo((): React.ComponentProps<typeof MDXProvider>['components'] => ({
         img: ({ src, placeholder, ...props }) => {
             const imgSrc = src.startsWith('./')
                 ? post.importPath + src.substring(1)
                 : src;
-            console.log(imgSrc);
-            // return <Image src={imgSrc} {...props} />
-            return null;
-        },
+            return (<span className="relative flex justify-center"><img src={imgSrc} style={{ maxWidth: '590px' }} {...props} /></span>);
+        }
     }), [post]);
-    console.log(post.html);
+    const components = useMDXComponents(pathedComponents);
+    // console.log(components);
+    const Component = React.useMemo(() => getMDXComponent(post.code), [post.code])
+    // console.log(post);
     return (
         <Layout>
             <SEO title={post.frontmatter.title} image={post.frontmatter.image} />
@@ -37,9 +40,12 @@ export default function Article({ data }: ArticleProps) {
                     <p className={articleStyles.subheader}>{new Date(post.frontmatter.date).toLocaleDateString()} &mdash; {post.timeToRead}</p>
                 </header>
                 {/* <div className={articleStyles.markdown} dangerouslySetInnerHTML={{ __html: post.html }} /> */}
-                <MDXProvider components={components}>
-                    <MDXRemote {...post.html} components={components} />
-                </MDXProvider>
+                {/* <MDXProvider components={components}>
+                    <MDXRemote {...post.html} />
+                </MDXProvider> */}
+                <div className={articleStyles.markdown}>
+                    <Component components={components} />
+                </div>
             </article>
         </Layout>
     )

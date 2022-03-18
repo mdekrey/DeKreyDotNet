@@ -6,8 +6,10 @@ import Link from "next/link"
 import { GetStaticProps, GetStaticPropsResult } from "next/types"
 import { BlogPost, getAllPosts } from "../articles/utils"
 
+type BlogPostSummary = Pick<BlogPost, 'slug' | 'frontmatter' | 'excerpt'>
+
 type IndexProps = {
-  posts: BlogPost[]
+  posts: BlogPostSummary[]
 }
 
 const IndexPage = ({ posts }: IndexProps) => {
@@ -54,5 +56,13 @@ export default IndexPage
 export const getStaticProps: GetStaticProps<IndexProps> = async (): Promise<GetStaticPropsResult<IndexProps>> => {
   const posts = await getAllPosts();
 
-  return { props: { posts } }
+  return { props: { posts: posts.map(toSummary) } }
+}
+
+function toSummary(post: BlogPost): BlogPostSummary {
+  return {
+    slug: post.slug,
+    excerpt: post.excerpt,
+    frontmatter: post.frontmatter,
+  }
 }

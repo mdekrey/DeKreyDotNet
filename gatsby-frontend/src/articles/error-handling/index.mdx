@@ -10,6 +10,8 @@ tags:
 source: https://medium.com/@matt.dekrey/error-handling-and-your-rest-api-6473fb6bfbfe
 ---
 
+import FigCaption from '../components/FigCaption';
+
 Designing an API is not an easy thing. You need to make it easy to use. You want to make it provide all the information the consumer(s) need and keep it efficient for your server. You have all those semantic bits of your communication medium, too: if it's over the wire, REST is common, but if it's a library you need to consider your object references and who then is allowed to change the object and who owns it. Self-documenting, atomic vs eventual consistency, concurrency... And then you have the afterthought of most APIs: error handling.
 
 In a REST API, it's easy to say that it'll simply follow the HTTP status codes and be done with it ' but remember that every spec can be interpreted differently. 4XX error codes are when the user can fix it, but how involved is that? Do they need to use the login API first (401 Unauthorized, aka Not Authenticated?) Do they need to talk to the system admin and get their privileges escalated (403 Forbidden?) Do they need to wait some time (429 Too Many Requests?) Maybe make their request simpler (408 Request Timeout?) But wait, that last one is usually given as 502 Bad Gateway if you have a proxy server that timed out instead. So, which do _you_ use, and when, and how the API consumer could handle it starts to become an issue that needs to become documented, and probably use the response body that doesn't get defined for you. And then, of course, there's the generic 500 Internal Server Error.
@@ -24,10 +26,8 @@ So, the next decision is often to swing the full opposite direction, since almos
 
 
 <figure>
-<img src="./qvWMvdRY5jfcM2aC.png" alt="Classroom of kids looking inattentive and bored" />
-<figcaption>
-How many of us like using CLI tools for more than simple scripting via Perl or Powershell? (Image from Ferris Bueller's Day Off.)
-</figcaption>
+![Classroom of kids looking inattentive and bored](./qvWMvdRY5jfcM2aC.png)
+<FigCaption>How many of us like using CLI tools for more than simple scripting via Perl or Powershell? (Image from Ferris Bueller's Day Off.)</FigCaption>
 </figure>
 
 
@@ -52,10 +52,8 @@ Don't forget about multiple errors! You may have a required field missing in one
 What about the inheritance model? For that, I'd recommend looking at URNs.
 
 <figure>
-<img src="./zW4gs19G-9rgWW8R.jpg" alt="Pottery" />
-<figcaption>
-No, I'm not suggesting checking out some pottery. (<a href="https://commons.wikimedia.org/wiki/File:Selection_of_Undecorated_Newcomb_College_Pieces.jpg">Image thanks to Wikipedia user Txhorns79</a>.)
-</figcaption>
+![Pottery](./zW4gs19G-9rgWW8R.jpg)
+<FigCaption>No, I'm not suggesting checking out some pottery. (<a href="https://commons.wikimedia.org/wiki/File:Selection_of_Undecorated_Newcomb_College_Pieces.jpg">Image thanks to Wikipedia user Txhorns79</a>.)</FigCaption>
 </figure>
 
 I mean [Universal Resource Names](https://en.wikipedia.org/wiki/Uniform_Resource_Name). If you're reading this, you know what a URL is, and your language of choice has probably started calling them URI's. URNs are the other side of that. (For more information, [Wikipedia has a great breakdown of URIs](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier), URNs, and URLs.) It'd be safe to assume the first part of a URN would be the same for every one of your error codes, so I typically just use their definition of a "namespace-specific string", or NSS. As a result, my error responses look more like the following:

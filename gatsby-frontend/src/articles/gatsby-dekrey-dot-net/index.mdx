@@ -12,6 +12,8 @@ tags:
 image: ./architecture.png
 ---
 
+import FigCaption from '../components/FigCaption';
+
 I don't like maintenance. I prefer to make things that can just continue to run
 on their own and don't require constant fixing or upkeep. As a result, almost
 always my own website (probably where you're reading this at DeKrey.NET) is
@@ -36,13 +38,8 @@ And so, I followed the [GatsbyJS tutorial](https://www.gatsbyjs.org/tutorial/),
 tossing in my hosting preference, I designed the following architecture.
 
 <figure>
-<img src="./architecture.png" alt="Architecture diagram for DeKrey.NET" />
-<figcaption>
-Markdown, React, and tailwindcss assembled by GatsbyJS in a Docker container
-publishing static HTML, CSS, and JS in a production Docker container, hosted on
-Azure Kubernetes Service (AKS) and calling out to an Azure Functions application
-for the Contact form.
-</figcaption>
+![Architecture diagram for DeKrey.NET](./architecture.png)
+<FigCaption>Markdown, React, and tailwindcss assembled by GatsbyJS in a Docker containerpublishing static HTML, CSS, and JS in a production Docker container, hosted on Azure Kubernetes Service (AKS) and calling out to an Azure Functions application for the Contact form. </FigCaption>
 </figure>
 
 Wow, okay, so, when written out this way, it doesn't look simpler. Then again, I

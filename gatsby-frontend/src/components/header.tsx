@@ -8,17 +8,20 @@ const Header = ({ siteTitle = "" }: { siteTitle: string }) => {
     <header>
       <div className="flex flex-wrap items-center justify-between max-w-4xl p-4 mx-auto md:p-8">
         <Link href="/">
-          <h1 className="flex items-center no-underline">
-            <span className="text-xl font-bold tracking-tight">
-              {siteTitle}
-            </span>
-          </h1>
+          <a>
+            <h1 className="flex items-center no-underline">
+              <span className="text-xl font-bold tracking-tight">
+                {siteTitle}
+              </span>
+            </h1>
+          </a>
         </Link>
 
         <button
-          className="flex items-center block px-3 py-2 border border-white rounded md:hidden"
+          className="items-center block px-3 py-2 border border-white rounded md:hidden"
           onClick={() => toggleExpansion(!isExpanded)}
         >
+          {/* Accessibility menu */}
           <svg
             className="w-3 h-3 fill-current"
             viewBox="0 0 20 20"
@@ -32,7 +35,7 @@ const Header = ({ siteTitle = "" }: { siteTitle: string }) => {
         <nav
           className={`${
             isExpanded ? `block` : `hidden`
-            } md:block md:flex md:items-center w-full md:w-auto`}
+            } md:flex md:items-center w-full md:w-auto`}
         >
           {[
             {

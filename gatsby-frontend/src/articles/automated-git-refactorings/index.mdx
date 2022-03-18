@@ -9,15 +9,15 @@ tags:
 source: https://medium.com/@matt.dekrey/how-to-apply-automated-refactorings-to-a-large-git-branch-tree-fccb65452904
 ---
 
+import FigCaption from '../components/FigCaption';
+
 Recently, my team decided to implement [Prettier](https://github.com/prettier/prettier) on our TypeScript code base. When we started our greenfield project more than a year ago, we started with a core team of CoffeeScript and Ruby developers plus me as architect and TypeScript specialist. While we needed the maintainability benefits that you get from a strongly-typed language like TypeScript, the core team balked at all the stylistic changes, especially the addition of semicolons. Picking my battles, I agreed to adopt their style. Fast-forward to now when we have mostly people from C-like backgrounds on the team... there's been some stylistic shifts. Rather than continuing to have the fight back-and-forth over the little things, we decided Prettier out-of-the-box was the way to go.
 
 Unfortunately, our code base has grown considerably. With over 100,000 lines of TypeScript spread across 1,200 files (and more SCSS files exceeding 30,000 lines of code), it was looking like a massive chore. A few of us have been developing for quite some time, so we knew we didn't want to deal with the merge conflicts that could come from implementing this kind of change. With launch day right around the corner, we didn't have the time to stop work in progress so a `master` branch could be updated and new work could start from there. Our plan to get our coding style under control seemed DOA.
 
 <figure>
-<img src="./L8V0he9CqczlGIhu.jpg" alt="Lord Eddard Stark looking dramatic with caption: Brace yourself, merge conflicts are coming." />
-<figcaption>
-What all of our senior developers were saying as we continued to move forward...
-</figcaption>
+![Lord Eddard Stark looking dramatic with caption: Brace yourself, merge conflicts are coming.](./L8V0he9CqczlGIhu.jpg)
+<FigCaption>What all of our senior developers were saying as we continued to move forward...</FigCaption>
 </figure>
 
 _Note: Make sure your auto-refactor is completely idempotent. (That is, you can run it several times and you'll get the same result.) The version of Prettier that we used didn't get every file to 100% the final state in a single run, though got fairly close. Fortunately, it was in an untouched corner of our code base where we saw this happen, so it didn't bite us with difficult merge conflicts._

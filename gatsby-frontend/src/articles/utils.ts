@@ -5,11 +5,14 @@ import html from 'remark-html'
 import readingTime from 'remark-reading-time'
 import matter from 'gray-matter'
 import { serialize } from 'next-mdx-remote/serialize'
-
+import {bundleMDX} from 'mdx-bundler'
+import {remarkMdxImages} from 'remark-mdx-images'
+import remarkUnwrapImages from 'remark-unwrap-images'
 
 export type BlogPost = {
     slug: string;
-    html: Awaited<ReturnType<typeof serialize>>;
+    html: string;
+    code: string;
     excerpt: string;
     importPath: string;
     frontmatter: { title?: string; image?: string; date?: string; tags?: string[] };
@@ -24,38 +27,60 @@ type ReadingTimeData = {
 };
 
 const articlesFsRoot = path.join(process.cwd(), 'src/articles');
-const articlesImportRoot = 'src/articles';
+const articlesImportRoot = '/src/articles';
 
 export async function getPostBySlug(slug: string): Promise<BlogPost> {
     const fsDir = path.join(articlesFsRoot, slug);
     const importPath = `${articlesImportRoot}/${slug}`;
-    const fileContent = fs.readFileSync(path.join(fsDir, `${slug}.md`));
+    const fileContent = fs.readFileSync(path.join(fsDir, `index.mdx`));
     const htmlPipeline = remark()
         .use(readingTime, { name: 'readingTime' });
     const { data, content } = matter(fileContent);
 
-    const mdxSource = await serialize(content, {
-        scope: {},
-        mdxOptions: {
-            baseUrl: importPath,
-            remarkPlugins: [
-                [require("@pondorasti/remark-img-links"), { absolutePath: importPath }]
-            ],
-        }
-    });
+    // const mdxSource = await serialize(content, {
+    //     scope: {},
+    //     mdxOptions: {
+    //         baseUrl: importPath,
+    //         remarkPlugins: [
+    //             [require("@pondorasti/remark-img-links"), { absolutePath: importPath }]
+    //         ],
+    //         jsx: false,
+    //     }
+    // });
     const markdown = await htmlPipeline.process(content);
+    const {code} = await bundleMDX({
+        cwd: fsDir,
+        source: content,
+        globals: {
+            'Figure': 'Figure',
+            'Figcaption': 'Figcaption',
+        },
+        xdmOptions(options) {
+            options.remarkPlugins = [...(options.remarkPlugins ?? []), remarkUnwrapImages, remarkMdxImages]
 
-    // const jsx = await import(path.join(articlesRoot, `${slug}/${slug}.md`));
-    // console.log(jsx);
+            return options;
+        },
+        esbuildOptions: options => {
+          options.loader = {
+            ...options.loader,
+            '.png': 'dataurl',
+            '.svg': 'dataurl',
+            '.jpg': 'dataurl',
+          }
+
+          return options
+        },
+    })
 
     return {
         slug,
-        html: mdxSource, //markdown.toString(),
+        html: markdown.toString(),
+        code,
         excerpt: '',
         importPath,
         frontmatter: {
             title: data.title,
-            image: null, // data.image ? await import(path.join(articlesRoot, slug, data.image)) : null,
+            image: data.image ? path.join(articlesImportRoot, slug, data.image) : null,
             date: data.date,
             tags: data.tags
         },
@@ -68,6 +93,7 @@ export async function getAllPosts() {
     const posts = await Promise.all(
         slugs
             .filter(slug => fs.lstatSync(path.join(articlesFsRoot, slug)).isDirectory())
+            .filter(slug => fs.existsSync(path.join(articlesFsRoot, slug, 'index.mdx')))
             .map((slug) => getPostBySlug(slug))
     );
 
