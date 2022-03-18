@@ -11,10 +11,8 @@ import remarkUnwrapImages from 'remark-unwrap-images'
 
 export type BlogPost = {
     slug: string;
-    html: string;
     code: string;
     excerpt: string;
-    importPath: string;
     frontmatter: { title?: string; image?: string; date?: string; tags?: string[] };
     timeToRead: string;
 };
@@ -28,10 +26,11 @@ type ReadingTimeData = {
 
 const articlesFsRoot = path.join(process.cwd(), 'src/articles');
 const articlesImportRoot = '/src/articles';
+const publicBundleFsRoot = path.join(process.cwd(), 'public/articles');
+const publicBundlePath = '/articles/';
 
 export async function getPostBySlug(slug: string): Promise<BlogPost> {
     const fsDir = path.join(articlesFsRoot, slug);
-    const importPath = `${articlesImportRoot}/${slug}`;
     const fileContent = fs.readFileSync(path.join(fsDir, `index.mdx`));
     const htmlPipeline = remark()
         .use(readingTime, { name: 'readingTime' });
@@ -50,6 +49,8 @@ export async function getPostBySlug(slug: string): Promise<BlogPost> {
     const markdown = await htmlPipeline.process(content);
     const {code} = await bundleMDX({
         cwd: fsDir,
+        bundleDirectory: publicBundleFsRoot,
+        bundlePath: publicBundlePath,
         source: content,
         globals: {
             'Figure': 'Figure',
@@ -63,9 +64,9 @@ export async function getPostBySlug(slug: string): Promise<BlogPost> {
         esbuildOptions: options => {
           options.loader = {
             ...options.loader,
-            '.png': 'dataurl',
-            '.svg': 'dataurl',
-            '.jpg': 'dataurl',
+            '.png': 'file',
+            '.svg': 'file',
+            '.jpg': 'file',
           }
 
           return options
@@ -74,10 +75,8 @@ export async function getPostBySlug(slug: string): Promise<BlogPost> {
 
     return {
         slug,
-        html: markdown.toString(),
         code,
         excerpt: '',
-        importPath,
         frontmatter: {
             title: data.title,
             image: data.image ? path.join(articlesImportRoot, slug, data.image) : null,

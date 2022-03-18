@@ -20,11 +20,8 @@ export default function Article({ data }: ArticleProps) {
 
 
     const pathedComponents = useMemo((): React.ComponentProps<typeof MDXProvider>['components'] => ({
-        img: ({ src, placeholder, ...props }) => {
-            const imgSrc = src.startsWith('./')
-                ? post.importPath + src.substring(1)
-                : src;
-            return (<span className="relative flex justify-center"><img src={imgSrc} style={{ maxWidth: '590px' }} {...props} /></span>);
+        img: ({ placeholder, ...props }) => {
+            return (<span className="relative flex justify-center"><img style={{ maxWidth: '590px' }} {...props} /></span>);
         }
     }), [post]);
     const components = useMDXComponents(pathedComponents);
