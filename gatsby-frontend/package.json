@@ -34,7 +34,8 @@
   },
   "license": "MIT",
   "scripts": {
-    "build": "next build && next export",
+    "build": "next build",
+    "export": "next export",
     "dev": "next dev",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start": "npm run dev",
