@@ -2,6 +2,8 @@
 const config = {
     // Append the default value with md extensions
     pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+    // Force the export to add /index.html for each page
+    trailingSlash: true,
 };
 
 function composeConfig(config, ...plugins) {

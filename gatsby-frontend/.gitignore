@@ -1,5 +1,6 @@
 # NextJS Generated
 public/articles/*
+out/
 
 # Logs
 logs
