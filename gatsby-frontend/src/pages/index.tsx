@@ -56,7 +56,7 @@ export default IndexPage
 export const getStaticProps: GetStaticProps<IndexProps> = async (): Promise<GetStaticPropsResult<IndexProps>> => {
   const posts = await getAllPosts();
 
-  return { props: { posts: posts.map(toSummary) } }
+  return { props: { posts: posts.map(toSummary).sort((a, b) => -a.frontmatter.date.localeCompare(b.frontmatter.date)) } }
 }
 
 function toSummary(post: BlogPost): BlogPostSummary {
