@@ -38,8 +38,6 @@ const publicBundlePath = '/articles/';
 export async function getPostBySlug(slug: string): Promise<BlogPost> {
     const fsDir = path.join(articlesFsRoot, slug);
     const fileContent = fs.readFileSync(path.join(fsDir, `index.mdx`));
-    const htmlPipeline = remark()
-        .use(readingTime, { name: 'readingTime' });
 
     const {code, frontmatter, matter} = await bundleMDX({
         cwd: fsDir,
