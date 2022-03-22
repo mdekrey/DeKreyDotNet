@@ -6,8 +6,6 @@ import articleStyles from "./article.module.css"
 import SEO from "src/components/seo";
 import { GetStaticPathsResult, GetStaticProps, GetStaticPropsResult } from "next"
 import { BlogPost, getAllPosts, getPostBySlug } from "src/articles/utils";
-import { MDXRemote } from 'next-mdx-remote';
-import Image from 'next/image';
 
 import {getMDXComponent} from 'mdx-bundler/client';
 
@@ -34,7 +32,7 @@ export default function Article({ data }: ArticleProps) {
             <article className={articleStyles.article}>
                 <header className={articleStyles.header}>
                     <h1>{post.frontmatter.title}</h1>
-                    <p className={articleStyles.subheader}>{new Date(post.frontmatter.date).toLocaleDateString()} &mdash; {post.timeToRead}</p>
+                    <p className={articleStyles.subheader}>{new Date(post.frontmatter.date).toLocaleDateString()} &mdash; {post.frontmatter.readingTime.text}</p>
                 </header>
                 {/* <div className={articleStyles.markdown} dangerouslySetInnerHTML={{ __html: post.html }} /> */}
                 {/* <MDXProvider components={components}>

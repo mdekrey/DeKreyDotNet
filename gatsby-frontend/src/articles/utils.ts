@@ -1,20 +1,23 @@
 import fs from 'fs';
 import path from 'path';
 import {remark} from 'remark'
-import html from 'remark-html'
 import readingTime from 'remark-reading-time'
-import matter from 'gray-matter'
-import { serialize } from 'next-mdx-remote/serialize'
 import {bundleMDX} from 'mdx-bundler'
 import {remarkMdxImages} from 'remark-mdx-images'
 import remarkUnwrapImages from 'remark-unwrap-images'
+import strip from 'strip-markdown';
 
 export type BlogPost = {
     slug: string;
     code: string;
-    excerpt: string;
-    frontmatter: { title?: string; image?: string; date?: string; tags?: string[] };
-    timeToRead: string;
+    frontmatter: {
+        excerpt: string;
+        title?: string;
+        image?: string;
+        date?: string;
+        tags?: string[];
+        readingTime: ReadingTimeData;
+    };
 };
 
 type ReadingTimeData = {
@@ -34,31 +37,23 @@ export async function getPostBySlug(slug: string): Promise<BlogPost> {
     const fileContent = fs.readFileSync(path.join(fsDir, `index.mdx`));
     const htmlPipeline = remark()
         .use(readingTime, { name: 'readingTime' });
-    const { data, content } = matter(fileContent);
 
-    // const mdxSource = await serialize(content, {
-    //     scope: {},
-    //     mdxOptions: {
-    //         baseUrl: importPath,
-    //         remarkPlugins: [
-    //             [require("@pondorasti/remark-img-links"), { absolutePath: importPath }]
-    //         ],
-    //         jsx: false,
-    //     }
-    // });
-    const markdown = await htmlPipeline.process(content);
-    const {code} = await bundleMDX({
+    const {code, frontmatter, matter} = await bundleMDX({
         cwd: fsDir,
         bundleDirectory: publicBundleFsRoot,
         bundlePath: publicBundlePath,
-        source: content,
+        source: fileContent.toString(),
         globals: {
             'Figure': 'Figure',
             'Figcaption': 'Figcaption',
         },
         xdmOptions(options) {
-            options.remarkPlugins = [...(options.remarkPlugins ?? []), remarkUnwrapImages, remarkMdxImages]
-
+            options.remarkPlugins = [
+                ...(options.remarkPlugins ?? []),
+                remarkUnwrapImages,
+                remarkMdxImages,
+                readingTime
+            ];
             return options;
         },
         esbuildOptions: options => {
@@ -71,19 +66,19 @@ export async function getPostBySlug(slug: string): Promise<BlogPost> {
 
           return options
         },
-    })
+    });
 
     return {
         slug,
         code,
-        excerpt: '',
         frontmatter: {
-            title: data.title,
-            image: data.image ? path.join(articlesImportRoot, slug, data.image) : null,
-            date: data.date,
-            tags: data.tags
+            excerpt: frontmatter.excerpt ?? await getExcerpt(matter.content),
+            title: frontmatter.title,
+            image: frontmatter.image ? path.join(articlesImportRoot, slug, frontmatter.image) : null,
+            date: frontmatter.date,
+            tags: frontmatter.tags,
+            readingTime: frontmatter.readingTime ?? ((await remark().use(readingTime, { name: 'readingTime' }).process(matter.content)).data.readingTime as ReadingTimeData),
         },
-        timeToRead: (markdown.data.readingTime as ReadingTimeData).text,
     };
 }
 
@@ -97,4 +92,27 @@ export async function getAllPosts() {
     );
 
     return posts;
+}
+
+async function getExcerpt(file: string) {
+    const content = file.split('\n');
+    const start = skipWhile(0, true);
+    const end = skipWhile(start, false);
+    const excerptParagraph = content.slice(start, end).join('\n');
+    const limited = (await remark().use(strip).process(excerptParagraph)).toString().split(' ').splice(0, 25).join(' ')
+    const result = limited === excerptParagraph ? excerptParagraph : (limited + '...');
+
+    return result || '';
+
+    function skipWhile(startAt: number, isMarkdown: boolean) {
+        let result = startAt;
+        while (result < content.length) {
+            if (isMarkdown && content[result].match(/^[a-zA-Z]/) && !content[result].startsWith('import'))
+                break;
+            if (!isMarkdown && (!content[result].match(/^[a-zA-Z]/) || content[result].startsWith('import')))
+                break;
+            result++;
+        }
+        return result;
+    }
 }
