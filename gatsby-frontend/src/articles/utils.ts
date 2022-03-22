@@ -5,7 +5,10 @@ import readingTime from 'remark-reading-time'
 import {bundleMDX} from 'mdx-bundler'
 import {remarkMdxImages} from 'remark-mdx-images'
 import remarkUnwrapImages from 'remark-unwrap-images'
+import rehypeHighlight from 'rehype-highlight'
 import strip from 'strip-markdown';
+import fsharp from 'highlight.js/lib/languages/fsharp'
+import dockerfile from 'highlight.js/lib/languages/dockerfile'
 
 export type BlogPost = {
     slug: string;
@@ -48,6 +51,10 @@ export async function getPostBySlug(slug: string): Promise<BlogPost> {
             'Figcaption': 'Figcaption',
         },
         xdmOptions(options) {
+            options.rehypePlugins = [
+                ...(options.rehypePlugins ?? []),
+                [rehypeHighlight, { languages: { fsharp, dockerfile } }],
+            ]
             options.remarkPlugins = [
                 ...(options.remarkPlugins ?? []),
                 remarkUnwrapImages,

@@ -13,15 +13,18 @@ type ArticleProps = {
     data: { markdownRemark: BlogPost }
 }
 
+const pathedComponents: React.ComponentProps<typeof MDXProvider>['components'] = ({
+    img: ({ placeholder, ...props }) => {
+        return (<span className="relative flex justify-center"><img style={{ maxWidth: '590px' }} {...props} /></span>);
+    },
+    pre: ({ className, ...props }) => {
+        return (<pre className={`${className ?? ''} overflow-hidden rounded-lg`} {...props} />);
+    }
+});
+
 export default function Article({ data }: ArticleProps) {
     const post = data.markdownRemark;
 
-
-    const pathedComponents = useMemo((): React.ComponentProps<typeof MDXProvider>['components'] => ({
-        img: ({ placeholder, ...props }) => {
-            return (<span className="relative flex justify-center"><img style={{ maxWidth: '590px' }} {...props} /></span>);
-        }
-    }), [post]);
     const components = useMDXComponents(pathedComponents);
     // console.log(components);
     const Component = React.useMemo(() => getMDXComponent(post.code), [post.code])
