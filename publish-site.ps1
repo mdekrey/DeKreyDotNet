@@ -8,9 +8,9 @@ param (
     $imageName = 'dekreydotnet',
 
     [String]
-    $azureResourceGroup = 'PrincipleK8s',
+    $azureResourceGroup = 'DeKreyDotNet',
     [String]
-    $azureAksCluster = 'PrincipleToolsCluster',
+    $azureAksCluster = 'TinyKubed',
 
     [String]
     $k8sNamespace = 'dekrey-dot-net',
@@ -30,6 +30,7 @@ docker push "$($fullImageName):$tag"
 
 $sslClusterIssuer = 'letsencrypt'
 
+az aks get-credentials --resource-group $azureResourceGroup -n $azureAksCluster
 helm upgrade --install -n $k8sNamespace $chartName --create-namespace mdekrey/single-container `
     --set-string "image.repository=$($fullImageName)" `
     --set-string "image.tag=$tag,image.pullPolicy=Always" `
