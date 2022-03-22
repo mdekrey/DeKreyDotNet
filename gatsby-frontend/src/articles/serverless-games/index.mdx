@@ -10,6 +10,7 @@ image: ./games-architecture.png
 ---
 
 import FigCaption from '../components/FigCaption';
+import { TwitterTweetEmbed } from 'react-twitter-embed';
 
 I enjoy classical games. Simple rules that combine in interesting ways are the
 definitions of "emergent gameplay" that the games industry strives for in modern
@@ -22,7 +23,8 @@ takes in the previous state of the game board and the action being performed.
 Originally wired into Rx.NET and served via a hosted SignalR hub, I wanted to
 scale the application.
 
-<blockquote class="twitter-tweet"><p lang="es" dir="ltr">Ah 1 replica :)</p>&mdash; David Fowler #BlackLivesMatter (@davidfowl) <a href="https://twitter.com/davidfowl/status/1248639534650118145?ref_src=twsrc%5Etfw">April 10, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<TwitterTweetEmbed tweetId="1248639534650118145" />
+{/* <blockquote class="twitter-tweet"><p lang="es" dir="ltr">Ah 1 replica :)</p>&mdash; David Fowler #BlackLivesMatter (@davidfowl) <a href="https://twitter.com/davidfowl/status/1248639534650118145?ref_src=twsrc%5Etfw">April 10, 2020</a></blockquote> */}
 
 I had to do some refactoring, first. I simplified my [game logic interface](https://github.com/mdekrey/SignalRGammon/blob/0d9eaad12da859ce0ed11acddc1a69ec3cfc612d/SignalRGame/GameUtilities/IGameLogic.cs#L38-L49) to
 just a few functions and allowed for serializing and deserializing certain
