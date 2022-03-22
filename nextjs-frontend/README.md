@@ -1,4 +1,4 @@
-This project was made with GatsbyJS.
+This project was made with Next.JS.
 
 To build the docker image:
 

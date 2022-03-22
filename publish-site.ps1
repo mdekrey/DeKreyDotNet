@@ -1,5 +1,5 @@
 Push-Location $PSScriptRoot
-cd .\gatsby-frontend
+cd .\nextjs-frontend
 $tag = (Get-Date).ToString('yyyy-MM-ddTHH_mm_ss')
 docker build . -t dekreydotnet.azurecr.io/dekreydotnet:$tag
 az acr login --name dekreydotnet
