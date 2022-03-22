@@ -18,6 +18,7 @@ function SEO({ title, image: metaImage }: {
 
   return (
     <Head>
+      <link rel="shortcut icon" href="/favicon-32x32.png" />
       <title>{title} | {siteMetadata.title}</title>
         <meta
           name={`description`}
