@@ -15,7 +15,10 @@ param (
     [String]
     $k8sNamespace = 'dekrey-dot-net',
     [String]
-    $chartName = 'dekrey-dot-net'
+    $releaseName = 'dekrey-dot-net',
+
+    [String]
+    $valuesFile = './deployment/values.prod.yaml'
 )
 
 Push-Location $PSScriptRoot
@@ -28,14 +31,11 @@ az acr login --name $repository
 
 docker push "$($fullImageName):$tag"
 
-$sslClusterIssuer = 'letsencrypt'
-
 az aks get-credentials --resource-group $azureResourceGroup -n $azureAksCluster
-helm upgrade --install -n $k8sNamespace $chartName --create-namespace mdekrey/single-container `
+helm upgrade --install -n $k8sNamespace $releaseName --create-namespace `
+    --repo https://mdekrey.github.io/helm-charts single-container `
     --set-string "image.repository=$($fullImageName)" `
-    --set-string "image.tag=$tag,image.pullPolicy=Always" `
-    --set-string "ingress.annotations.cert-manager\.io/cluster-issuer=$sslClusterIssuer" `
-    --set-string "ingress.hosts[0].host=dekrey.net" `
-    --set-string "ingress.hosts[1].host=www.dekrey.net"
+    --set-string "image.tag=$tag" `
+    --values ./deployment/values.yaml --values $valuesFile
 
 Pop-Location
