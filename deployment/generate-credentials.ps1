@@ -13,5 +13,5 @@ $details = az ad sp create-for-rbac --name "$appName" --role contributor --scope
 @{
     AZURE_CREDENTIALS = $details
     REGISTRY_USERNAME = $($details.appId)
-    REGISTRY_PASSWORD = $($details.tenant)
+    REGISTRY_PASSWORD = $($details.password)
 } | ConvertTo-Json

@@ -25,7 +25,7 @@ jobs:
     - name: 'Log in to docker registry'
       uses: azure/docker-login@v1
       with:
-        login-server: $registryLoginServer
+        login-server: ${{ env.registryLoginServer }}
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
 
