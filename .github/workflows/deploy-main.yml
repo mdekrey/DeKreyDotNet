@@ -17,7 +17,7 @@ env:
 # Secrets generated via ./deployment/generate-credentials.ps1 - need to be reset regularly
 
 jobs:
-  deployment:
+  build:
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v1
@@ -35,10 +35,15 @@ jobs:
         docker push $registryLoginServer/$imageName:${{ github.sha }}
       working-directory: ./nextjs-frontend
 
+  deployment:
+    runs-on: 'ubuntu-latest'
+    steps:
     # Set the target Azure Kubernetes Service (AKS) cluster.
-    - uses: azure/aks-set-context@v1
+    - uses: azure/login@v1
       with:
-        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - uses: azure/aks-set-context@v2.0
+      with:
         cluster-name: ${{ env.azClusterName }}
         resource-group: ${{ env.azClusterResourceGroup }}
 
