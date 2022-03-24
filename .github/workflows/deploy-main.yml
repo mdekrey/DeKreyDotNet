@@ -36,6 +36,7 @@ jobs:
       working-directory: ./nextjs-frontend
 
   deployment:
+    needs: build
     runs-on: 'ubuntu-latest'
     steps:
     # Set the target Azure Kubernetes Service (AKS) cluster.
