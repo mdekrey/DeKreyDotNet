@@ -12,8 +12,9 @@ param (
 # version when written: https://github.com/Azure/actions-workflow-samples/blob/9a151eaa180e20378c308bcb24a3dcad7d49f22c/assets/create-secrets-for-GitHub-workflows.md
 $details = az ad sp create-for-rbac --name "$appName" --role contributor --scopes /subscriptions/$($subscription)/resourceGroups/$azureResourceGroup --sdk-auth | ConvertFrom-Json
 
+# order is alphabetical to reflect what it shows in github, each key is its own secret
 @{
     AZURE_CREDENTIALS = $details
-    REGISTRY_USERNAME = $($details.clientId)
     REGISTRY_PASSWORD = $($details.clientSecret)
+    REGISTRY_USERNAME = $($details.clientId)
 } | ConvertTo-Json

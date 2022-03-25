@@ -1,0 +1,36 @@
+name: PR Cleanup
+on:
+  pull_request:
+    types: [closed]
+
+env:
+  azClusterName: TinyKubed
+  azClusterResourceGroup: DeKreyDotNet
+
+  registryLoginServer: 'dekreydotnet.azurecr.io'
+  imageName: 'dekreydotnet'
+  k8sNamespacePrefix: 'dekrey-dot-net-pr-'
+  releaseName: 'pr'
+
+# Secrets generated via ./deployment/generate-credentials.ps1 - need to be reset regularly
+
+jobs:
+  deployment:
+    runs-on: 'ubuntu-latest'
+    steps:
+    # Set the target Azure Kubernetes Service (AKS) cluster.
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - uses: azure/aks-set-context@v2.0
+      with:
+        cluster-name: ${{ env.azClusterName }}
+        resource-group: ${{ env.azClusterResourceGroup }}
+
+    - name: Helm tool installer
+      uses: Azure/setup-helm@v1
+
+    - name: 'Deploy'
+      run: |
+        helm remove -n $k8sNamespace${{ github.event.pull_request.number }} $releaseName --wait
+        kubectl delete ns ${{ env.k8sNamespacePrefix }}${{ github.event.pull_request.number }}

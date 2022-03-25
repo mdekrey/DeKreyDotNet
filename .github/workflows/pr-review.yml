@@ -1,9 +1,7 @@
-name: Deploy Main
-
+name: PR Review
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types: [opened, reopened]
 
 env:
   azClusterName: TinyKubed
@@ -11,8 +9,8 @@ env:
 
   registryLoginServer: 'dekreydotnet.azurecr.io'
   imageName: 'dekreydotnet'
-  k8sNamespace: 'dekrey-dot-net'
-  releaseName: 'dekrey-dot-net'
+  k8sNamespacePrefix: 'dekrey-dot-net-pr-'
+  releaseName: 'pr'
 
 # Secrets generated via ./deployment/generate-credentials.ps1 - need to be reset regularly
 
@@ -49,5 +47,15 @@ jobs:
 
     - name: 'Deploy'
       run: |
-        helm upgrade --install -n $k8sNamespace $releaseName --create-namespace --repo https://mdekrey.github.io/helm-charts single-container --set-string "image.repository=$registryLoginServer/$imageName,image.tag=${{ github.sha }}" --values ./deployment/values.yaml --values ./deployment/values.prod.yaml
+        helm upgrade --install -n ${{ env.k8sNamespacePrefix }}${{ github.event.pull_request.number }} $releaseName --create-namespace --repo https://mdekrey.github.io/helm-charts single-container --set-string "image.repository=$registryLoginServer/$imageName,image.tag=${{ github.sha }},ingress.hosts[0].host=pr-${{ github.event.pull_request.number }}.dekrey.net" --values ./deployment/values.yaml
 
+    - name: Report PR url
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: 'Branch ready for preview at https://pr-${{ github.event.pull_request.number }}.dekrey.net'
+          })
