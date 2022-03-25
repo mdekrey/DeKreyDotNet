@@ -87,12 +87,14 @@ export async function getPostBySlug(slug: string): Promise<BlogPost> {
 
 export async function getAllPosts() {
 	const slugs = fs.readdirSync(articlesFsRoot);
-	const posts = await Promise.all(
-		slugs
-			.filter((slug) => fs.lstatSync(path.join(articlesFsRoot, slug)).isDirectory())
-			.filter((slug) => fs.existsSync(path.join(articlesFsRoot, slug, 'index.mdx')))
-			.map((slug) => getPostBySlug(slug))
-	);
+	const posts = (
+		await Promise.all(
+			slugs
+				.filter((slug) => fs.lstatSync(path.join(articlesFsRoot, slug)).isDirectory())
+				.filter((slug) => fs.existsSync(path.join(articlesFsRoot, slug, 'index.mdx')))
+				.map((slug) => getPostBySlug(slug))
+		)
+	).filter((post) => post.frontmatter.date);
 
 	return posts;
 }
