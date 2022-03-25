@@ -32,5 +32,5 @@ jobs:
 
     - name: 'Deploy'
       run: |
-        helm remove -n $k8sNamespace${{ github.event.pull_request.number }} $releaseName --wait
+        helm delete -n $k8sNamespace${{ github.event.pull_request.number }} $releaseName --wait
         kubectl delete ns ${{ env.k8sNamespacePrefix }}${{ github.event.pull_request.number }}
