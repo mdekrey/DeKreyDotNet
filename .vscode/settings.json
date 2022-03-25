@@ -1,0 +1,8 @@
+{
+    "typescript.tsdk": "nextjs-frontend/node_modules/typescript/lib",
+    "editor.insertSpaces": false,
+    "editor.codeActionsOnSave": {
+        // For ESLint
+        "source.fixAll.eslint": true
+    },
+}
