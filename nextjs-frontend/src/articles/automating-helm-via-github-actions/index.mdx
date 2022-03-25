@@ -5,8 +5,8 @@ draft: false
 author: Matthew DeKrey
 tags:
   - automation
-  - docker
   - github actions
+  - kubernetes
   - helm
 ---
 
@@ -85,4 +85,47 @@ the way to go!
       --values ./deployment/values.yaml
 ```
 
-This looked pretty good, though I really wanted to notify when the site was available.
+This looked pretty good, though I really wanted to notify when the site was
+available. I found a ton of published actions that allow you to easily add a
+comment to the PR, but I'd rather use something official and definitely
+maintained. Eventually I found the [official
+github-script](https://github.com/actions/github-script) repository, and they
+had a pretty basic example that almost did what I needed. The final result looks
+like this:
+
+```yaml
+- name: Report PR url
+  uses: actions/github-script@v6
+  with:
+    script: |
+      github.rest.issues.createComment({
+        issue_number: context.issue.number,
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        body: 'Branch ready for preview at https://pr-${{ github.event.pull_request.number }}.dekrey.net'
+      })
+```
+
+With that, we're almost done! But, when creating new resources, we want to
+always clean up after ourselves. On the PR closed (whether merged or not), we
+want to be sure to delete both the helm resource and the kubernetes namespace.
+
+```yaml
+on:
+  pull_request:
+    types: [closed]
+```
+
+Again, we'll use the same login scripts as before, but this time, we'll make
+sure to issue the delete commands.
+
+```yaml
+- name: 'Clean up Kubernetes'
+  run: |
+    helm delete -n ${{ env.k8sNamespacePrefix }}${{ github.event.pull_request.number }} ${{ env.releaseName }} --wait
+    kubectl delete ns ${{ env.k8sNamespacePrefix }}${{ github.event.pull_request.number }}
+```
+
+And that's it! Now I have a site that not only builds my PRs, but deploys a
+testing branch so I can preview it and really make sure it works on the server
+before hitting that merge button.
