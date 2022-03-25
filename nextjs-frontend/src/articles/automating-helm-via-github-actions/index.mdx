@@ -64,7 +64,7 @@ This time, since I wanted to preview a PR, I needed a PR trigger:
 ```yaml
 on:
   pull_request:
-    types: [opened, reopened]
+    types: [opened, reopened, synchronize, ready_for_review]
 ```
 
 We can reuse most of the yaml from our original `main` build, but the helm
