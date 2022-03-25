@@ -4,6 +4,9 @@ const config = {
     pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
     // Force the export to add /index.html for each page
     trailingSlash: true,
+    eslint: {
+        dirs: ['pages', 'components', 'lib', 'articles']
+    }
 };
 
 function composeConfig(config, ...plugins) {
