@@ -15,7 +15,7 @@ env:
 # Secrets generated via ./deployment/generate-credentials.ps1 - need to be reset regularly
 
 jobs:
-  deployment:
+  cleanup:
     runs-on: 'ubuntu-latest'
     steps:
     # Set the target Azure Kubernetes Service (AKS) cluster.
@@ -30,7 +30,7 @@ jobs:
     - name: Helm tool installer
       uses: Azure/setup-helm@v1
 
-    - name: 'Deploy'
+    - name: 'Clean up Kubernetes'
       run: |
-        helm delete -n $k8sNamespace${{ github.event.pull_request.number }} $releaseName --wait
+        helm delete -n ${{ env.k8sNamespacePrefix }}${{ github.event.pull_request.number }} ${{ env.releaseName }} --wait
         kubectl delete ns ${{ env.k8sNamespacePrefix }}${{ github.event.pull_request.number }}
