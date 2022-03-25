@@ -13,11 +13,11 @@ type ArticleProps = {
 };
 
 const pathedComponents: ComponentProps<typeof MDXProvider>['components'] = {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	img: ({ placeholder, ...props }) => {
-		console.log(placeholder);
 		return (
 			<span className="relative flex justify-center">
-				<img style={{ maxWidth: '590px' }} {...props} />
+				<img style={{ maxWidth: '590px' }} alt="" {...props} />
 			</span>
 		);
 	},
