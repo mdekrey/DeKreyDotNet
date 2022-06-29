@@ -1,0 +1,148 @@
+---
+title: "Modern SOLID Architecture"
+date: "2022-06-24"
+draft: true
+author: Matthew DeKrey
+tags:
+  - architecture
+---
+
+When talking about Object-Oriented Programming, SOLID design principles are
+frequently raised as an important baseline. However, even with OOP falling out
+of favor, I've found that the SOLID design principles are still fully relevant,
+but need a little updating.
+
+Most of the original collection of SOLID design principles predates the acronym,
+initially released in an essay published online titled [Design Principles and
+Design Patterns][1]. There's more to the original essay than the principles, so
+if you're interested in this particular bit of history of computer science, it
+is worth a read.
+
+_An aside: While the author of the above essay has a long history of advice when
+it comes to building software, his recent commentary is problematic at best,
+including misogynistic and racist rants. I do not hold with his views and will
+not link to any of his recent works._
+
+## Single Responsibility Principle (SRP)
+
+> There should never be more than one reason for a class to change.
+
+Well, since we're doing functional programming and not using classes, there's no
+reason to look any further at this one! 😏 As I said, all of these need a little
+updating, so let's focus on how to do that.
+
+_How do we update it?_ Rather than saying "a class", we'll say "a unit", making
+the new statement:
+
+> There should never be more than one reason for a unit to change.
+
+But, wait, what's a unit? Well, that really depends on your project. In my
+opinion, your project should consider several levels of units continually. A
+typical React project would consider not just each custom hook and component a
+unit, but also each folder of files (which can include other folders), and even
+each package. Unfortunately, a package can have multiple reasons to change, so I
+prefer a slightly different definition for the SRP.
+
+> A unit's responsibility should be able to be defined such that, if any
+> responsibility is taken away, it can no longer be considered a cohesive unit.
+
+That's a mouthful, so I usually say:
+
+> A unit's responsibility should be able to be defined without using the word
+> "and".
+
+This means that there can be several increasingly broad statements of
+responsibility, including:
+
+* This function retrieves the current user's information that is available on
+  every page.
+* This file contains the data access layer for user data.
+* This namespace contains the code dependent directly upon our PostgreSQL
+  implementation.
+* This package contains abstractions necessary for communicating with our
+  physical models.
+* This folder contains our core reusable components.
+* This folder contains components needed to render our site header.
+* This component renders the current user's information when presented via the
+  site header.
+* This component renders a user avatar.
+
+It's important to understand the SRP on a more fundamental level than a short
+single-sentence definition, however, as literal interpretations get out-of-date
+fast and can lead to bad decisions.
+
+## Open Closed Principle (OCP)
+
+> A module should be open for extension but closed for modification.
+
+## Liskov Substitution Principle (LSP)
+
+The [Liskov Substitution Principle was originally written in 1994][3] by [Barbara
+Liskov][4], a computer scientist who
+still teaches at MIT. Unfortunately, the most succinct definition uses
+mathematical definitions:
+
+> Let _ϕ(x)_ be a property provable about objects _x_ of type _T_. Then _ϕ(y)_
+> should be true for objects _y_ of type _S_ where _S_ is a subtype of _T_.
+
+Okay... let's put that into terms that those of us who haven't been in computer
+science classes recently can understand.
+
+> If a function can be applied to objects of type T safely, and S extends T, the
+> same function when applied to objects of type S should have the same results.
+
+Hmm, that's the best I can do at clarifying it without examples. Since the
+concept really is about substitution, let's talk about food, where we frequently
+substitute ingredients. If we have a blender, and we know that if we put any
+kind of fruit in it we'll get a smoothie, we don't want the blender to suddenly
+work differently when we put berries in it.
+
+_How do we update it?_ Other than being hard to understand, I don't think it
+needs to be updated; Barbara Liskov, by making the original definition
+mathematical, naturally made this principle pretty well future-proof: the
+updates really need to come in how modern developers think of types to
+understand the original meaning. (Of course, the original paper discusses
+function pointers, etc. so we'll just avoid that.) Instead, I like to think of
+types closer to how TypeScript does them - even functions are types.
+
+What does that really mean? As an example, I like to look at JavaScript's
+`Array.prototype.map` function. It doesn't behave differently for an array of
+numbers or strings. It doesn't detect the number of parameters of the function
+you pass and do something different.
+
+I'll also propose the inverse is also true - when creating a subtype, it should
+be able to be have as a substitute of the parent type. That is, if a new thing
+is a "duck", it better quack like a duck, fly like a duck, and truly be
+considered a waterfowl in all ways. (Don't make a duck call and call it a duck!)
+
+## Interface Segregation Principle (ISP)
+
+> Many client-specific interfaces are better than one general-purpose interface.
+
+This one seems to be the hardest for most people to really follow, as I see even
+framework authors get this wrong. Low-level stream or buffer interfaces are
+usually read-write with a handful of booleans for "can read", "can write", and
+so on — following the ISP would encourage more individual interfaces, such as a
+separate Readable Stream and a Writable Stream. Each object could implement only
+the interfaces that are applicable.
+
+_How do we update it?_ Does this one need updating? Not as much, but we can
+expand it. Most developers think of "interfaces" as being the abstract
+definition of a class's contract, such as used by TypeScript's "implements"
+keyword. Instead, a programming interface can be as simple as an individual
+function. With that in mind, we should depend on individual functions rather
+than entire types when possible, and more specifically, on the most specific
+form of the function we need. We can also use covariance and contravariance, if
+available in our language, to be more specific with the interfaces we depend
+upon.
+
+## Dependency Inversion Principle (DIP)
+
+> Depend upon abstractions, [not] concretions.
+
+Dependency Inversion usually is confused with Dependency Injection,
+
+[1]: https://web.archive.org/web/20150906155800/http:/www.objectmentor.com/resources/articles/Principles_and_Patterns.pdf
+[2]: https://web.archive.org/web/20150202200348/http://www.objectmentor.com/resources/articles/srp.pdf
+[3]: https://www.engr.mun.ca/~theo/Courses/sd/5895-downloads/sd-principles-3.ppt.pdf
+[4]: https://en.wikipedia.org/wiki/Barbara_Liskov
