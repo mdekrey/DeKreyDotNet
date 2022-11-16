@@ -21,6 +21,11 @@ const AboutPage = () => {
 			</p>
 
 			<p>
+				My teams tell me that I do things about 10° off from the rest of the industry. I say that if our use-case was
+				the exact same as everyone else's, we wouldn't be the ones asked to do it.
+			</p>
+
+			<p>
 				I've worked in a large number of industries, including game development, advertising, eDiscovery, e-commerce,
 				robotics, and more. Applying old patterns in new ways is exciting, and leads to innovations or surprise
 				flexibility for products and teams I work with.
