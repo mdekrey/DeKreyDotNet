@@ -38,7 +38,7 @@ export default function Article({ data }: ArticleProps) {
 			<SEO title={post.frontmatter.title} image={post.frontmatter.image} />
 			<article className={articleStyles.article}>
 				<header className={articleStyles.header}>
-					<h1>{post.frontmatter.title}</h1>
+					<h1 className="font-bold mb-4 text-4xl">{post.frontmatter.title}</h1>
 					<p className={articleStyles.subheader}>
 						{new Date(post.frontmatter.date).toLocaleDateString()} &mdash; {post.frontmatter.readingTime.text}
 					</p>

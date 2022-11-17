@@ -7,13 +7,13 @@ export const Footer = () => {
 		<footer className="text-gray-700 body-font">
 			<div className="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col w-full max-w-4xl">
 				<Link href="/">
-					<a className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
+					<a className="flex gap-3 font-medium items-center md:justify-start justify-center text-gray-900">
 						<img
 							src={headshotUrl.src}
 							className="rounded-full items-center justify-center w-10 h-10 inline-block"
-							alt="Matt DeKrey headshot"
+							alt=""
 						/>
-						<span className="ml-3 text-xl">DeKrey.net</span>
+						<span className="text-xl">DeKrey.net</span>
 					</a>
 				</Link>
 				<p className="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">
