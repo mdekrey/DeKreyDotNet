@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import headshotUrl from 'src/images/headshot.jpg';
+import classNames from 'classnames';
 
 const mainNavLinks = [
 	{
@@ -13,12 +14,55 @@ const mainNavLinks = [
 	},
 ];
 
-const Header = ({ siteTitle = '' }: { siteTitle: string }) => {
+const hideHeaderClass = '-translate-y-full';
+const showHeaderClass = 'bg-white';
+
+const Header = ({ siteTitle = '', showOnScroll }: { siteTitle: string; showOnScroll?: boolean }) => {
+	const shouldShowHeader = useRef(global && global.scrollY === 0);
 	const [isExpanded, toggleExpansion] = React.useState(false);
+	const headerRef = useRef<HTMLHeadingElement>();
+
+	useEffect(() => {
+		let scrollPosition = window.scrollY;
+		function onScroll() {
+			const newScrollPosition = window.scrollY;
+			if (newScrollPosition < scrollPosition) showHeader();
+			else if (newScrollPosition > scrollPosition) hideHeader();
+
+			scrollPosition = newScrollPosition;
+		}
+
+		if (showOnScroll) window.addEventListener('scroll', onScroll);
+		if (scrollPosition === 0) showHeader();
+		if (scrollPosition && showOnScroll) hideHeader();
+
+		return () => {
+			window.removeEventListener('scroll', onScroll);
+		};
+
+		function hideHeader() {
+			headerRef.current?.classList.remove(showHeaderClass);
+			headerRef.current?.classList.add(hideHeaderClass);
+			shouldShowHeader.current = false;
+		}
+		function showHeader() {
+			headerRef.current?.classList.add(showHeaderClass);
+			headerRef.current?.classList.remove(hideHeaderClass);
+			shouldShowHeader.current = true;
+		}
+	}, [showOnScroll]);
 
 	return (
-		<header>
-			<div className="flex flex-wrap items-center justify-between max-w-4xl p-4 mx-auto md:p-8">
+		<header
+			className={classNames('z-10 motion-safe:transition-transform ease-in duration-100', {
+				[showHeaderClass]: !showOnScroll || shouldShowHeader,
+				[hideHeaderClass]: showOnScroll && !shouldShowHeader,
+				sticky: !showOnScroll,
+				'fixed inset-x-0': showOnScroll,
+			})}
+			style={{ top: 0 }}
+			ref={headerRef}>
+			<div className="flex flex-wrap items-center justify-between max-w-4xl p-2 mx-auto">
 				<Link href="/">
 					<a className="flex items-center gap-3 no-underline font-medium text-gray-900">
 						<img

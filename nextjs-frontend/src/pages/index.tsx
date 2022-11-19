@@ -18,9 +18,9 @@ const IndexPage = ({ posts }: IndexProps) => {
 		<Layout>
 			<SEO title="Home" />
 
-			<Layout.ReplacementHeaderSlot>
-				<div className="flex flex-col items-center md:flex-row md:items-start md:justify-center max-h-screen overflow-hidden mx-auto max-w-4xl">
-					<div className="flex flex-col flex-shrink-0 mt-[20%]">
+			<Layout.NoScrollHeaderSlot>
+				<div className="flex flex-col items-center md:flex-row md:items-start md:justify-center max-h-screen overflow-hidden mx-auto max-w-4xl sticky top-0 pt-16">
+					<div className="flex flex-col flex-shrink-0 mt-8 md:mt-[20%]">
 						<h1 className="text-2xl md:text-left">
 							Hey, <br />
 							I'm Matt DeKrey!
@@ -29,14 +29,14 @@ const IndexPage = ({ posts }: IndexProps) => {
 						<p className="text-xs">he/him</p>
 					</div>
 					<div
-						className="max-w-screen md:flex-shrink-default bg-contain bg-no-repeat h-[100vmin] w-[100vmin] md:h-[80vmin] md:w-[80vmin]"
+						className="max-w-screen md:flex-shrink-default bg-contain bg-no-repeat h-[100vmin] w-[100vmin] md:h-[60vmin] md:w-[80vmin]"
 						style={{
 							backgroundImage: `url(${fullUrl.src})`,
 							backgroundPosition: '50% 20%',
 						}}
 					/>
 				</div>
-			</Layout.ReplacementHeaderSlot>
+			</Layout.NoScrollHeaderSlot>
 
 			<div className="divide-y -my-8">
 				{posts.map((blogSummary) => (
