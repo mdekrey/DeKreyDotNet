@@ -3,15 +3,17 @@ import React from 'react';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
 import { GetStaticProps, GetStaticPropsResult } from 'next/types';
-import { getAllPosts } from '../articles/utils';
-import { BlogPostSummaryDisplay, BlogPostSummary, toSummary } from 'src/components/blog-post-summary-display';
+import { BlogPostSummary, toSummary } from 'src/articles/blog-post-summary-display';
 import { IntroBlock } from 'src/components/intro-block';
+import { getArticlesPage } from 'src/articles/pages';
+import { BlogPostList } from '../articles/blog-post-list';
 
 type IndexProps = {
 	posts: BlogPostSummary[];
+	pageCount: number;
 };
 
-const IndexPage = ({ posts }: IndexProps) => {
+const IndexPage = ({ posts, pageCount }: IndexProps) => {
 	return (
 		<Layout>
 			<SEO title="Home" />
@@ -20,11 +22,7 @@ const IndexPage = ({ posts }: IndexProps) => {
 				<IntroBlock />
 			</Layout.NoScrollHeaderSlot>
 
-			<div className="divide-y -my-8">
-				{posts.map((blogSummary) => (
-					<BlogPostSummaryDisplay post={blogSummary} key={blogSummary.slug} />
-				))}
-			</div>
+			<BlogPostList posts={posts} page={1} pageCount={pageCount} />
 		</Layout>
 	);
 };
@@ -32,9 +30,9 @@ const IndexPage = ({ posts }: IndexProps) => {
 export default IndexPage;
 
 export const getStaticProps: GetStaticProps<IndexProps> = async (): Promise<GetStaticPropsResult<IndexProps>> => {
-	const posts = await getAllPosts();
+	const pageInfo = await getArticlesPage(1);
 
 	return {
-		props: { posts: posts.map(toSummary).sort((a, b) => -a.frontmatter.date.localeCompare(b.frontmatter.date)) },
+		props: { posts: pageInfo?.articles.map(toSummary) ?? [], pageCount: pageInfo?.totalPageCount ?? 0 },
 	};
 };

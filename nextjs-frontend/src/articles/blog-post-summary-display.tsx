@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import Link from 'next/link';
 import { BlogPost } from 'src/articles/utils';
-import { linkClassName } from './styles';
+import { linkClassName } from '../components/styles';
 
 export type BlogPostSummary = Pick<BlogPost, 'slug' | 'frontmatter'>;
 
