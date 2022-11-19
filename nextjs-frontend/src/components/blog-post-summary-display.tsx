@@ -1,5 +1,7 @@
+import classNames from 'classnames';
 import Link from 'next/link';
 import { BlogPost } from 'src/articles/utils';
+import { linkClassName } from './styles';
 
 type BlogPostSummary = Pick<BlogPost, 'slug' | 'frontmatter'>;
 
@@ -12,14 +14,14 @@ export const BlogPostSummaryDisplay = ({ post: blogSummary }: { post: BlogPostSu
 			<span className="mt-1 text-gray-500 text-sm">{blogSummary.frontmatter.date}</span>
 		</div>
 		<div className="md:flex-grow">
-			<h2 className="text-2xl font-medium text-gray-900 mb-2">
+			<h2 className={classNames(linkClassName, 'text-2xl font-medium mb-2')}>
 				<Link href={`/articles/${blogSummary.slug}`}>
 					<a>{blogSummary.frontmatter.title}</a>
 				</Link>
 			</h2>
 			<p className="leading-relaxed">{blogSummary.frontmatter.excerpt}</p>
 			<Link href={`/articles/${blogSummary.slug}`}>
-				<a className="text-indigo-500 inline-flex items-center mt-4">
+				<a className={classNames(linkClassName, 'inline-flex items-center mt-4')}>
 					Read More
 					<svg
 						className="w-4 h-4 ml-2"

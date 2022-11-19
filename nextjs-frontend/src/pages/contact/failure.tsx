@@ -1,4 +1,5 @@
 import React from 'react';
+import { linkClassName } from 'src/components/styles';
 
 import Layout from '../../components/layout';
 import SEO from '../../components/seo';
@@ -13,7 +14,7 @@ const ContactPage = () => (
 					<p className="lg:w-2/3 mx-auto leading-relaxed text-base">
 						Looks like there was a problem. It might be just easier to email me directly.
 					</p>
-					<a className="text-indigo-500" href="mailto:matt.dekrey@gmail.com">
+					<a className={linkClassName} href="mailto:matt.dekrey@gmail.com">
 						matt.dekrey@gmail.com
 					</a>
 				</div>
