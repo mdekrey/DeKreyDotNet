@@ -31,7 +31,8 @@ const IndexPage = ({ posts }: IndexProps) => {
 							Hey, <br />
 							I'm Matt DeKrey!
 						</h1>
-						<p className="text-xs">pronounced: MAT deh-KRAY</p>
+						<p className="text-xs">MAT deh-KRAY</p>
+						<p className="text-xs">/mæt d&#x026A;&#x02c8;kre&#x026A;/</p>
 						<p className="text-xs">he/him</p>
 					</div>
 					<div
