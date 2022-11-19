@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { GetStaticProps, GetStaticPropsResult } from 'next/types';
 import { BlogPost, getAllPosts } from '../articles/utils';
 import fullUrl from 'src/images/full.jpg';
+import styles from './index.module.css';
+import classNames from 'classnames';
 
 type BlogPostSummary = Pick<BlogPost, 'slug' | 'frontmatter'>;
 
@@ -19,7 +21,11 @@ const IndexPage = ({ posts }: IndexProps) => {
 			<SEO title="Home" />
 
 			<Layout.NoScrollHeaderSlot>
-				<div className="flex flex-col items-center md:flex-row md:items-start md:justify-center max-h-screen overflow-hidden mx-auto max-w-4xl sticky top-0 pt-16">
+				<div
+					className={classNames(
+						'flex flex-col items-center md:flex-row md:items-start md:justify-center max-h-screen overflow-hidden mx-auto max-w-4xl sticky top-0 pt-16',
+						styles['post-blur']
+					)}>
 					<div className="flex flex-col flex-shrink-0 mt-8 md:mt-[20%]">
 						<h1 className="text-2xl md:text-left">
 							Hey, <br />
