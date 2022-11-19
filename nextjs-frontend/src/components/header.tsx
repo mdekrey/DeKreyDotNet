@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
-import headshotUrl from 'src/images/headshot.jpg';
 import classNames from 'classnames';
+import { MattDeKreyAvatar } from './avatar';
 
 const mainNavLinks = [
 	{
@@ -66,11 +66,7 @@ const Header = ({ siteTitle = '', showOnScroll }: { siteTitle: string; showOnScr
 				<div className="flex flex-wrap items-center justify-between max-w-4xl p-2 mx-auto">
 					<Link href="/">
 						<a className="flex items-center gap-3 no-underline font-medium text-gray-900">
-							<img
-								src={headshotUrl.src}
-								className="rounded-full items-center justify-center w-10 h-10 inline-block"
-								alt=""
-							/>
+							<MattDeKreyAvatar />
 							<span className="text-xl font-bold tracking-tight">{siteTitle}</span>
 						</a>
 					</Link>
