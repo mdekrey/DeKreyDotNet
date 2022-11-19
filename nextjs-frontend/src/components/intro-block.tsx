@@ -9,7 +9,7 @@ export function IntroBlock() {
 	return (
 		<div
 			className={classNames(
-				'flex flex-col items-center md:flex-row md:items-start md:justify-center max-h-screen overflow-hidden mx-auto max-w-4xl sticky top-0 px-4 md:px-8',
+				'flex flex-col items-center md:flex-row md:items-start md:justify-center max-h-screen overflow-hidden mx-auto max-w-4xl sticky top-0 px-4 md:px-8 -z-10',
 				styles['post-blur']
 			)}>
 			<div className="flex flex-col flex-shrink-0 mt-8 md:mt-[20%]">
