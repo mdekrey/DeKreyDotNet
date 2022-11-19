@@ -3,11 +3,9 @@ import React from 'react';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
 import { GetStaticProps, GetStaticPropsResult } from 'next/types';
-import { BlogPost, getAllPosts } from '../articles/utils';
-import { BlogPostSummaryDisplay } from 'src/components/blog-post-summary-display';
+import { getAllPosts } from '../articles/utils';
+import { BlogPostSummaryDisplay, BlogPostSummary, toSummary } from 'src/components/blog-post-summary-display';
 import { IntroBlock } from 'src/components/intro-block';
-
-type BlogPostSummary = Pick<BlogPost, 'slug' | 'frontmatter'>;
 
 type IndexProps = {
 	posts: BlogPostSummary[];
@@ -40,10 +38,3 @@ export const getStaticProps: GetStaticProps<IndexProps> = async (): Promise<GetS
 		props: { posts: posts.map(toSummary).sort((a, b) => -a.frontmatter.date.localeCompare(b.frontmatter.date)) },
 	};
 };
-
-function toSummary(post: BlogPost): BlogPostSummary {
-	return {
-		slug: post.slug,
-		frontmatter: post.frontmatter,
-	};
-}

@@ -3,7 +3,14 @@ import Link from 'next/link';
 import { BlogPost } from 'src/articles/utils';
 import { linkClassName } from './styles';
 
-type BlogPostSummary = Pick<BlogPost, 'slug' | 'frontmatter'>;
+export type BlogPostSummary = Pick<BlogPost, 'slug' | 'frontmatter'>;
+
+export function toSummary(post: BlogPost): BlogPostSummary {
+	return {
+		slug: post.slug,
+		frontmatter: post.frontmatter,
+	};
+}
 
 export const BlogPostSummaryDisplay = ({ post: blogSummary }: { post: BlogPostSummary }) => (
 	<div className="py-8 flex flex-wrap md:flex-nowrap">
