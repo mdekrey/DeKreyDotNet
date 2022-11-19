@@ -12,7 +12,9 @@ const baseClassName: string = (<a className="inline-flex h-8 w-8 items-center ju
 
 const PaginationLink = ({ href, children }: { href: string; children?: ReactNode }) => (
 	<Link href={href}>
-		<a className={twMerge(baseClassName, linkClassName, 'hover:bg-purple-700 hover:text-white')}>{children}</a>
+		<a className={twMerge(baseClassName, linkClassName, 'transition hover:bg-purple-700 hover:text-white')}>
+			{children}
+		</a>
 	</Link>
 );
 const PageDisplay = ({ children }: { children?: ReactNode }) => (
