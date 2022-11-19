@@ -1,8 +1,13 @@
 import React from 'react';
 import { linkClassName } from 'src/components/styles';
 import headshotUrl from 'src/images/headshot.jpg';
+import { twMerge } from 'tailwind-merge';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
+
+const Emphasis = ({ className, ...props }: JSX.IntrinsicElements['span']) => (
+	<span className={twMerge('font-bold text-lg font-serif', className)} {...props} />
+);
 
 const AboutPage = () => {
 	return (
@@ -26,11 +31,13 @@ const AboutPage = () => {
 				<a href="https://en.wikipedia.org/wiki/Paradox_of_tolerance" className={linkClassName}>
 					paradox of tolerance
 				</a>
-				. I believe Black Lives Matter. I believe trans women are women, and trans men are men. I believe that love is
-				love. I believe that abortion is a hard enough decision without the government getting involved, and that it is
-				a private right. I believe workers rights are civil rights, and civil rights are more important than property
-				rights. I do my best to support my fellow neurodivergent people in my life (and at work), and I know I have a
-				lot to learn and try to keep an open mind and constantly do better than yesterday.
+				. I believe <Emphasis>Black Lives Matter</Emphasis>. I believe <Emphasis>trans women are women</Emphasis>, and{' '}
+				<Emphasis>trans men are men</Emphasis>. I believe that <Emphasis>love is love</Emphasis>. I believe that
+				abortion is a hard enough decision without the government getting involved, and that{' '}
+				<Emphasis>abortion is a private right</Emphasis>. I believe <Emphasis>workers rights are civil rights</Emphasis>{' '}
+				and <Emphasis>civil rights are more important than property rights</Emphasis>. I do my best to support my fellow
+				neurodivergent people in my life (and at work), and I know I have a lot to learn and try to keep an open mind
+				and constantly do better than yesterday.
 			</p>
 
 			<p className="my-4">
