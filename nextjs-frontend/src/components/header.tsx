@@ -26,7 +26,7 @@ const Header = ({ siteTitle = '', showOnScroll }: { siteTitle: string; showOnScr
 		let scrollPosition = window.scrollY;
 		function onScroll() {
 			const newScrollPosition = window.scrollY;
-			if (newScrollPosition < scrollPosition) showHeader();
+			if (newScrollPosition < scrollPosition || newScrollPosition <= 0) showHeader();
 			else if (newScrollPosition > scrollPosition) hideHeader();
 
 			scrollPosition = newScrollPosition;
