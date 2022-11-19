@@ -29,7 +29,7 @@ export function IntroBlock() {
 				className="max-w-screen md:flex-shrink-default bg-contain bg-no-repeat h-[100vmin] w-[100vmin] md:h-[60vmin] md:w-[80vmin]"
 				style={{
 					backgroundImage: `url(${fullUrl.src})`,
-					backgroundPosition: '50% botom',
+					backgroundPosition: '50% bottom',
 				}}
 			/>
 		</div>
