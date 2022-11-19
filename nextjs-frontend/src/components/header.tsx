@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
-import headshotUrl from 'src/images/headshot.jpg';
 import classNames from 'classnames';
+import { MattDeKreyAvatar } from './avatar';
 
 const mainNavLinks = [
 	{
@@ -26,7 +26,7 @@ const Header = ({ siteTitle = '', showOnScroll }: { siteTitle: string; showOnScr
 		let scrollPosition = window.scrollY;
 		function onScroll() {
 			const newScrollPosition = window.scrollY;
-			if (newScrollPosition < scrollPosition) showHeader();
+			if (newScrollPosition < scrollPosition || newScrollPosition <= 0) showHeader();
 			else if (newScrollPosition > scrollPosition) hideHeader();
 
 			scrollPosition = newScrollPosition;
@@ -53,46 +53,48 @@ const Header = ({ siteTitle = '', showOnScroll }: { siteTitle: string; showOnScr
 	}, [showOnScroll]);
 
 	return (
-		<header
-			className={classNames('z-10 motion-safe:transition-transform ease-in duration-100', {
-				[showHeaderClass]: !showOnScroll || shouldShowHeader,
-				[hideHeaderClass]: showOnScroll && !shouldShowHeader,
-				sticky: !showOnScroll,
-				'fixed inset-x-0': showOnScroll,
-			})}
-			style={{ top: 0 }}
-			ref={headerRef}>
-			<div className="flex flex-wrap items-center justify-between max-w-4xl p-2 mx-auto">
-				<Link href="/">
-					<a className="flex items-center gap-3 no-underline font-medium text-gray-900">
-						<img
-							src={headshotUrl.src}
-							className="rounded-full items-center justify-center w-10 h-10 inline-block"
-							alt=""
-						/>
-						<span className="text-xl font-bold tracking-tight">{siteTitle}</span>
-					</a>
-				</Link>
+		<>
+			<header
+				className={classNames('z-10 motion-safe:transition-transform ease-in duration-100', {
+					[showHeaderClass]: !showOnScroll || shouldShowHeader,
+					[hideHeaderClass]: showOnScroll && !shouldShowHeader,
+					sticky: !showOnScroll,
+					'fixed inset-x-0': showOnScroll,
+				})}
+				style={{ top: 0 }}
+				ref={headerRef}>
+				<div className="flex flex-wrap items-center justify-between max-w-4xl p-2 mx-auto">
+					<Link href="/">
+						<a className="flex items-center gap-3 no-underline font-medium text-gray-900">
+							<MattDeKreyAvatar />
+							<span className="text-xl font-bold tracking-tight">{siteTitle}</span>
+						</a>
+					</Link>
 
-				<button
-					className="items-center block px-3 py-2 border border-white rounded md:hidden"
-					onClick={() => toggleExpansion(!isExpanded)}>
-					{/* Mobile hamburger menu */}
-					<svg className="w-3 h-3 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-						<title>Menu</title>
-						<path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-					</svg>
-				</button>
+					<button
+						className="items-center block px-3 py-2 border border-white rounded md:hidden"
+						onClick={() => toggleExpansion(!isExpanded)}>
+						{/* Mobile hamburger menu */}
+						<svg className="w-3 h-3 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+							<title>Menu</title>
+							<path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+						</svg>
+					</button>
 
-				<nav className={`${isExpanded ? `block` : `hidden`} md:flex md:items-center w-full md:w-auto`}>
-					{mainNavLinks.map((link) => (
-						<Link key={link.title} href={link.route}>
-							<a className="block mt-4 no-underline md:inline-block md:mt-0 md:ml-6">{link.title}</a>
-						</Link>
-					))}
-				</nav>
-			</div>
-		</header>
+					<nav className={`${isExpanded ? `block` : `hidden`} md:flex md:items-center w-full md:w-auto`}>
+						{mainNavLinks.map((link) => (
+							<Link key={link.title} href={link.route}>
+								<a className="block mt-4 no-underline md:inline-block md:mt-0 md:ml-6">{link.title}</a>
+							</Link>
+						))}
+					</nav>
+				</div>
+			</header>
+			<div
+				className={classNames({
+					'pt-16': showOnScroll,
+				})}></div>
+		</>
 	);
 };
 

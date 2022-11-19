@@ -1,18 +1,15 @@
 import React from 'react';
 import Link from 'next/link';
-import headshotUrl from 'src/images/headshot.jpg';
+import { twMerge } from 'tailwind-merge';
+import { MattDeKreyAvatar } from './avatar';
 
-export const Footer = () => {
+export const Footer = ({ className }: { className?: string }) => {
 	return (
-		<footer className="text-gray-700 body-font">
+		<footer className={twMerge('text-gray-700 body-font', className)}>
 			<div className="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col w-full max-w-4xl">
 				<Link href="/">
 					<a className="flex gap-3 font-medium items-center md:justify-start justify-center text-gray-900">
-						<img
-							src={headshotUrl.src}
-							className="rounded-full items-center justify-center w-10 h-10 inline-block"
-							alt=""
-						/>
+						<MattDeKreyAvatar />
 						<span className="text-xl">DeKrey.net</span>
 					</a>
 				</Link>

@@ -1,7 +1,13 @@
 import React from 'react';
+import { linkClassName } from 'src/components/styles';
 import headshotUrl from 'src/images/headshot.jpg';
+import { twMerge } from 'tailwind-merge';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
+
+const Emphasis = ({ className, ...props }: JSX.IntrinsicElements['span']) => (
+	<span className={twMerge('font-bold text-lg font-serif', className)} {...props} />
+);
 
 const AboutPage = () => {
 	return (
@@ -17,7 +23,21 @@ const AboutPage = () => {
 			<h1 className="font-bold mb-4 text-4xl">About Matt DeKrey</h1>
 
 			<p className="my-4">
-				Hello, World! I'm a software developer, architect, and gamer. I enjoy learning and sharing what I've discovered.{' '}
+				Hello, World! I'm a software developer, architect, and gamer. I enjoy learning and sharing what I've discovered.
+			</p>
+
+			<p className="my-4">
+				Before anything more, you should know I believe in the{' '}
+				<a href="https://en.wikipedia.org/wiki/Paradox_of_tolerance" className={linkClassName}>
+					paradox of tolerance
+				</a>
+				. I believe <Emphasis>Black Lives Matter</Emphasis>. I believe <Emphasis>trans women are women</Emphasis>, and{' '}
+				<Emphasis>trans men are men</Emphasis>. I believe that <Emphasis>love is love</Emphasis>. I believe that
+				abortion is a hard enough decision without the government getting involved, and that{' '}
+				<Emphasis>abortion is a private right</Emphasis>. I believe <Emphasis>workers rights are civil rights</Emphasis>{' '}
+				and <Emphasis>civil rights are more important than property rights</Emphasis>. I do my best to support my fellow
+				neurodivergent people in my life (and at work), and I know I have a lot to learn and try to keep an open mind
+				and constantly do better than yesterday.
 			</p>
 
 			<p className="my-4">
@@ -62,6 +82,17 @@ const AboutPage = () => {
 					</a>
 				</li>
 			</ul>
+			<p className="my-4">
+				<span className="font-bold text-red-700">Notice: </span>It has come to my attention that at least once I have
+				been impersonated on freelancing sites. Please be aware that, if I am freelancing, the link will be posted
+				above. I am currently not available for freelancing work (unless I know you personally, and then we will talk
+				verbally before making any arrangements.) However, I am very proud of the team I've helped build and lead at{' '}
+				<a href="https://principlestudios.com" className={linkClassName}>
+					Principle Studios
+				</a>
+				; if you are interested in working with me, please contact them or let me know that you're interested in being
+				put in touch!
+			</p>
 		</Layout>
 	);
 };

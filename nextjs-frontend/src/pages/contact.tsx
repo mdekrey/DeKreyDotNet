@@ -6,6 +6,12 @@ import SEO from '../components/seo';
 import { load, ReCaptchaInstance } from 'recaptcha-v3';
 import { isSSR } from '../utils/isSSR';
 import { useRouter } from 'next/router';
+import classNames from 'classnames';
+import { linkClassName } from 'src/components/styles';
+
+const textInputClassNames: string = (
+	<input className="w-full bg-gray-100 rounded border border-gray-400 focus:outline-none focus:border-purple-700 text-base px-4 py-2" />
+).props.className;
 
 const ContactPage = ({ recaptchaSSR }: { recaptchaSSR?: Promise<ReCaptchaInstance> }) => {
 	const router = useRouter();
@@ -73,14 +79,7 @@ const ContactPage = ({ recaptchaSSR }: { recaptchaSSR?: Promise<ReCaptchaInstanc
 							<label htmlFor="name" className="sr-only">
 								Name
 							</label>
-							<input
-								id="name"
-								name="name"
-								required
-								className="w-full bg-gray-100 rounded border border-gray-400 focus:outline-none focus:border-indigo-500 text-base px-4 py-2"
-								placeholder="Name"
-								type="text"
-							/>
+							<input id="name" name="name" required className={textInputClassNames} placeholder="Name" type="text" />
 						</div>
 						<div className="p-2 md:w-1/2 w-full">
 							<label htmlFor="email" className="sr-only">
@@ -91,7 +90,7 @@ const ContactPage = ({ recaptchaSSR }: { recaptchaSSR?: Promise<ReCaptchaInstanc
 								name="email"
 								type="email"
 								required
-								className="w-full bg-gray-100 rounded border border-gray-400 focus:outline-none focus:border-indigo-500 text-base px-4 py-2"
+								className={textInputClassNames}
 								placeholder="Email"
 							/>
 						</div>
@@ -103,14 +102,14 @@ const ContactPage = ({ recaptchaSSR }: { recaptchaSSR?: Promise<ReCaptchaInstanc
 								id="message"
 								name="message"
 								required
-								className="w-full bg-gray-100 rounded border border-gray-400 focus:outline-none h-48 focus:border-indigo-500 text-base px-4 py-2 resize-none block"
+								className={classNames(textInputClassNames, 'h-48 resize-none block')}
 								placeholder="Message"></textarea>
 						</div>
 						<fieldset ref={fieldset}>
 							<div className="p-2 w-full">
 								<button
 									type="submit"
-									className="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+									className="flex mx-auto text-white bg-purple-700 border-0 py-2 px-8 focus:outline-none hover:bg-purple-800 rounded text-lg">
 									Send
 								</button>
 							</div>
@@ -119,7 +118,7 @@ const ContactPage = ({ recaptchaSSR }: { recaptchaSSR?: Promise<ReCaptchaInstanc
 				</form>
 				<div className="p-2 w-full pt-8 text-center">
 					<p className="lg:w-2/3 mx-auto leading-relaxed text-base">Or, sure, you can just send me an email.</p>
-					<a className="text-indigo-500" href="mailto:matt.dekrey@gmail.com">
+					<a className={linkClassName} href="mailto:matt.dekrey@gmail.com">
 						matt.dekrey@gmail.com
 					</a>
 				</div>

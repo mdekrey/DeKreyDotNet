@@ -18,7 +18,7 @@ const Layout = withSlots<{ NoScrollHeaderSlot: NoScrollHeaderSlot }, { children:
 
 				<main className="flex-1 w-full max-w-4xl px-4 py-8 mx-auto md:px-8 md:py-16 bg-white relative">{children}</main>
 
-				<Footer />
+				<Footer className="bg-white" />
 			</div>
 		);
 	}
