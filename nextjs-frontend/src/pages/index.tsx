@@ -5,6 +5,9 @@ import SEO from '../components/seo';
 import Link from 'next/link';
 import { GetStaticProps, GetStaticPropsResult } from 'next/types';
 import { BlogPost, getAllPosts } from '../articles/utils';
+import fullUrl from 'src/images/full.jpg';
+import styles from './index.module.css';
+import classNames from 'classnames';
 
 type BlogPostSummary = Pick<BlogPost, 'slug' | 'frontmatter'>;
 
@@ -17,17 +20,42 @@ const IndexPage = ({ posts }: IndexProps) => {
 		<Layout>
 			<SEO title="Home" />
 
+			<Layout.NoScrollHeaderSlot>
+				<div
+					className={classNames(
+						'flex flex-col items-center md:flex-row md:items-start md:justify-center max-h-screen overflow-hidden mx-auto max-w-4xl sticky top-0 pt-16',
+						styles['post-blur']
+					)}>
+					<div className="flex flex-col flex-shrink-0 mt-8 md:mt-[20%]">
+						<h1 className="text-2xl md:text-left">
+							Hey, <br />
+							I'm Matt DeKrey!
+						</h1>
+						<p className="text-xs">MAT deh-KRAY</p>
+						<p className="text-xs">/mæt d&#x026A;&#x02c8;kre&#x026A;/</p>
+						<p className="text-xs">he/him</p>
+					</div>
+					<div
+						className="max-w-screen md:flex-shrink-default bg-contain bg-no-repeat h-[100vmin] w-[100vmin] md:h-[60vmin] md:w-[80vmin]"
+						style={{
+							backgroundImage: `url(${fullUrl.src})`,
+							backgroundPosition: '50% 20%',
+						}}
+					/>
+				</div>
+			</Layout.NoScrollHeaderSlot>
+
 			<div className="divide-y -my-8">
 				{posts.map((blogSummary) => (
 					<div className="py-8 flex flex-wrap md:flex-nowrap" key={blogSummary.slug}>
 						<div className="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
-							<span className="tracking-widest font-medium title-font text-gray-900">
+							<span className="tracking-widest font-medium text-gray-900">
 								{(blogSummary.frontmatter.tags && blogSummary.frontmatter.tags[0]) || 'software'}
 							</span>
 							<span className="mt-1 text-gray-500 text-sm">{blogSummary.frontmatter.date}</span>
 						</div>
 						<div className="md:flex-grow">
-							<h2 className="text-2xl font-medium text-gray-900 title-font mb-2">
+							<h2 className="text-2xl font-medium text-gray-900 mb-2">
 								<Link href={`/articles/${blogSummary.slug}`}>
 									<a>{blogSummary.frontmatter.title}</a>
 								</Link>

@@ -52,5 +52,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/mdekrey/DeKreyDotNet.git"
+  },
+  "dependencies": {
+    "react-slot-component": "^2.0.3"
   }
 }

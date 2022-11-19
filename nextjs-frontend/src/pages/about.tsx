@@ -14,24 +14,24 @@ const AboutPage = () => {
 				alt="Matt DeKrey headshot"
 			/>
 
-			<h1>About Matt DeKrey</h1>
+			<h1 className="font-bold mb-4 text-4xl">About Matt DeKrey</h1>
 
-			<p>
+			<p className="my-4">
 				Hello, World! I'm a software developer, architect, and gamer. I enjoy learning and sharing what I've discovered.{' '}
 			</p>
 
-			<p>
+			<p className="my-4">
 				My teams tell me that I do things about 10° off from the rest of the industry. I say that if our use-case was
 				the exact same as everyone else's, we wouldn't be the ones asked to do it.
 			</p>
 
-			<p>
+			<p className="my-4">
 				I've worked in a large number of industries, including game development, advertising, eDiscovery, e-commerce,
 				robotics, and more. Applying old patterns in new ways is exciting, and leads to innovations or surprise
 				flexibility for products and teams I work with.
 			</p>
 
-			<p>
+			<p className="my-4">
 				I believe that software engineering itself is a craft that we, as developers, are still learning. It's too new
 				of an industry for anyone to have learned the right way to solve even the tasks they're familiar with, let alone
 				all of the problems that could be encountered. I try to remember this as I work with other developers, as
@@ -43,17 +43,23 @@ const AboutPage = () => {
 				ready to admit that I don't know.
 			</p>
 
-			<h2>Other sites</h2>
-			<ul>
-				<li>
-					<a href="https://www.linkedin.com/in/mattdekrey/">Matt DeKrey's LinkedIn</a>
+			<h2 className="font-bold mb-4 text-3xl">Other sites</h2>
+			<ul className="my-4">
+				<li className="my-4">
+					<a className="underline font-bold" href="https://www.linkedin.com/in/mattdekrey/">
+						Matt DeKrey's LinkedIn
+					</a>
 				</li>
-				{/* <li><a href="https://medium.com/@matt.dekrey">Matt DeKrey's Medium</a></li> */}
-				<li>
-					<a href="https://github.com/mdekrey">Matt DeKrey's GitHub</a>
+				{/* <li className="my-4"><a className="underline font-bold" href="https://medium.com/@matt.dekrey">Matt DeKrey's Medium</a></li> */}
+				<li className="my-4">
+					<a className="underline font-bold" href="https://github.com/mdekrey">
+						Matt DeKrey's GitHub
+					</a>
 				</li>
-				<li>
-					<a href="https://twitter.com/mdekrey">Matt DeKrey's Twitter Profile</a>
+				<li className="my-4">
+					<a className="underline font-bold" href="https://twitter.com/mdekrey">
+						Matt DeKrey's Twitter Profile
+					</a>
 				</li>
 			</ul>
 		</Layout>

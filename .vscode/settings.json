@@ -5,4 +5,10 @@
         // For ESLint
         "source.fixAll.eslint": true
     },
+    "eslint.rules.customizations": [
+        {
+            "rule": "*",
+            "severity": "warn"
+        }
+    ]
 }
