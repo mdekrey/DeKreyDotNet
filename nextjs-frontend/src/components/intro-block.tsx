@@ -12,7 +12,7 @@ export function IntroBlock() {
 				'flex flex-col items-center md:flex-row md:items-start md:justify-center max-h-screen overflow-hidden mx-auto max-w-4xl sticky top-0 px-4 md:px-8 -z-10',
 				styles['post-blur']
 			)}>
-			<div className="flex flex-col flex-shrink-0 mt-8 md:mt-[15min]">
+			<div className="flex flex-col flex-shrink-0 mt-8 md:mt-[15vmin] md:mb-[10vmin]">
 				<h1 className="text-2xl md:text-left font-bold">
 					Hey, <br />
 					<span className="text-purple-700 text-4xl">I'm Matt DeKrey!</span>
@@ -26,7 +26,7 @@ export function IntroBlock() {
 				</p>
 			</div>
 			<div
-				className="max-w-screen md:flex-shrink-default bg-contain bg-no-repeat h-[100vmin] w-[100vmin] md:h-[60vmin] md:w-[80vmin]"
+				className="max-w-screen md:flex-shrink-default bg-contain bg-no-repeat h-[100vmin] w-[100vmin] md:h-[60vmin] md:w-[80vmin] md:self-end"
 				style={{
 					backgroundImage: `url(${fullUrl.src})`,
 					backgroundPosition: '50% bottom',
