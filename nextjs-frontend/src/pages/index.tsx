@@ -22,6 +22,9 @@ const IndexPage = ({ posts, pageCount }: IndexProps) => {
 				<IntroBlock />
 			</Layout.NoScrollHeaderSlot>
 
+			<Layout.Main className="z-10" />
+			<Layout.Footer className="z-10" />
+
 			<BlogPostList posts={posts} page={1} pageCount={pageCount} />
 		</Layout>
 	);
