@@ -17,9 +17,9 @@ const mainNavLinks = [
 const hideHeaderClass = '-translate-y-full';
 const showHeaderClass = 'bg-white';
 
-const Header = ({ siteTitle = '', showOnScroll }: { siteTitle: string; showOnScroll?: boolean }) => {
-	const shouldShowHeader = useRef(global && global.scrollY === 0);
+const Header = ({ siteTitle = '' }: { siteTitle: string }) => {
 	const [isExpanded, toggleExpansion] = React.useState(false);
+	const shouldShowHeader = useRef(global && global.scrollY === 0);
 	const headerRef = useRef<HTMLHeadingElement>();
 
 	useEffect(() => {
@@ -32,9 +32,9 @@ const Header = ({ siteTitle = '', showOnScroll }: { siteTitle: string; showOnScr
 			scrollPosition = newScrollPosition;
 		}
 
-		if (showOnScroll) window.addEventListener('scroll', onScroll);
-		if (scrollPosition === 0) showHeader();
-		if (scrollPosition && showOnScroll) hideHeader();
+		window.addEventListener('scroll', onScroll);
+		if (scrollPosition <= 0) showHeader();
+		if (scrollPosition) hideHeader();
 
 		return () => {
 			window.removeEventListener('scroll', onScroll);
@@ -50,16 +50,14 @@ const Header = ({ siteTitle = '', showOnScroll }: { siteTitle: string; showOnScr
 			headerRef.current?.classList.remove(hideHeaderClass);
 			shouldShowHeader.current = true;
 		}
-	}, [showOnScroll]);
+	}, []);
 
 	return (
 		<>
 			<header
-				className={classNames('z-10 motion-safe:transition-transform ease-in duration-100', {
-					[showHeaderClass]: !showOnScroll || shouldShowHeader,
-					[hideHeaderClass]: showOnScroll && !shouldShowHeader,
-					sticky: !showOnScroll,
-					'fixed inset-x-0': showOnScroll,
+				className={classNames('z-10 motion-safe:transition-transform ease-in duration-100 fixed inset-x-0', {
+					[showHeaderClass]: shouldShowHeader.current,
+					[hideHeaderClass]: !shouldShowHeader.current,
 				})}
 				style={{ top: 0 }}
 				ref={headerRef}>
@@ -90,10 +88,7 @@ const Header = ({ siteTitle = '', showOnScroll }: { siteTitle: string; showOnScr
 					</nav>
 				</div>
 			</header>
-			<div
-				className={classNames({
-					'pt-16': showOnScroll,
-				})}></div>
+			<div className="pt-16"></div>
 		</>
 	);
 };

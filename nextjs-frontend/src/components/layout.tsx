@@ -23,7 +23,7 @@ const Layout = withSlots<
 >(({ children, slotProps: { NoScrollHeaderSlot, Main, Footer: FooterSlot } }) => {
 	return (
 		<div className="flex flex-col min-h-screen font-sans text-gray-900">
-			<Header siteTitle={siteMetadata.title} showOnScroll={!!NoScrollHeaderSlot?.children} />
+			<Header siteTitle={siteMetadata.title} />
 			{NoScrollHeaderSlot?.children}
 
 			<main

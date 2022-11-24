@@ -1,0 +1,152 @@
+---
+title: "Pure React Components"
+date: "2022-11-24"
+draft: true
+author: Matthew DeKrey
+tags:
+  - react
+  - frontend
+---
+
+I recommend to my teams that they use "pure react components" - but, like usual, I've realized that I use the term a bit
+differently than most. There are two major React patterns that I follow, and from these, I consider both
+"Presentational" and "Single Element" components to be the true "Pure" components.
+
+## Container vs. Presentational Components
+
+State management in React is hard. In order to separate the concerns, a common pattern of Container vs. Presentational
+components is used. (This is also known as Smart and Dumb components.)
+
+### Container Components
+
+Container components are basically a catch-all. They:
+
+- Orchestrate data from other parts of the application by:
+	- Making API calls
+	- Using data from context
+	- Connecting to a state store
+
+	If things get complex, I recommend moving interconnected logic to hooks or
+	even "services", but that is an article for another time.
+
+- Do not need to return a single JSX element, but they might return only their corresponding Presentational component
+- Reference either Container or Presentational components
+- Avoid using plain HTML elements
+- Have tests that do a shallow render to ensure the data is passed correctly to the child components
+
+### Presentational Components
+
+Presentational components are the renderable part when following this pattern. They:
+
+- Are "controlled" components
+- Do not access context, API calls, state stores, etc.
+- Have primitive properties, such as strings, numbers, booleans, and arrays of objects when necessary
+- Provide events in the style of HTML DOM events, such as `onNameChanged`
+- May use "slots" to pass properties deeper (Right now, I prefer the
+  [react-slot-component](https://www.npmjs.com/package/react-slot-component).)
+- Should not use objects directly from the API layer
+	- (I get a lot of push-back on this because it does create redundant code, but it also ensures the Presentational
+		components receive only what they need, keeping them more Pure by the traditional standard.)
+- Should have representation within Storybook
+- Have tests that test user functionality or snapshots
+
+
+Finally, follow as many of the Single Element Pattern recommendations as possible when making a presentational
+component, especially:
+
+- Never break the app
+- Always merge the styles passed as props (such as via [tailwind-merge](https://www.npmjs.com/package/tailwind-merge))
+- Always try to create a component — such as `AvatarRounded` — which renders `Avatar` and modifies it, rather than
+  adding a custom prop.
+- Render all HTML attributes passed as props (do not change the attribute names)
+
+## Single Element Pattern
+
+The [Single Element pattern](https://www.freecodecamp.org/news/introducing-the-single-element-pattern-dfbd2c295c5d/) is
+a great pattern for making reusable low-level components. I recommend most of its advice. Specifically, they:
+
+- Never break the app
+- Render all HTML attributes passed as props (do not change the attribute names)
+- Always merge the styles passed as props (such as via [tailwind-merge](https://www.npmjs.com/package/tailwind-merge))
+- Add all the event handlers passed as props
+
+Note I left out the "render a single element". That's because in many situations, such as an `<svg>` element or when
+recreating a dropdown with a custom style, you'll need multiple elements. If you follow the other rules, it usually
+comes out with the expected effect.
+
+I also recommend the following from that article:
+
+- Always try to create a component — such as `AvatarRounded` — which renders `Avatar` and modifies it, rather than
+  adding a custom prop.
+- Receive the underlying HTML element as a prop, when practical, which pairs nicely with the previous point.
+
+Following most of these also pushes you gently towards the [Open-Closed Principle](https://en.wikipedia.org/wiki/Open%E2%80%93closed_principle),
+which will help your application be more stable as it grows.
+
+## Exceptions
+
+Of course, there are exceptions to these rules.
+
+### Forms
+
+Forms are hard in React, and I can't stress that enough. This is partly due to the two-directional data flow that is
+needed, but also partly due to the state of the forms libraries. Currently, they need to break these rules, at least to
+some degree, for every React library so far.
+
+<div className="italic m-4 px-4 py-px bg-slate-200">
+	As a side note... that gives me an idea on how to make Forms libraries in React behave better. Forms in html have a
+	reference to their child components' through the name (see [item 2 in this Stack Overflow question](https://stackoverflow.com/q/2435525/195653).)
+	This makes form use in jQuery or even vanilla JS via the `FormData` object trivial. If something could be done to
+	abstract most form elements that way with an additional way to register via context... validation done through the
+	[Constraint Validation API](https://developer.mozilla.org/en-US/docs/Web/API/Constraint_validation)... well, I
+	think that would be pretty special. Maybe I'll give it a go someday.
+</div>
+
+### JavaScript-driven animations and reactions to user input, such as scrolling or mouse input.
+
+In _very_ rare situations, may update their own DOM elements via `ref`s. In even rarer situations, where that
+information needs to be passed to another component, use some sort of Subject/Observable such as those from rxjs. One
+example of this is the header of this site (at the time of writing) - classes are added and removed via a ref to the
+element, and a ref is used to track the current state of that change for rerender purposes.
+
+```tsx
+const shouldShowHeader = useRef(global && global.scrollY === 0);
+const headerRef = useRef<HTMLHeadingElement>();
+
+useEffect(() => {
+	let scrollPosition = window.scrollY;
+	function onScroll() {
+		const newScrollPosition = window.scrollY;
+		if (newScrollPosition < scrollPosition || newScrollPosition <= 0) showHeader();
+		else if (newScrollPosition > scrollPosition) hideHeader();
+
+		scrollPosition = newScrollPosition;
+	}
+
+	window.addEventListener('scroll', onScroll);
+	if (scrollPosition <= 0) showHeader();
+	if (scrollPosition) hideHeader();
+
+	return () => {
+		window.removeEventListener('scroll', onScroll);
+	};
+
+	function hideHeader() {
+		headerRef.current?.classList.remove(showHeaderClass);
+		headerRef.current?.classList.add(hideHeaderClass);
+		shouldShowHeader.current = false;
+	}
+	function showHeader() {
+		headerRef.current?.classList.add(showHeaderClass);
+		headerRef.current?.classList.remove(hideHeaderClass);
+		shouldShowHeader.current = true;
+	}
+}, []);
+```
+
+### Other exceptions?
+
+Using third party APIs, edge case user experience, and many other things could be the cause for an exception. With this
+in mind, the closer these rules are followed, the cleaner React tends to look, the more testable it ends up being, and
+the easier it is to safely reuse and refactor much of the application. If you have ideas of another common exception,
+please let me know! I'd like to keep this document updated.
