@@ -19,7 +19,7 @@ const showHeaderClass = 'bg-white';
 
 const Header = ({ siteTitle = '' }: { siteTitle: string }) => {
 	const [isExpanded, toggleExpansion] = React.useState(false);
-	const shouldShowHeader = useRef(global && global.scrollY === 0);
+	const shouldShowHeader = useRef(global && !global.scrollY);
 	const headerRef = useRef<HTMLHeadingElement>();
 
 	useEffect(() => {
