@@ -15,6 +15,7 @@ export type BlogPost = {
 	code: string;
 	frontmatter: {
 		excerpt: string;
+		draft?: boolean;
 		title?: string;
 		image?: string;
 		date?: string;
@@ -75,6 +76,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost> {
 			excerpt: frontmatter.excerpt ?? (await getExcerpt(matter.content)),
 			title: frontmatter.title,
 			image: frontmatter.image ? path.join(articlesImportRoot, slug, frontmatter.image) : null,
+			draft: frontmatter.draft,
 			date: frontmatter.date,
 			tags: frontmatter.tags,
 			readingTime:

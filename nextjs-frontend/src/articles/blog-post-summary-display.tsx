@@ -2,6 +2,10 @@ import classNames from 'classnames';
 import Link from 'next/link';
 import { BlogPost } from 'src/articles/utils';
 import { linkClassName } from '../components/styles';
+import identity from 'lodash/fp/identity';
+import sortBy from 'lodash/fp/sortBy';
+
+const tagSort = sortBy<string>(identity);
 
 export type BlogPostSummary = Pick<BlogPost, 'slug' | 'frontmatter'>;
 
@@ -15,9 +19,12 @@ export function toSummary(post: BlogPost): BlogPostSummary {
 export const BlogPostSummaryDisplay = ({ post: blogSummary }: { post: BlogPostSummary }) => (
 	<div className="py-8 flex flex-wrap md:flex-nowrap">
 		<div className="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
-			<span className="tracking-widest font-medium text-gray-900">
-				{(blogSummary.frontmatter.tags && blogSummary.frontmatter.tags[0]) || 'software'}
-			</span>
+			{blogSummary.frontmatter.tags &&
+				tagSort(blogSummary.frontmatter.tags).map((tag) => (
+					<span className="tracking-widest font-medium text-gray-900" key={tag}>
+						{tag}
+					</span>
+				))}
 			<span className="mt-1 text-gray-500 text-sm">{blogSummary.frontmatter.date}</span>
 		</div>
 		<div className="md:flex-grow">
