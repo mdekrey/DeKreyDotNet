@@ -1,0 +1,95 @@
+---
+title: "AWS Security Basics"
+date: "2022-12-10"
+draft: false
+author: Matthew DeKrey
+tags:
+  - aws
+  - cloud
+  - security
+---
+
+I was asked recently what my security recommendations would be for an AWS account. I'm not in infosec personally, so
+this is definitely not a comprehensive security post - it's more of an outline to get things at least moving in the right
+direction.
+
+## Basic guidelines
+
+**Keep the main AWS account separate from the sandbox where engineers can test their policies.** In my
+experience, it is difficult to get AWS permissions correct the first time, and engineers need a place to test policies
+before they are reviewed but also where they can't accidentally access something they shouldn't. That said, the sandbox
+should have no long-running services: all test and production services can be in the main account once policy changes
+are reviewed by the security team. All of the following recommendations are for the main account.
+
+**Engineer permissions should be based on groups based on the team they are assigned to.** The groups for
+these should include the basic permissions all engineers should have. These permissions may vary depending on your
+organization's needs, but I specifically recommend [allowing MFA-authenticated users to manage their own credentials](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_aws_my-sec-creds-self-manage.html).
+This has a nice added effect that engineer accounts also cannot be used in automation tasks: MFA would need to be
+entered each time.
+
+**Applications should have their own permission policies that get created with the application.** These are
+version controlled and reviewed before deployment to the main AWS account by a security team member - they should be in
+the CloudFormation stack for each application that is deployed to AWS. (The CloudFormation stack should specify
+the exact ARNs for the resources they should have permission to, rather than specifying wildcard permissions.) Different
+policies should be created for read-only access, read-write access, and deployment, but more policies may be applicable
+depending on the application.
+
+**Team groups would be assigned policies based on the applications that that team maintains.** Depending on the
+organization, the groups may only be assigned an `sts:AssumeRole` permission for some or all of the policies; this
+ensures users with elevated permissions don't accidentally copy data from production while intending to use dev
+instances.
+
+- For dev versions of their application, engineers should have full read/write permissions to debug.
+- For test versions of their application, engineers should have read permissions to debug, but not write.
+- For production, engineers may have read access where necessary, or no permissions.
+
+**Deployment should be able to update policies, but policies should be reviewed by a security team member.** Because
+engineers should be able to test their policies before sending them to be reviewed, engineers should be able to deploy
+their own applications in the sandbox by use of a deployment role. This devops technique will allow permissions to be
+tested by the engineer best suited for the task (they use the roles they updated in dev and test to diagnose
+applications.) Deployment processes should be able to leverage the same policies as created within the CloudFormation
+stack after its first deployment.
+
+**When production issues require elevated privileges, grant access through a fixed-time policy.** The policies for the
+applications can be assigned to a role, and access to that specific role can be granted [based on date and time.](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_aws-dates.html)
+Limiting access based on time ensures security does not accidentally become more lax over time, and fits with many
+organizations' firefighter policies.
+
+**A VPC policy should be established.**
+
+- Should each application get its own VPC?
+- Is there an intentional DMZ VPC, and other applications should create their own?
+
+**Each application should have its own security group.** Creation of the security groups and rules for access between
+them should be maintained in the CloudFormation stack. These rules should be reviewed by security team members.
+
+Some applications need end developers to be able to access a security group directly for local development. Your
+organization should determine how this is handled. This could include adding a policy in the application's
+CloudFormation stack that allows updating of the security group inbound rules, or it could be adding a VPN IP range
+specifically to certain versions of the application (again, via the CloudFormation stack.)
+
+**Secrets Manager should be leveraged under guidance of an organization policy.** Your organization should establish a
+policy for how. Be sure to include:
+
+- What is the format of secret names? (`phase/app/item` is common, so `dev/messaging/twilio` would be an example.)
+- Whose responsibility is it to update them? (Can they be automated? Are there manual processes) Make sure
+- How do Secrets get reused? (Some SAS solutions only provide one API key to an organization; does that key get copied to multiple Secrets for each application that needs it, or can applications share a single Secret inside Secrets Manager?)
+
+My recommendations would be to have a single secret for each unique credential. If secrets can be unique to an
+application, they get created with that application's CloudFormation stack. If they are shared, the secret could be
+created independently or maintained via CloudFormation, but then referenced via the CloudFormation stack of the end
+application.
+
+## Security team touch-points
+
+How does the security team get involved in these processes? The security team should be a required reviewer on changes
+that affect the CloudFormation template before they are deployed to the main account. At a minimum, the security team
+should check:
+
+- Policy changes
+- Security Group changes
+
+## So, what did I miss?
+
+As mentioned earlier, I am not an infosec professional, but this should provide a baseline for getting a new AWS account
+set up... or maybe for starting the process to improve your organization's existing setup.
