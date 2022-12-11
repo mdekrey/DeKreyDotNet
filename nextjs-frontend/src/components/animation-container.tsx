@@ -1,8 +1,8 @@
-import { DependencyList, EffectCallback, LegacyRef, useEffect, useMemo, useState } from 'react';
+import { DependencyList, EffectCallback, LegacyRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import uniqueId from 'lodash/fp/uniqueId';
 
-console.warn('new', 2);
+import { EffectComposer, RenderPass, EffectPass, BloomEffect } from 'postprocessing';
 
 const canvasId = uniqueId('three');
 
@@ -12,8 +12,8 @@ function useMountedRef<T extends Element>(
 ): LegacyRef<T> {
 	const [currentElement, setCurrentElement] = useState<T | undefined>(undefined);
 	useEffect(() => {
-		console.log({ mounting: canvasId });
-		if (currentElement) {
+		console.log({ mounting: canvasId, currentElement, window });
+		if (currentElement && typeof window !== 'undefined') {
 			const dispose = effect(currentElement);
 			return dispose;
 		}
@@ -26,40 +26,57 @@ function useMountedRef<T extends Element>(
 	};
 }
 
-function useThreeJs({ scene, onFrame }: Omit<Parameters<typeof renderThreeJs>[0], 'canvas'>) {
-	return useMountedRef<HTMLCanvasElement>((canvas) => renderThreeJs({ canvas, scene, onFrame }), [scene, onFrame]);
+function useThreeJs({ onFrame }: Omit<Parameters<typeof renderThreeJs>[0], 'canvas'>) {
+	return useMountedRef<HTMLCanvasElement>((canvas) => renderThreeJs({ canvas, onFrame }), [onFrame]);
 }
 
 // init
 function renderThreeJs({
 	canvas,
-	scene,
 	onFrame,
 }: {
 	canvas: HTMLCanvasElement;
-	scene: THREE.Scene;
-	onFrame?: (time: number) => void;
+	onFrame: (params: { canvas: HTMLCanvasElement; time: number }) => { scene: THREE.Scene; camera: THREE.Camera };
 }): ReturnType<EffectCallback> {
 	fixResolution(canvas);
 
-	const camera = new THREE.PerspectiveCamera(70, canvas.clientWidth / canvas.clientHeight, 0.01, 10);
-	camera.position.z = 1;
-
 	const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
+	renderer.setPixelRatio(window.devicePixelRatio);
+	renderer.toneMapping = THREE.ReinhardToneMapping;
 	renderer.setAnimationLoop(animation);
+	renderer.autoClear = false;
+	renderer.outputEncoding = THREE.sRGBEncoding;
+
+	const composer = new EffectComposer(renderer);
+	const renderPass = new RenderPass();
+	composer.addPass(renderPass);
+	const bloomEffect = new BloomEffect({ intensity: 1, luminanceThreshold: 0 });
+	composer.addPass(new EffectPass(null, bloomEffect));
 
 	// animation
 
-	function animation(time: number) {
-		camera.aspect = canvas.clientWidth / canvas.clientHeight;
-		onFrame?.(time);
+	let lastTime = 0;
 
-		renderer.render(scene, camera);
+	function animation(time: number) {
+		const deltaTime = time - lastTime;
+		lastTime = time;
+
+		// renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+		// composer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+		const { scene, camera } = onFrame({ canvas, time });
+		// renderer.render(scene, camera);
+		composer.setMainScene(scene);
+		composer.setMainCamera(camera);
+		// renderPass.mainScene = scene;
+		// renderPass.mainCamera = camera;
+		composer.render(deltaTime);
 	}
 
 	return () => {
 		console.log({ disposing: canvasId });
 		renderer.dispose();
+		composer.dispose();
 	};
 }
 
@@ -69,12 +86,10 @@ function fixResolution(canvas: HTMLCanvasElement) {
 }
 
 export function ThreeCanvas({
-	scene,
 	onFrame,
 	...props
 }: JSX.IntrinsicElements['canvas'] & Omit<Parameters<typeof renderThreeJs>[0], 'canvas'>) {
 	const canvasRef = useThreeJs({
-		scene,
 		onFrame,
 	});
 	return <canvas key={canvasId} ref={canvasRef} {...props} />;

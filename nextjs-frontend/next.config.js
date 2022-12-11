@@ -7,6 +7,13 @@ const config = {
 	eslint: {
 		dirs: ['..'],
 	},
+	webpack: (config) => {
+		config.module.rules.push({
+			test: /\.glsl$/,
+			type: 'asset/source',
+		});
+		return config;
+	},
 };
 
 function composeConfig(config, ...plugins) {
