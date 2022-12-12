@@ -6,5 +6,5 @@ module.exports = {
 		'@next/next/no-img-element': 0,
 		'@typescript-eslint/no-var-requires': 0,
 	},
-	ignorePatterns: ['/*.json'],
+	ignorePatterns: ['/*.json', '/node_modules/**/*'],
 };

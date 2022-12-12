@@ -79,13 +79,17 @@ export function ExplosionScene({ className }: { className?: string }) {
 				<ThreeCanvas className={twMerge('w-full h-96', className)} onFrame={onFrame} />
 			) : (
 				<button
-					className={twMerge('w-full h-96 bg-black bg-no-repeat text-center text-blue-900', className)}
+					className={twMerge(
+						'w-full h-96 bg-black bg-no-repeat text-center text-blue-900 text-3xl font-bold',
+						className
+					)}
 					style={{
 						backgroundImage: `url(${screenshotUrl.src})`,
 						backgroundSize: 'contain',
 						backgroundPosition: '50% 50%',
 					}}
-					onClick={onFrame && setPlaying}>
+					onClick={onFrame && setPlaying}
+					title="Click to Play visual effect">
 					<MdPlayArrow className="inline-block w-40 h-40" />
 				</button>
 			)}
