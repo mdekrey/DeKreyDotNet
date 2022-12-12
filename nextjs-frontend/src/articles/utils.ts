@@ -63,6 +63,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost> {
 				'.png': 'file',
 				'.svg': 'file',
 				'.jpg': 'file',
+				'.glsl': 'text',
 			};
 
 			return options;

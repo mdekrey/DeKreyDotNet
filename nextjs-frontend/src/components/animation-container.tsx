@@ -36,7 +36,10 @@ function renderThreeJs({
 	onFrame,
 }: {
 	canvas: HTMLCanvasElement;
-	onFrame: (params: { canvas: HTMLCanvasElement; time: number }) => { scene: THREE.Scene; camera: THREE.Camera };
+	onFrame: (params: { canvas: HTMLCanvasElement; time: number; deltaTime: number }) => {
+		scene: THREE.Scene;
+		camera: THREE.Camera;
+	};
 }): ReturnType<EffectCallback> {
 	fixResolution(canvas);
 
@@ -55,16 +58,17 @@ function renderThreeJs({
 
 	// animation
 
-	let lastTime = 0;
+	let lastTime = performance.now();
 
-	function animation(time: number) {
+	function animation() {
+		const time = performance.now();
 		const deltaTime = time - lastTime;
 		lastTime = time;
 
 		// renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 		// composer.setSize(canvas.clientWidth, canvas.clientHeight);
 
-		const { scene, camera } = onFrame({ canvas, time });
+		const { scene, camera } = onFrame({ canvas, time, deltaTime });
 		// renderer.render(scene, camera);
 		composer.setMainScene(scene);
 		composer.setMainCamera(camera);
