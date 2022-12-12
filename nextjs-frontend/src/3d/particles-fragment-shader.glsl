@@ -1,25 +1,35 @@
 
-uniform vec3 color;
-uniform vec3 emissionColor;
-uniform sampler2D pointTexture;
-uniform sampler2D emissionTexture;
-uniform int horizontalSprites;
-uniform int verticalSprites;
+precision highp float;
+#define gl_FragColor pc_fragColor
+layout(location = 0) out highp vec4 pc_fragColor;
 
-varying float vTime;
+uniform sampler2D pointTexture;
+uniform vec3 emissionColor;
+uniform sampler2D emissionTexture;
+
+in vec2 vUv;
+in float vActive;
+
+// HSL to RGB Convertion helpers
+vec3 HUEtoRGB(float H){
+	H = mod(H,1.0);
+	float R = abs(H * 6.0 - 3.0) - 1.0;
+	float G = 2.0 - abs(H * 6.0 - 2.0);
+	float B = 2.0 - abs(H * 6.0 - 4.0);
+	return clamp(vec3(R,G,B),0.0,1.0);
+}
+
+vec3 HSLtoRGB(vec3 HSL){
+	vec3 RGB = HUEtoRGB(HSL.x);
+	float C = (1.0 - abs(2.0 * HSL.z - 1.0)) * HSL.y;
+	return (RGB - 0.5) * C + HSL.z;
+}
 
 void main() {
-	int spriteIndex = int( vTime * float(horizontalSprites * verticalSprites) );
-	int xSprite = spriteIndex % horizontalSprites;
-	int ySprite = spriteIndex / horizontalSprites;
+	if ( vActive <= 0. ) discard;
 
-	vec2 vUv = vec2(
-		(gl_PointCoord.x + float(xSprite)) / float(horizontalSprites),
-		1.0 - (gl_PointCoord.y + float(ySprite)) / float(verticalSprites)
-	);
+	vec4 diffuseColor = texture( pointTexture, vUv );
 
-	gl_FragColor = vec4( color , 1.0 );
-	gl_FragColor = gl_FragColor * texture2D( pointTexture, vUv );
-	gl_FragColor = gl_FragColor + vec4( emissionColor, 1.0 ) * texture2D( emissionTexture, vUv );
-
+	if ( diffuseColor.w == 0. ) discard;
+	gl_FragColor = diffuseColor + vec4( emissionColor, 1.0 ) * texture( emissionTexture, vUv );
 }
