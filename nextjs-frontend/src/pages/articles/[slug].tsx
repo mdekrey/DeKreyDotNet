@@ -42,7 +42,7 @@ export default function Article({ data }: ArticleProps) {
 				<header className={articleStyles.header}>
 					<h1 className="font-bold mb-4 text-4xl">{frontmatter?.title}</h1>
 					<p className={articleStyles.subheader}>
-						{new Date(frontmatter?.date).toLocaleDateString()} &mdash; {readingTime?.text}
+						{frontmatter?.date} &mdash; {readingTime?.text}
 					</p>
 				</header>
 				<div className={articleStyles.markdown}>{Component && <Component components={components} />}</div>
