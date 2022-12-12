@@ -4,7 +4,7 @@ import Layout from 'src/components/layout';
 import articleStyles from './article.module.css';
 import SEO from 'src/components/seo';
 import { GetStaticPathsResult, GetStaticProps, GetStaticPropsResult } from 'next';
-import { BlogPost, getAllPosts, getPostBySlug } from 'src/articles/utils';
+import { getAllPosts } from 'src/articles/utils';
 
 import { useAsync } from 'src/components/useAsync';
 
@@ -30,9 +30,10 @@ export default function Article({ data }: ArticleProps) {
 	const components = useMDXComponents(pathedComponents);
 	const componentModule = useAsync(
 		async () => await (import(`../../articles/${data.slug}/index.mdx`) as Promise<typeof import('*.mdx')>),
-		null,
+		{} as Partial<typeof import('*.mdx')>,
 		[]
 	);
+	console.log(componentModule);
 	const { default: Component, frontmatter, readingTime } = componentModule ?? {};
 	return (
 		<Layout>

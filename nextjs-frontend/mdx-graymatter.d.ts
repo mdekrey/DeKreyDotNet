@@ -1,6 +1,5 @@
 declare module '*.mdx' {
 	export const frontmatter: {
-		excerpt: string;
 		draft?: boolean;
 		title?: string;
 		image?: string;
@@ -13,4 +12,5 @@ declare module '*.mdx' {
 		time: number;
 		words: number;
 	};
+	export const excerpt: string;
 }

@@ -29,6 +29,8 @@ function composeConfig(config, ...plugins) {
 }
 
 const withMDX = async () => {
+	const remarkExcerpt = (await import('./remark-excerpt.mjs')).default;
+	// console.log({ remarkExcerpt });
 	return require('@next/mdx')({
 		extension: /\.mdx?$/,
 		options: {
@@ -39,6 +41,7 @@ const withMDX = async () => {
 				(await import('remark-mdx-images')).remarkMdxImages,
 				[(await import('remark-reading-time')).default, { attribute: 'readingTime' }],
 				[(await import('remark-reading-time/mdx.js')).default, { attribute: 'readingTime' }],
+				[remarkExcerpt],
 			],
 			rehypePlugins: [
 				[
