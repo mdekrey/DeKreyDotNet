@@ -24,7 +24,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/articles/remark-excerpt.js"  ],
   "exclude": [
     "node_modules"
   ]

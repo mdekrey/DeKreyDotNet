@@ -7,12 +7,14 @@ import sortBy from 'lodash/fp/sortBy';
 
 const tagSort = sortBy<string>(identity);
 
-export type BlogPostSummary = Pick<BlogPost, 'slug' | 'frontmatter'>;
+export type BlogPostSummary = Pick<BlogPost, 'slug' | 'frontmatter' | 'excerpt' | 'readingTime'>;
 
 export function toSummary(post: BlogPost): BlogPostSummary {
 	return {
 		slug: post.slug,
 		frontmatter: post.frontmatter,
+		readingTime: post.readingTime,
+		excerpt: post.excerpt ?? null,
 	};
 }
 
@@ -33,10 +35,10 @@ export const BlogPostSummaryDisplay = ({ post: blogSummary }: { post: BlogPostSu
 					<a>{blogSummary.frontmatter.title}</a>
 				</Link>
 			</h2>
-			<p className="leading-relaxed">{blogSummary.frontmatter.excerpt}</p>
+			<p className="leading-relaxed">{blogSummary.excerpt}</p>
 			<Link href={`/articles/${blogSummary.slug}`}>
 				<a className={classNames(linkClassName, 'inline-flex items-center mt-4')}>
-					Read More
+					Read More ({blogSummary.readingTime.text})
 					<svg
 						className="w-4 h-4 ml-2"
 						viewBox="0 0 24 24"
