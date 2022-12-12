@@ -1,5 +1,3 @@
-// import { remark } from 'remark';
-// import strip from 'strip-markdown';
 import { name as isIdentifierName } from 'estree-util-is-identifier-name';
 import { valueToEstree } from 'estree-util-value-to-estree';
 import { visit } from 'unist-util-visit';
@@ -19,9 +17,7 @@ export default function toExcerpt({ attribute = 'excerpt' } = {}) {
 		const excerpt = text.split(' ').splice(0, 25).join(' ') + '...';
 		file.data[attribute] = excerpt;
 
-		// console.log(excerpt);
-		// console.log(info.children.filter((i) => i.type === 'mdxjsEsm'));
-
+		// makes it an export in mdx files
 		info.children.unshift({
 			type: 'mdxjsEsm',
 			data: {

@@ -1,14 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import { remark } from 'remark';
-import readingTime from 'remark-reading-time';
-import { bundleMDX } from 'mdx-bundler';
-import { remarkMdxImages } from 'remark-mdx-images';
-import remarkUnwrapImages from 'remark-unwrap-images';
-import rehypeHighlight from 'rehype-highlight';
-import strip from 'strip-markdown';
-import fsharp from 'highlight.js/lib/languages/fsharp';
-import dockerfile from 'highlight.js/lib/languages/dockerfile';
 
 export type BlogPost = { slug: string } & typeof import('something.mdx');
 
