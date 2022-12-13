@@ -3,6 +3,7 @@ declare module '*.mdx' {
 		draft?: boolean;
 		title?: string;
 		image?: string;
+		excerpt?: string;
 		date?: string;
 		tags?: string[];
 	};
@@ -16,4 +17,6 @@ declare module '*.mdx' {
 	};
 	export const readingTime: ReadingTime;
 	export const excerpt: string;
+
+	export const ogImage: string | undefined;
 }

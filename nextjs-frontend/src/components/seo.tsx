@@ -2,9 +2,16 @@ import React from 'react';
 import Head from 'next/head';
 import siteMetadata from '../siteMetadata';
 
-function SEO({ title, image: metaImage }: { title: string; image?: string }) {
+function SEO({
+	title,
+	image: metaImage,
+	description: metaDescription = siteMetadata.description,
+}: {
+	title: string;
+	image?: string;
+	description?: string;
+}) {
 	const rootUrl = (siteMetadata.url as string).replace(/\/$/, '');
-	const metaDescription = siteMetadata.description;
 
 	return (
 		<Head>

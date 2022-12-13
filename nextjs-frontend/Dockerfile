@@ -4,6 +4,8 @@ WORKDIR /src
 ADD package*.json ./
 RUN npm ci
 ADD . ./
+ARG DOMAIN=https://dekrey.net
+ENV NEXT_PUBLIC_DOMAIN=$DOMAIN
 RUN npm run build
 RUN npm run export
 
