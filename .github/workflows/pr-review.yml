@@ -29,7 +29,7 @@ jobs:
 
     - name: 'Build and push image'
       run: |
-        docker build . -t $registryLoginServer/$imageName:${{ github.sha }}
+        docker build . -t $registryLoginServer/$imageName:${{ github.sha }} --build-arg DOMAIN=https://pr-${{ github.event.pull_request.number }}.dekrey.net --build-arg GIT_HASH=${{ github.sha }}
         docker push $registryLoginServer/$imageName:${{ github.sha }}
       working-directory: ./nextjs-frontend
 

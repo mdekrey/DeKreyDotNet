@@ -14,7 +14,7 @@ export default function toExcerpt({ attribute = 'excerpt' } = {}) {
 			text += node.value;
 		});
 
-		const excerpt = text.split(' ').splice(0, 25).join(' ') + '...';
+		const excerpt = text.split(/\s/g).splice(0, 25).join(' ') + '...';
 		file.data[attribute] = excerpt;
 
 		// makes it an export in mdx files

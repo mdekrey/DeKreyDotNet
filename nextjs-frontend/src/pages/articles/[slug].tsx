@@ -5,11 +5,16 @@ import articleStyles from './article.module.css';
 import SEO from 'src/components/seo';
 import { GetStaticPathsResult, GetStaticProps, GetStaticPropsResult } from 'next';
 import { getAllPosts } from 'src/articles/utils';
-
+import type { FrontMatter } from 'nonexistant.mdx';
 import { useAsync } from 'src/components/useAsync';
 
 type ArticleProps = {
-	data: { slug: string };
+	data: {
+		slug: string;
+		frontmatter: FrontMatter;
+		image: string | null;
+		excerpt: string;
+	};
 };
 
 const pathedComponents: ComponentProps<typeof MDXProvider>['components'] = {
@@ -26,23 +31,25 @@ const pathedComponents: ComponentProps<typeof MDXProvider>['components'] = {
 	},
 };
 
-export default function Article({ data }: ArticleProps) {
-	const components = useMDXComponents(pathedComponents);
-	const componentModule = useAsync(
-		async () => await (import(`../../articles/${data.slug}/index.mdx`) as Promise<typeof import('*.mdx')>),
-		{} as Partial<typeof import('*.mdx')>,
-		[]
+function useArticleBySlug(slug: string) {
+	return useAsync(
+		async () => (await import(`../../articles/${slug}/index.mdx`)) as Partial<typeof import('*.mdx')>,
+		{},
+		[slug]
 	);
-	console.log(componentModule);
-	const { default: Component, frontmatter, readingTime } = componentModule ?? {};
+}
+
+export default function Article({ data: { slug, frontmatter, excerpt, image } }: ArticleProps) {
+	const components = useMDXComponents(pathedComponents);
+	const { default: Component, readingTime } = useArticleBySlug(slug);
 	return (
 		<Layout>
-			<SEO title={frontmatter?.title ?? 'WIP'} image={frontmatter?.image ?? ''} />
+			<SEO title={frontmatter.title ?? 'WIP'} image={image ?? ''} description={excerpt} />
 			<article className={articleStyles.article}>
 				<header className={articleStyles.header}>
-					<h1 className="font-bold mb-4 text-4xl">{frontmatter?.title}</h1>
+					<h1 className="font-bold mb-4 text-4xl">{frontmatter.title}</h1>
 					<p className={articleStyles.subheader}>
-						{frontmatter?.date} &mdash; {readingTime?.text}
+						{frontmatter.date} &mdash; {readingTime?.text}
 					</p>
 				</header>
 				<div className={articleStyles.markdown}>{Component && <Component components={components} />}</div>
@@ -54,10 +61,16 @@ export default function Article({ data }: ArticleProps) {
 export const getStaticProps: GetStaticProps<ArticleProps, { slug: string }> = async ({
 	params,
 }): Promise<GetStaticPropsResult<ArticleProps>> => {
+	const { frontmatter, excerpt, ogImage } = (await import(
+		`../../articles/${params.slug}/index.mdx`
+	)) as typeof import('*.mdx');
 	return {
 		props: {
 			data: {
 				slug: params.slug,
+				frontmatter,
+				image: ogImage ?? null,
+				excerpt: frontmatter.excerpt ?? excerpt,
 			},
 		},
 	};

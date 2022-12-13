@@ -14,7 +14,7 @@ export function toSummary(post: BlogPost): BlogPostSummary {
 		slug: post.slug,
 		frontmatter: post.frontmatter,
 		readingTime: post.readingTime,
-		excerpt: post.excerpt ?? null,
+		excerpt: post.frontmatter.excerpt ?? post.excerpt ?? null,
 	};
 }
 
