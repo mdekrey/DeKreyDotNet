@@ -77,9 +77,9 @@ intermediate step is easier than the last.
 	  do the right thing!
 - Improving security is hard. Work to construct a process that makes creating a secure application easier than an
   unsecure application.
-	- Make new Secrets in AWS Secrets Manager easier than adding generic storage or configuration values! Make it easy
-	  for secrets to be updated and changed without checking into source control. .NET does this for local development
-	  with the `dotnet user-secrets` command.
+	- Make new Secrets in AWS Secrets Manager (or other secrets vault) easier than adding generic storage or
+	  configuration values! Make it easy for secrets to be updated and changed without checking into source control.
+	  .NET does this for local development with the `dotnet user-secrets` command.
 	- Make getting necessary permissions for users, especially in lower environments, easier than sharing credentials.
 	  This means rapidly approving and provisioning permissions, but keeping them granular enough that shared
 	  credentials don't usually help. It can also mean restricting credentials to being used from only one location at
