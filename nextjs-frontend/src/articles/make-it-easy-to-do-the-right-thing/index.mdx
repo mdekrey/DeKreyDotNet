@@ -75,25 +75,29 @@ intermediate step is easier than the last.
 	- Write a decision-making matrix to help engineers in the future define new packages; the existing strategies should
 	  be able to be determined from that matrix. Reduction in decision making will help the more junior developers still
 	  do the right thing!
-- Improving security is hard. Work to making a process that makes creating a secure application easier than an unsecure
-  application.
-	- Make new Secrets in secrets manager easier than adding generic storage or configuration values! Make it easy for
-	  secrets to be updated and changed without checking into source control. .NET does this for local development with
-	  the `dotnet user-secrets` command.
+- Improving security is hard. Work to construct a process that makes creating a secure application easier than an
+  unsecure application.
+	- Make new Secrets in AWS Secrets Manager easier than adding generic storage or configuration values! Make it easy
+	  for secrets to be updated and changed without checking into source control. .NET does this for local development
+	  with the `dotnet user-secrets` command.
 	- Make getting necessary permissions for users, especially in lower environments, easier than sharing credentials.
 	  This means rapidly approving and provisioning permissions, but keeping them granular enough that shared
 	  credentials don't usually help. It can also mean restricting credentials to being used from only one location at
 	  a time, requiring SSL public/private keys, MFA, IP filtering, etc.
 	- Make getting granular permissions for new services, or adding permissions to existing services, easier than adding
-	  user credentials to those services.
+	  user credentials to those services. (This includes build systems.)
+	- Make getting new credentials for a new service easier than accessing the existing credentials for an existing
+	  service.
 	- When moving to a more secure system, make sure you work with people that use the system already to make sure the
 	  new system will work for them - don't surprise them with sudden decreased access.
+	- Make a list of legacy credentials and audit them on a rolling basis to eliminate them and move to new credentials.
+	  Prioritize this work as the new systems become more and more standard.
 
 # Organizational Policies
 
-I suspect this doesn't apply just to engineering. Setting up organizational alignment is only a start; making it easy
-for every employee, from the directors to the line managers and even employees, to make the right decision in the moment
-should move the company in a positive direction every day, for every decision.
+From my formal education, I know this doesn't apply just to engineering. Setting up organizational alignment is only a
+start; making it easy for every employee, from the directors to the line managers and even employees, to make the right
+decision in the moment should move the company in a positive direction every day, for every decision.
 
 - Set up a vision for where the organization will go.
 - Look at the decision points that get made each day - from what contracts to sign, to how to allocate employee time.
@@ -103,15 +107,17 @@ should move the company in a positive direction every day, for every decision.
 
 A simple example may be an airline policy, when the company values comfort of employees, but doesn't want to spend too
 much, but knows that an employee's time is billable. In this case, simple rules may help:
-- Employees to ride any non-luxury airline they wish, but anything beyond "extra leg room" would be an expense for the
-  employee.
+- Employees may ride any non-luxury airline they wish, but any upgrade beyond "extra leg room" would be an expense for
+  the employee.
 - Luggage charges are to be covered by the company.
-- If the flight is more than 2 hours, in-air wi-fi may be expensed if at least 30 minutes of time is billable.
-- Direct flights are preferred.
+- If the flight is more than 2 hours, in-air internet may be expensed if at least 30 minutes of time is billable.
+- Direct flights are preferred to minimize employee's in-airport time.
 - Red-eye flights are not necessary.
+- Airport parking or transport to/from the airport is covered by the company.
 
 Slogans from both past and current employers indicate this, too:
 - We are who we are, because of who we are together.
 - Do good work. Be good people.
 
-A proper set of policies can help improve a codebase or an organization. Make sure you're doing it all the way through!
+A proper set of policies can help improve a codebase or an organization. Make sure you're making it easy to do the
+right thing all the way through the migration process!
