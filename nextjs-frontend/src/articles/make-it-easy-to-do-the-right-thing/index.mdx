@@ -1,0 +1,117 @@
+---
+title: "Doing the Right Thing"
+date: "2023-01-05"
+draft: false
+author: Matthew DeKrey
+tags:
+  - architecture
+  - organization
+---
+
+Generally speaking, employees want to be good at their jobs. We like to know that the people around us can depend on us
+to get our responsibilities done, and we want to help improve the overall quality of life of everyone involved.
+Especially with the high-quality teams that I usually find myself a part of, everyone would prefer we're all moving in
+the "right direction," though we may disagree on what that direction is.
+
+However, despite us all wanting to move together, there tends to be friction, especially when timelines are short:
+situations frequently come up where we do the wrong thing! Why is that?
+
+# Make it easy to do the right thing
+
+As a software architect, I don't see myself as the gatekeeper of architecture for my teams - on the contrary,
+architecture is everyone's responsibility. Instead, I my responsibility as helping people make the right decisions to
+make the right thing be the easiest thing to do. As [Scott Hanselman](https://www.hanselman.com/) frequently says,
+I want everyone to "fall into the pit of success..." the earliest reference I can find is via an
+[old archive of Brad Abrams' blog](https://learn.microsoft.com/en-us/archive/blogs/brada/the-pit-of-success):
+
+> **The Pit of Success:** in stark contrast to a summit, a peak, or a journey across a desert to find victory through
+> many trials and surprises, we want our customers to simply fall into winning practices by using our platform and
+> frameworks. To the extent that we make it easy to get into trouble we fail.
+>
+> &mdash; Rico Mariani, MS Research MindSwap Oct 2003
+
+Ultimately, success must be easier to do than failure - the right thing must be harder to do than the wrong thing.
+
+# Making the wrong thing harder
+
+Often, I'll work with an engineering team and talk about architecture updates - how we can make dependency management
+clearer, upgrade an aging technology stack, how we can make an application more secure. The entire team seems on
+board... but if I let it slide thinking my job is done, I'll come back months later without any changes to what has
+been occurring. Are the teams malicious? Of course not! Are they not contradicting me even though they disagree?
+Possibly, but I feel like I do a pretty good job establishing that I'm not perfect in my decisions - I encourage
+disagreements in planning stages, ask others their opinions &mdash; especially new folks, as they have fresh external
+viewpoints! &mdash; and most importantly, change my mind when someone presents a better option. Are they lazy?
+Definitely not; despite my best efforts to encourage people to take personal time, I had extra team members volunteer
+for the latest late-night release for a client, and engineers talking about "cheating" on their holiday time because
+they were excited about upcoming projects. (You know who you are; I really wish you wouldn't. But I 💗 you all anyway.)
+
+(As an aside: I don't believe [greenfield projects](https://en.wikipedia.org/wiki/Greenfield_project) are a solution for
+bad architectural decisions. This costs too much, and the path to being feature parity with the old version is littered
+with conflicts of interest. Instead, refactoring an existing project, team, etc. is encouraged. I approach the code with
+the same respect I do existing teams: they were built for a reason, and without understanding
+[Chesterton's Fence](https://thoughtbot.com/blog/chestertons-fence) we're doomed to repeat the same mistakes.)
+
+Instead, I feel that the failure lies in making it easy. This means not just defining the end goal, but making sure each
+intermediate step is easier than the last.
+
+- Converting from Angular to React is hard. Ensure that the React code is easy to write:
+	- Start with a process that ensures the new React code is easy to write: use the latest technologies, make it easy
+	  to upgrade by itself, make it testable, make it use a separate build process... whatever you need to make it the
+	  best.
+	- Write an adapter layer that is easy to use so that engineers can easily write something enjoyable in React and
+	  leverage it within the legacy codebase.
+	- Write an adapter layer for all the non-React business logic such that it can be migrated out of the legacy code.
+	- Prioritize finishing sections of legacy code so they are fully converted.
+- Improving dependency management is hard. Ensure the refactoring is easier than the old code:
+	- Create a framework that easily references new packages but cannot reference the old code. Don't try to move
+	  anything yet!
+	- Ensure the old code can reference the new code. Move something small to ensure it can be done very easily.
+	- Start making a handful of smaller packages. These packages should have clearly defined boundaries; don't make a
+	  "utilities" package, but instead make an "http utilities" package. Don't make a "user management" package,
+	  make a "login" package that depends on other smaller packages.
+	- Once you have a few packages, retroactively figure out what the strategy was for splitting each one the way you
+	  did. Read through the strategies, does it make sense? Have others read them. Does it make sense to them?
+	- Clearly define the vision based on those strategies. Make sure it doesn't have exceptions!
+	- Write a decision-making matrix to help engineers in the future define new packages; the existing strategies should
+	  be able to be determined from that matrix. Reduction in decision making will help the more junior developers still
+	  do the right thing!
+- Improving security is hard. Work to making a process that makes creating a secure application easier than an unsecure
+  application.
+	- Make new Secrets in secrets manager easier than adding generic storage or configuration values! Make it easy for
+	  secrets to be updated and changed without checking into source control. .NET does this for local development with
+	  the `dotnet user-secrets` command.
+	- Make getting necessary permissions for users, especially in lower environments, easier than sharing credentials.
+	  This means rapidly approving and provisioning permissions, but keeping them granular enough that shared
+	  credentials don't usually help. It can also mean restricting credentials to being used from only one location at
+	  a time, requiring SSL public/private keys, MFA, IP filtering, etc.
+	- Make getting granular permissions for new services, or adding permissions to existing services, easier than adding
+	  user credentials to those services.
+	- When moving to a more secure system, make sure you work with people that use the system already to make sure the
+	  new system will work for them - don't surprise them with sudden decreased access.
+
+# Organizational Policies
+
+I suspect this doesn't apply just to engineering. Setting up organizational alignment is only a start; making it easy
+for every employee, from the directors to the line managers and even employees, to make the right decision in the moment
+should move the company in a positive direction every day, for every decision.
+
+- Set up a vision for where the organization will go.
+- Look at the decision points that get made each day - from what contracts to sign, to how to allocate employee time.
+  Make strategies to inform those decisions.
+- From there, set policies that help guide people into making the right decision; leave their decision making for the
+  important parts that you can't write into policy!
+
+A simple example may be an airline policy, when the company values comfort of employees, but doesn't want to spend too
+much, but knows that an employee's time is billable. In this case, simple rules may help:
+- Employees to ride any non-luxury airline they wish, but anything beyond "extra leg room" would be an expense for the
+  employee.
+- Luggage charges are to be covered by the company.
+- If the flight is more than 2 hours, in-air wi-fi may be expensed if at least 30 minutes of time is billable.
+- Direct flights are preferred.
+- Red-eye flights are not necessary.
+
+Slogans from both past and current employers indicate this, too:
+- We are who we are, because of who we are together.
+- Do good work. Be good people.
+
+A proper set of policies can help improve a codebase or an organization. Make sure you're doing it all the way through!

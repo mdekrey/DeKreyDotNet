@@ -24,6 +24,10 @@
     @apply mt-2 text-center text-gray-600 text-sm;
 }
 
+.markdown blockquote {
+    @apply border-l-4 border-gray-300 pl-8;
+}
+
 .markdown ol {
     @apply list-decimal ml-16;
 }
