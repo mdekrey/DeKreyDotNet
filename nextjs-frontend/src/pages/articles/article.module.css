@@ -24,11 +24,15 @@
     @apply mt-2 text-center text-gray-600 text-sm;
 }
 
+.markdown blockquote {
+    @apply border-l-4 border-gray-300 italic md:mx-8 mx-4 pl-4 md:pl-8;
+}
+
 .markdown ol {
-    @apply list-decimal ml-16;
+    @apply list-decimal md:ml-16 ml-8;
 }
 .markdown ul {
-    @apply list-disc ml-16;
+    @apply list-disc md:ml-16 ml-8;
 }
 
 .markdown pre {
