@@ -6,7 +6,8 @@ import { GetStaticProps, GetStaticPropsResult } from 'next/types';
 import { BlogPostSummary, toSummary } from 'src/articles/blog-post-summary-display';
 import { IntroBlock } from 'src/components/intro-block';
 import { getArticlesPage } from 'src/articles/pages';
-import { BlogPostList } from '../articles/blog-post-list';
+import { BlogPostList } from 'src/articles/blog-post-list';
+import { generateRssFeed } from 'src/articles/rss';
 
 type IndexProps = {
 	posts: BlogPostSummary[];
@@ -33,6 +34,7 @@ const IndexPage = ({ posts, pageCount }: IndexProps) => {
 export default IndexPage;
 
 export const getStaticProps: GetStaticProps<IndexProps> = async (): Promise<GetStaticPropsResult<IndexProps>> => {
+	await generateRssFeed();
 	const pageInfo = await getArticlesPage(1);
 
 	return {

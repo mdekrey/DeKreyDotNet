@@ -28,6 +28,7 @@ function SEO({
 			<meta name={`twitter:creator`} content={siteMetadata.author} />
 			<meta name={`twitter:title`} content={title} />
 			<meta name={`twitter:description`} content={metaDescription} />
+			<link rel="alternate" type="application/rss+xml" title="RSS Feed for Dekrey.NET" href="/rss.xml" />
 		</Head>
 	);
 }

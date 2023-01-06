@@ -77,6 +77,20 @@ export const Footer = ({ className }: { className?: string }) => {
 							<circle cx="4" cy="4" r="2" stroke="none"></circle>
 						</svg>
 					</a>
+					<a className="ml-3 text-gray-500" rel="me" href="/rss.xml">
+						<svg
+							fill="currentColor"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth="2"
+							className="w-5 h-5"
+							viewBox="0 0 8 8">
+							<title>DeKrey.NET RSS feed</title>
+							<circle className="symbol" cx="2" cy="6" r="1" />
+							<path className="symbol" d="m 1,4 a 3,3 0 0 1 3,3 h 1 a 4,4 0 0 0 -4,-4 z" />
+							<path className="symbol" d="m 1,2 a 5,5 0 0 1 5,5 h 1 a 6,6 0 0 0 -6,-6 z" />
+						</svg>
+					</a>
 				</span>
 			</div>
 		</footer>
