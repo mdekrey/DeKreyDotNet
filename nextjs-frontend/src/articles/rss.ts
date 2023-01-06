@@ -25,10 +25,11 @@ export async function generateRssFeed() {
 	allPosts.forEach((post) => {
 		feed.addItem({
 			title: post.frontmatter.title,
-			id: `${site_url}/blog/${post.slug}`,
-			link: `${site_url}/blog/${post.slug}`,
+			id: `${site_url}/articles/${post.slug}`,
+			link: `${site_url}/articles/${post.slug}`,
 			description: post.excerpt,
 			date: new Date(post.frontmatter.date),
+			image: post.frontmatter.image ? `${site_url}/articles/${post.frontmatter.image}` : undefined,
 		});
 	});
 
