@@ -1,6 +1,7 @@
 # NextJS Generated
 public/articles/*
 out/
+public/rss.xml
 
 # Logs
 logs

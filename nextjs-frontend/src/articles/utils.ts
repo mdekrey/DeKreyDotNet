@@ -20,7 +20,9 @@ export async function getAllPosts() {
 						slug,
 					}))
 			)
-		).filter((post) => post.frontmatter.date);
+		)
+			.filter((post) => post.frontmatter.date)
+			.sort((a, b) => -a.frontmatter.date.localeCompare(b.frontmatter.date));
 	}
 
 	return [...posts];
