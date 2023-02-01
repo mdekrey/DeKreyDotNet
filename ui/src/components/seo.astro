@@ -1,0 +1,46 @@
+---
+export interface Props {
+	title: string;
+	ogImage?: string;
+	ogDescription?: string;
+}
+
+const {
+	title,
+	ogImage: metaImage,
+	ogDescription:
+		metaDescription = 'Personal articles and profile of Matt DeKrey',
+} = Astro.props;
+const canonicalURL = new URL(
+	Astro.url.pathname.replace(/([^/])$/, '$1/'),
+	Astro.site
+);
+
+const gitHash = import.meta.env.GIT_HASH ?? 'HEAD';
+---
+
+<link rel="shortcut icon" href="/favicon-32x32.png" />
+<title>
+	{title} | DeKrey.NET
+</title>
+<meta name={`description`} content={metaDescription} />
+<meta property={`og:title`} content={title} />
+<meta property={`og:description`} content={metaDescription} />
+{
+	metaImage ? (
+		<meta property={`og:image`} content={Astro.site + metaImage} />
+	) : null
+}
+<meta property={`og:type`} content={`website`} />
+<meta name={`twitter:card`} content={`summary`} />
+<meta name={`twitter:creator`} content={`@mdekrey`} />
+<meta name={`twitter:title`} content={title} />
+<meta name={`twitter:description`} content={metaDescription} />
+<meta name="git-version" content={gitHash} />
+<link rel="canonical" href={canonicalURL} />
+<link
+	rel="alternate"
+	type="application/rss+xml"
+	title="RSS Feed for Dekrey.NET"
+	href="/rss.xml"
+/>

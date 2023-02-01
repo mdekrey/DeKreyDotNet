@@ -1,0 +1,40 @@
+---
+import Seo from '@/components/seo.astro';
+import Header from './header.astro';
+import { twMerge } from 'tailwind-merge';
+
+export interface Props {
+	title: string;
+	ogImage?: string;
+	ogDescription?: string;
+	mainClass?: string;
+}
+
+const { title, ogImage, ogDescription, mainClass } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<Seo title={title} ogImage={ogImage} ogDescription={ogDescription} />
+	</head>
+	<body>
+		<div className="flex flex-col min-h-screen font-sans text-gray-900">
+			<Header siteTitle="DeKrey.NET" />
+			<slot name="no-scroll-header" />
+
+			<main
+				className={twMerge(
+					'flex-1 w-full max-w-4xl px-4 py-8 mx-auto md:px-8 md:py-16 bg-white relative',
+					mainClass
+				)}
+			>
+				<slot />
+			</main>
+
+			<div class="bg-white">
+				<slot name="footer" />
+			</div>
+		</div>
+	</body>
+</html>

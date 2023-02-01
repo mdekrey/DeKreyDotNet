@@ -1,0 +1,62 @@
+---
+import fullUrl from '@/images/full.jpg';
+
+import { MdToggleOff, MdToggleOn } from 'react-icons/md';
+---
+
+<div
+	class={'flex flex-col items-center md:flex-row md:items-start md:justify-center max-h-screen overflow-hidden mx-auto max-w-4xl sticky top-0 px-4 md:px-8 post-blur'}
+>
+	<div
+		class="group flex flex-col flex-shrink-0 mt-8 md:mt-[15vmin] md:mb-[10vmin]"
+	>
+		<h1 class="text-2xl md:text-left font-bold">
+			Hey, <br />
+			<span class="text-purple-700 text-4xl"> I&apos;m Matt DeKrey!</span>
+		</h1>
+		<p class="text-xs">MAT deh-KRAY</p>
+		<p class="text-xs">/mæt d&#x026A;&#x02c8;kre&#x026A;/</p>
+		<p class="text-xs">he/him</p>
+
+		<p class="text-sm">
+			<a href="https://principlestudios.com">
+				<span class="block group-hover:hidden">
+					<MdToggleOff className="text-red-700 text-[36px] inline-block" />{' '}
+					Not available for contracting
+				</span>
+				<span class="block md:hidden md:group-hover:block">
+					<MdToggleOn className="text-green-700 text-[36px] inline-block" />{
+						' '
+					}
+					But Principle Studios is!
+				</span>
+			</a>
+		</p>
+	</div>
+	<div
+		class="max-w-screen md:flex-shrink-default bg-contain bg-no-repeat h-[100vmin] w-[100vmin] md:h-[60vmin] md:w-[80vmin] md:self-end"
+		style={{
+			backgroundImage: `url(${fullUrl.src})`,
+			backgroundPosition: '50% bottom',
+		}}
+	>
+	</div>
+</div>
+<style>
+	.post-blur + :global(*:before) {
+		content: '';
+		@apply inset-x-0;
+		position: absolute;
+		bottom: calc(100% - 1px);
+
+		background-image: linear-gradient(
+			2.5deg,
+			white,
+			white,
+			transparent,
+			transparent
+		);
+		background-repeat: no-repeat;
+		padding-top: min(10%, 10vh);
+	}
+</style>

@@ -1,0 +1,42 @@
+---
+import { getContentEntries } from '@/site-content/utils.astro';
+import {
+	removeLeadingSlash,
+	removeTrailingSlash,
+} from '@/util/pathManipulation';
+
+export type NavEntryBase = {
+	text: string;
+	sortOrder: number;
+};
+export type PageNavEntry = NavEntryBase & {
+	slug: string;
+	header: false;
+};
+export type HeaderNavEntry = NavEntryBase & {
+	slug: string;
+	header: true;
+};
+export type NavEntry = PageNavEntry | HeaderNavEntry;
+
+export async function getNavigation(currentPage: string): Promise<NavEntry[]> {
+	const contentEntries = (await getContentEntries())
+		.filter(
+			(article) =>
+				!article.frontmatter.draft ||
+				currentPage.startsWith(
+					removeLeadingSlash(removeTrailingSlash(article.url))
+				)
+		)
+		.map((article): NavEntry => {
+			return {
+				text: article.frontmatter.title,
+				slug: article.url,
+				sortOrder: article.sortOrder,
+				header: article.header,
+			};
+		});
+
+	return contentEntries;
+}
+---
