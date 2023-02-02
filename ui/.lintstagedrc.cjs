@@ -13,6 +13,7 @@ const buildPrettierCommand = (filenames) =>
 const buildTypecheckCommand = (filenames) => `npm run typecheck`;
 
 module.exports = {
-	'*.{js,jsx,ts,tsx,astro,md,mdx}': [buildEslintCommand, buildPrettierCommand],
+	'*.{js,jsx,ts,tsx,astro,md,mdx}': [buildEslintCommand],
+	'*.{js,jsx,ts,tsx,astro}': [buildPrettierCommand],
 	'*.{ts,tsx,astro,mdx}': [buildTypecheckCommand],
 };

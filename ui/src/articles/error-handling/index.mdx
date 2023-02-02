@@ -26,10 +26,8 @@ So, the next decision is often to swing the full opposite direction, since almos
 
 <figure>
 	![Classroom of kids looking inattentive and bored](./qvWMvdRY5jfcM2aC.png)
-	<FigCaption>
-		How many of us like using CLI tools for more than simple scripting via Perl
-		or Powershell? (Image from Ferris Bueller's Day Off.)
-	</FigCaption>
+	<FigCaption>How many of us like using CLI tools for more than simple scripting via Perl
+		or Powershell? (Image from Ferris Bueller's Day Off.)</FigCaption>
 </figure>
 
 Those are _obviously_ bad user experience to display, right? But then you have the API consumer nightmare of looking up the error codes in your documentation to figure out what they mean, and you have the internal developer nightmare of keeping track of what numbers are already used and maintaining the separate documentation. Error code 1001 is nowhere near as easy to understand. So much for self-documenting. There's got to be a better way!
@@ -53,10 +51,8 @@ What about the inheritance model? For that, I'd recommend looking at URNs.
 
 <figure>
 	![Pottery](./zW4gs19G-9rgWW8R.jpg)
-	<FigCaption>
-		No, I'm not suggesting checking out some pottery. (Image thanks to Wikipedia
-		user Txhorns79 under the CC-BY license.)
-	</FigCaption>
+	<FigCaption>No, I'm not suggesting checking out some pottery. (Image thanks to Wikipedia
+		user Txhorns79 under the CC-BY license.)</FigCaption>
 </figure>
 
 I mean [Universal Resource Names](https://en.wikipedia.org/wiki/Uniform_Resource_Name). If you're reading this, you know what a URL is, and your language of choice has probably started calling them URI's. URNs are the other side of that. (For more information, [Wikipedia has a great breakdown of URIs](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier), URNs, and URLs.) It'd be safe to assume the first part of a URN would be the same for every one of your error codes, so I typically just use their definition of a "namespace-specific string", or NSS. As a result, my error responses look more like the following:

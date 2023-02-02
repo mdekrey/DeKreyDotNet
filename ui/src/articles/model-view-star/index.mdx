@@ -35,10 +35,8 @@ pass some models directly to the View. As such, the dependency tree for MVC can 
 
 <figure>
 	![Model View Controller](./mvc.svg)
-	<FigCaption>
-		The View can access Model components, the Controller orchestrates both the
-		View and the Model, and the Model remains pure.
-	</FigCaption>
+	<FigCaption>The View can access Model components, the Controller orchestrates both the
+		View and the Model, and the Model remains pure.</FigCaption>
 </figure>
 
 With the View depending directly on the Model, there are some drawbacks: changes to the Model require refactoring of the
@@ -56,10 +54,8 @@ have its own scripting layer.
 
 <figure>
 	![Model View Presenter](./mvp.svg)
-	<FigCaption>
-		The Presenter orchestrates both the View and the Model, and both the Model
-		and the View remain separate from the other.
-	</FigCaption>
+	<FigCaption>The Presenter orchestrates both the View and the Model, and both the Model
+		and the View remain separate from the other.</FigCaption>
 </figure>
 
 MVP has greater reuse potential than MVC, allowing different models to be presented to the same view through only
@@ -77,10 +73,8 @@ well with MVVM.
 
 <figure>
 	![Model View View-Model](./mvvm.svg)
-	<FigCaption>
-		The View accesses the View-Model, the View-Model accesses the Model, and the
-		Model remains pure.
-	</FigCaption>
+	<FigCaption>The View accesses the View-Model, the View-Model accesses the Model, and the
+		Model remains pure.</FigCaption>
 </figure>
 
 While the View depends directly on a View-Model, the specific implementation of the View-Model could be swapped out,
