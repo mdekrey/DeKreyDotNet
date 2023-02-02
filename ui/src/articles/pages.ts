@@ -1,5 +1,4 @@
----
-import { getAllPosts } from './utils.astro';
+import { getAllPosts } from './utils';
 import identity from 'lodash/fp/identity';
 import groupBy from 'lodash/fp/groupBy';
 
@@ -41,4 +40,3 @@ export async function getFilteredPosts(tag?: string) {
 				.filter((post) => post.frontmatter.tags?.includes(tag));
 	return filtered;
 }
----

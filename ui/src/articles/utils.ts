@@ -1,14 +1,18 @@
----
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { processSrcRoot } from '@/util/paths';
 import type { BlogPost, BlogPostFrontmatter } from './post';
+import type { MDXInstance } from 'astro';
 
 export const contentFsRoot = path.join(processSrcRoot, 'articles');
 export const contentUrlRoot = pathToFileURL(contentFsRoot).href;
 
 export async function getAllPosts(): Promise<BlogPost[]> {
-	const articles = await Astro.glob<BlogPostFrontmatter>('./*/index.mdx');
+	const articles = await Promise.all(
+		Object.values(
+			import.meta.glob<MDXInstance<BlogPostFrontmatter>>('./*/index.mdx')
+		).map((v) => v())
+	);
 
 	const result = articles
 		.map((article) => {
@@ -27,4 +31,3 @@ export async function getAllPosts(): Promise<BlogPost[]> {
 
 	return result;
 }
----
