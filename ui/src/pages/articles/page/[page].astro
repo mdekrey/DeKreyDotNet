@@ -1,0 +1,32 @@
+---
+import Layout from '@/components/layout.astro';
+import { getArticlesPage, getPageCount } from '@/articles/pages.astro';
+import { toSummary } from '@/articles/summary';
+import { BlogPostList } from '@/articles/blog-post-list';
+
+export type Props = {
+	page: number;
+};
+
+export async function getStaticPaths() {
+	const pageCount = await getPageCount();
+
+	return Array(pageCount)
+		.fill(0)
+		.map((_, index) => ({
+			params: { page: (index + 1).toFixed(0) },
+			props: { page: index + 1 },
+		}));
+}
+
+const { page } = Astro.props;
+
+const pageInfo = await getArticlesPage(page);
+
+const posts = pageInfo?.articles.map(toSummary) ?? [];
+const pageCount = pageInfo?.totalPageCount ?? 0;
+---
+
+<Layout title={`Blog Posts - Page ${page}`}>
+	<BlogPostList posts={posts} page={page} pageCount={pageCount} />
+</Layout>

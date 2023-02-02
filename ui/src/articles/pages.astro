@@ -3,12 +3,11 @@ import { getAllPosts } from './utils.astro';
 import identity from 'lodash/fp/identity';
 import groupBy from 'lodash/fp/groupBy';
 
-const groupByIdentity = groupBy(identity);
 export async function getCountByTag() {
 	const allPosts = await getAllPosts();
 	const allTags = allPosts.flatMap((post) => post.frontmatter.tags ?? []);
 
-	const entries = Object.entries(groupByIdentity(allTags)).map(
+	const entries = Object.entries(groupBy(identity, allTags)).map(
 		([tag, tags]) => [tag, tags.length] as const
 	);
 
