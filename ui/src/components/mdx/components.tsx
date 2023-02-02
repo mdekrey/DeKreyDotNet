@@ -5,6 +5,7 @@ import { pipeJsx } from '@/core/jsx/pipeJsx';
 import { twMerge } from 'tailwind-merge';
 import { recurse } from '@/core/jsx/recurse';
 import { Headings } from '../headings';
+import { mergeComponent } from '@/core/jsx/mergeComponent';
 
 export const rowTemplate = mergeStyles(
 	<tr className="even:bg-gradient-to-r from-tan-fading to-white odd:bg-tan-accent border-b-2 border-white font-info" />
@@ -13,11 +14,7 @@ export const infoFontTemplate = mergeStyles(<i className="font-info" />);
 
 export const components: ComponentProps<typeof MDXProvider>['components'] = {
 	...Headings.stepDown(0),
-	p: ({ children, className, ...props }: JSX.IntrinsicElements['p']) => (
-		<p className={twMerge('my-2', className)} {...props}>
-			{children}
-		</p>
-	),
+	p: mergeComponent(<p className="my-2" />),
 	table: ({
 		children,
 		className,
@@ -36,74 +33,19 @@ export const components: ComponentProps<typeof MDXProvider>['components'] = {
 			</table>
 		</div>
 	),
-	a: ({ children, className, ...props }: JSX.IntrinsicElements['a']) => (
-		<a className={twMerge('underline text-theme', className)} {...props}>
-			{children}
-		</a>
+	a: mergeComponent(
+		<a className="hover:underline focus:underline text-purple-700" />
 	),
-	thead: ({
-		children,
-		className,
-		...props
-	}: JSX.IntrinsicElements['thead']) => (
-		<thead className={twMerge('bg-theme text-white', className)} {...props}>
-			{children}
-		</thead>
-	),
+	thead: mergeComponent(<thead className="bg-theme text-white" />),
 	tbody: ({ children, ...props }: JSX.IntrinsicElements['tbody']) => (
 		<tbody {...props}>{pipeJsx(<>{children}</>, recurse(rowTemplate))}</tbody>
 	),
-	td: ({
-		children,
-		className,
-		...props
-	}: JSX.IntrinsicElements['td'] & { isHeader?: boolean }) => (
-		<td className={twMerge('px-2 font-bold align-top', className)} {...props}>
-			{children}
-		</td>
-	),
-	th: ({
-		children,
-		className,
-		...props
-	}: JSX.IntrinsicElements['th'] & { isHeader?: boolean }) => (
-		<th
-			className={twMerge('px-2 font-bold align-bottom', className)}
-			{...props}
-		>
-			{children}
-		</th>
-	),
-	ul: ({
-		children,
-		className,
-		...props
-	}: JSX.IntrinsicElements['ul'] & { ordered?: boolean }) => (
-		<ul className={twMerge('list-disc ml-6', className)} {...props}>
-			{children}
-		</ul>
-	),
-	ol: ({
-		children,
-		className,
-		...props
-	}: JSX.IntrinsicElements['ol'] & { ordered?: boolean }) => (
-		<ul className={twMerge('list-decimal ml-6', className)} {...props}>
-			{children}
-		</ul>
-	),
-	li: ({
-		children,
-		className,
-		...props
-	}: JSX.IntrinsicElements['li'] & { ordered?: boolean }) => (
-		<li className={twMerge('my-1', className)} {...props}>
-			{children}
-		</li>
-	),
-	hr: ({ className, ...props }: JSX.IntrinsicElements['hr']) => (
-		<hr className={twMerge('border-0 my-1.5', className)} {...props} />
-	),
+	td: mergeComponent(<td className="px-2 font-bold align-top" />),
+	th: mergeComponent(<th className="px-2 font-bold align-bottom" />),
+	ul: mergeComponent(<ul className="list-disc ml-6" />),
+	ol: mergeComponent(<ol className="list-decimal ml-6" />),
+	li: mergeComponent(<li className="my-1" />),
+	hr: mergeComponent(<hr className="border-0 my-1.5" />),
 	blockquote: ({
 		children,
 		className,
@@ -120,12 +62,5 @@ export const components: ComponentProps<typeof MDXProvider>['components'] = {
 			{pipeJsx(<>{children}</>, recurse(infoFontTemplate))}
 		</blockquote>
 	),
-	img: ({ src, alt, ...props }: JSX.IntrinsicElements['img']) => (
-		<img src={src} alt={alt} {...props} />
-	),
-	strong: ({ children, ...props }: JSX.IntrinsicElements['strong']) => (
-		<span className="font-bold" {...props}>
-			{children}
-		</span>
-	),
+	strong: mergeComponent(<span className="font-bold" />),
 };

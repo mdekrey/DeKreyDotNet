@@ -2,28 +2,8 @@ import type { MDXProvider } from '@mdx-js/react';
 import type { ComponentProps } from 'react';
 import type { ImageMetadata } from '@astrojs/image/dist/vite-plugin-astro-image';
 import { components } from './components';
-import { twMerge } from 'tailwind-merge';
 import { Headings } from '../headings';
-
-function mergeComponent<
-	T extends keyof JSX.IntrinsicElements = keyof JSX.IntrinsicElements
->({
-	type: Type,
-	props: { className: templateClassName, ...originalProps },
-}: JSX.Element) {
-	return function MergedComponent({
-		className,
-		...props
-	}: JSX.IntrinsicElements[T]) {
-		return (
-			<Type
-				className={twMerge(templateClassName, className)}
-				{...originalProps}
-				{...props}
-			/>
-		);
-	};
-}
+import { mergeComponent } from '@/core/jsx/mergeComponent';
 
 export const articleComponents: ComponentProps<
 	typeof MDXProvider
