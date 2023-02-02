@@ -1,12 +1,13 @@
 ---
 import Seo from '@/components/seo.astro';
 import Header from './header.astro';
+import Footer from './footer.astro';
 import { twMerge } from 'tailwind-merge';
 
 export interface Props {
 	title: string;
-	ogImage?: string;
-	ogDescription?: string;
+	ogImage?: string | undefined;
+	ogDescription?: string | undefined;
 	mainClass?: string;
 }
 
@@ -16,15 +17,16 @@ const { title, ogImage, ogDescription, mainClass } = Astro.props;
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		<meta charset="UTF-8" />
 		<Seo title={title} ogImage={ogImage} ogDescription={ogDescription} />
 	</head>
 	<body>
-		<div className="flex flex-col min-h-screen font-sans text-gray-900">
+		<div class="flex flex-col min-h-screen font-sans text-gray-900">
 			<Header siteTitle="DeKrey.NET" />
 			<slot name="no-scroll-header" />
 
 			<main
-				className={twMerge(
+				class={twMerge(
 					'flex-1 w-full max-w-4xl px-4 py-8 mx-auto md:px-8 md:py-16 bg-white relative',
 					mainClass
 				)}
@@ -32,9 +34,7 @@ const { title, ogImage, ogDescription, mainClass } = Astro.props;
 				<slot />
 			</main>
 
-			<div class="bg-white">
-				<slot name="footer" />
-			</div>
+			<Footer class="bg-white" />
 		</div>
 	</body>
 </html>

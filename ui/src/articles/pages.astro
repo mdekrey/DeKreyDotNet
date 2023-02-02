@@ -22,7 +22,6 @@ export async function getPageCount(tag?: string) {
 }
 
 export async function getArticlesPage(page: number, tag?: string) {
-	console.log('getArticlesPage', { page, tag });
 	const posts = await getFilteredPosts(tag);
 	const totalPageCount = Math.ceil(posts.length / postsPerPage);
 	if (page < 1 || page > totalPageCount) return null;

@@ -35,6 +35,13 @@ module.exports = {
 	ignorePatterns: ['/*.js*', '/*.cjs*'],
 	overrides: [
 		{
+			files: ['*.mdx'],
+			rules: {
+				// Pending https://github.com/microsoft/TypeScript/issues/36440 - TS cannot go in MDX
+				'react/prop-types': 'off',
+			},
+		},
+		{
 			// Define the configuration for `.astro` file.
 			files: ['*.astro'],
 			// Allows Astro components to be parsed.

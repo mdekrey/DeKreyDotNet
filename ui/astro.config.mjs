@@ -8,7 +8,6 @@ import image from '@astrojs/image';
 import glslify from 'rollup-plugin-glslify';
 
 export default defineConfig({
-	root: 'src',
 	vite: {
 		plugins: [glslify()],
 	},
@@ -17,6 +16,7 @@ export default defineConfig({
 		react(),
 		mdx({
 			remarkPlugins: [
+				[(await import('remark-mdx-images')).default],
 				[(await import('remark-reading-time')).default],
 				[(await import('remark-reading-time/mdx')).default],
 				[(await import('./remark-excerpt.mjs')).default],

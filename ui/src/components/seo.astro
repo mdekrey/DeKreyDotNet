@@ -1,8 +1,8 @@
 ---
 export interface Props {
 	title: string;
-	ogImage?: string;
-	ogDescription?: string;
+	ogImage?: string | undefined;
+	ogDescription?: string | undefined;
 }
 
 const {
@@ -28,7 +28,7 @@ const gitHash = import.meta.env.GIT_HASH ?? 'HEAD';
 <meta property={`og:description`} content={metaDescription} />
 {
 	metaImage ? (
-		<meta property={`og:image`} content={Astro.site + metaImage} />
+		<meta property={`og:image`} content={new URL(metaImage, Astro.site)} />
 	) : null
 }
 <meta property={`og:type`} content={`website`} />

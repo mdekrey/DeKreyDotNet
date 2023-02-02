@@ -22,7 +22,7 @@
     "files.eol": "\n",
     "typescript.tsdk": "ui/node_modules/typescript/lib",
     "prettier.requireConfig": true,
-    "prettier.documentSelectors": ["**/*.astro","**/*.md","**/*.mdx"],
+    "prettier.documentSelectors": ["**/*.astro"],
 
     "[javascript]": {
         "editor.formatOnSave": true,
@@ -43,13 +43,5 @@
     "[typescriptreact]": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "esbenp.prettier-vscode",
-    },
-    "[markdown]": {
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-    },
-    "[mdx]": {
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-    },
+    }
 }

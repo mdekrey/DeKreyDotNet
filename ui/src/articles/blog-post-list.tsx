@@ -24,7 +24,7 @@ export function BlogPostList({
 					<Paginator
 						page={page}
 						pageCount={pageCount}
-						path={(v) => `/posts/pages/${v}`}
+						path={(v) => `/articles/page/${v}`}
 					></Paginator>
 				</div>
 			) : null}

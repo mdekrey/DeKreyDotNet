@@ -9,8 +9,6 @@ const pageInfo = await getArticlesPage(1);
 
 const posts = pageInfo?.articles.map(toSummary) ?? [];
 const pageCount = pageInfo?.totalPageCount ?? 0;
-
-console.log('index.astro', { pageInfo, posts, pageCount });
 ---
 
 <Layout title="Home">

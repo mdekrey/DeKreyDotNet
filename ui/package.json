@@ -13,9 +13,9 @@
     "lint:fix": "npm run typecheck && npm run eslint:fix && npm run prettier:fix",
     "eslint": "eslint \"src/**/*.{js,ts,tsx,md,mdx,astro}\"",
     "eslint:fix": "eslint \"src/**/*.{js,ts,tsx,md,mdx,astro}\" --fix",
-    "prettier": "prettier --list-different \"src/**/*.{js,ts,tsx,md,mdx,astro}\"",
-    "prettier:fix": "prettier --write \"src/**/*.{js,ts,tsx,md,mdx,astro}\"",
-    "typecheck": "tsc --noemit",
+    "prettier": "prettier --list-different \"src/**/*.{js,ts,tsx,astro}\"",
+    "prettier:fix": "prettier --write \"src/**/*.{js,ts,tsx,astro}\"",
+    "typecheck": "astro check && tsc --noemit",
     "prepare": "cd .. && husky install ui/.husky"
   },
   "dependencies": {
@@ -36,6 +36,7 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
     "react-twitter-embed": "^4.0.4",
+    "remark-mdx-images": "^2.0.0",
     "remark-reading-time": "^2.0.1",
     "tailwind-merge": "^1.8.1",
     "tailwindcss": "^3.2.4",

@@ -1,0 +1,59 @@
+---
+import Layout from '@/components/layout.astro';
+
+import type { AstroComponentFactory } from 'astro/dist/runtime/server';
+import type { MarkdownHeading } from 'astro';
+import { getAllPosts } from '@/articles/utils.astro';
+import { articleComponents } from '@/components/mdx/article-components';
+import type { BlogPostFrontmatter, ReadingTime } from '@/articles/post';
+
+export type Props = {
+	Component: AstroComponentFactory;
+	frontmatter: BlogPostFrontmatter;
+	readingTime: ReadingTime;
+	title: string;
+	headings: MarkdownHeading[];
+	ogImage?: string;
+	ogDescription?: string;
+};
+
+export async function getStaticPaths() {
+	const articles = await getAllPosts();
+	return articles.map((article) => {
+		const { image: ogImage, excerpt: ogDescription } = article.frontmatter;
+
+		return {
+			params: { slug: article.slug },
+			props: {
+				Component: article.Content,
+				frontmatter: article.frontmatter,
+				readingTime: article.readingTime,
+				title: article.frontmatter.title,
+				ogImage,
+				ogDescription,
+				headings: article.getHeadings(),
+			},
+		};
+	});
+}
+
+const { Component, frontmatter, readingTime, title, ogImage, ogDescription } =
+	Astro.props;
+---
+
+<Layout title={title} ogImage={ogImage} ogDescription={ogDescription}>
+	{
+		/*<RightSidebar slot="secondary-sidebar">
+		<TableOfContents toc={generateToc(headings)} slot="nav" client:idle />
+	</RightSidebar>*/
+	}
+	<article class="mx-auto md:w-10/12">
+		<header>
+			<h1 class="font-serif font-normal mb-4 text-4xl">{frontmatter.title}</h1>
+			<p class="text-gray-500 text-sm">
+				{frontmatter.date} &mdash; {readingTime?.text}
+			</p>
+		</header>
+		<Component components={articleComponents} />
+	</article>
+</Layout>

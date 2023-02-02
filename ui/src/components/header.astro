@@ -1,5 +1,5 @@
 ---
-import { ScrollHeader } from './Scrollheader';
+import { ScrollHeader } from './ScrollHeader';
 import MattDeKreyAvatar from './avatar.astro';
 
 export type Props = {
@@ -27,7 +27,7 @@ const { siteTitle } = Astro.props;
 
 <ScrollHeader
 	{{ showHeaderClass, hideHeaderClass }}
-	className="z-10 motion-safe:transition-transform ease-in duration-100 fixed inset-x-0"
+	className="bg-white z-10 motion-safe:transition-transform ease-in duration-100 fixed inset-x-0"
 >
 	<div
 		class="flex flex-wrap items-center justify-between max-w-4xl p-2 mx-auto"
