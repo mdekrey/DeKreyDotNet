@@ -1,5 +1,5 @@
 import { useMemo, useReducer } from 'react';
-import { ThreeCanvas } from '@/components/animation-container';
+import { ThreeCanvas } from './animation-container';
 import * as THREE from 'three';
 import fireballUrl from './fireball.png';
 import fireballEmissionUrl from './fireball-emission.png';
@@ -7,7 +7,6 @@ import vertexShader from './particles-vertex-shader.glsl';
 import fragmentShader from './particles-fragment-shader.glsl';
 import { ParticleSystem } from './particle-system';
 import screenshotUrl from './explosion-screenshot.png';
-import { MdPlayArrow } from 'react-icons/md';
 import { twMerge } from 'tailwind-merge';
 
 export function ExplosionScene({ className }: { className?: string }) {
@@ -115,7 +114,19 @@ export function ExplosionScene({ className }: { className?: string }) {
 					onClick={(onFrame && setPlaying) ?? undefined}
 					title="Click to Play visual effect"
 				>
-					<MdPlayArrow className="inline-block w-40 h-40" />
+					<svg
+						stroke="currentColor"
+						fill="currentColor"
+						strokeWidth="0"
+						viewBox="0 0 24 24"
+						className="inline-block w-40 h-40"
+						height="1em"
+						width="1em"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path fill="none" d="M0 0h24v24H0z"></path>
+						<path d="M8 5v14l11-7z"></path>
+					</svg>
 				</button>
 			)}
 		</>

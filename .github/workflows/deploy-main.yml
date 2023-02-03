@@ -33,7 +33,7 @@ jobs:
       run: |
         docker build . -t $registryLoginServer/$imageName:${{ github.sha }} --build-arg GIT_HASH=${{ github.sha }}
         docker push $registryLoginServer/$imageName:${{ github.sha }}
-      working-directory: ./nextjs-frontend
+      working-directory: ./ui
 
     # Set the target Azure Kubernetes Service (AKS) cluster.
     - uses: azure/login@v1

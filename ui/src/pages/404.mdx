@@ -1,0 +1,21 @@
+import Layout from '@/components/layout.astro';
+
+export { components } from '@/components/mdx/components';
+
+export default function PageLayout({ children }) {
+	return (
+		<Layout
+			title="404: Not found"
+			ogDescription="Oops! You broke it."
+		>
+			{children}
+		</Layout>
+	);
+}
+
+
+# 404'd!
+
+Oops! You broke it.
+
+<span className="text-xs">I really hope this is logged somewhere&hellip;</span>
