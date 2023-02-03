@@ -1,4 +1,6 @@
 ---
+import { Picture } from '@astrojs/image/components';
+
 import fullUrl from '@/images/full.jpg';
 ---
 
@@ -58,12 +60,16 @@ import fullUrl from '@/images/full.jpg';
 		</p>
 	</div>
 	<div
-		class="max-w-screen md:flex-shrink-default bg-contain bg-no-repeat h-[100vmin] w-[100vmin] md:h-[60vmin] md:w-[80vmin] md:self-end"
-		style={{
-			backgroundImage: `url(${fullUrl.src})`,
-			backgroundPosition: '50% bottom',
-		}}
+		class="max-w-screen md:flex-shrink-default h-[100vmin] w-[100vmin] md:h-[60vmin] md:w-[80vmin] md:self-end"
 	>
+		<Picture
+			src={fullUrl}
+			class="object-contain h-full w-full mx-auto mt-auto"
+			alt="A photo of Matt DeKrey, smiling and wearing an aloha-style shirt. The print of the shirt is a pattern with Tux wearing an floral aloha-style shirt."
+			formats={['webp', 'jpeg']}
+			sizes="(min-width: 768px) 540px, (min-width: 640px) 577px, 480px"
+			widths={[540, 577, 480]}
+		/>
 	</div>
 </div>
 <style>

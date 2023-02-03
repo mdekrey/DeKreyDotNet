@@ -1,9 +1,15 @@
 ---
+import { Picture } from '@astrojs/image/components';
+
 import headshotUrl from '@/images/headshot.jpg';
 ---
 
-<img
-	src={headshotUrl.src}
+<Picture
+	src={headshotUrl}
 	class="rounded-full items-center justify-center w-10 h-10 inline-block"
+	aspectRatio={1}
+	sizes="80px"
+	widths={[80]}
 	alt=""
+	formats={['webp', 'jpg']}
 />
