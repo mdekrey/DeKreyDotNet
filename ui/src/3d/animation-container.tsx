@@ -13,7 +13,7 @@ import {
 	RenderPass,
 	EffectPass,
 	BloomEffect,
-} from 'postprocessing';
+} from 'postprocessing/module';
 
 const canvasId = uniqueId('three');
 
