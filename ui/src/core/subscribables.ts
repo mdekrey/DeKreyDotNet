@@ -1,4 +1,11 @@
-export function createSubscribable() {
+import { useSyncExternalStore } from 'react';
+
+export type Subscribable = {
+	trigger(): void;
+	subscribe(callback: () => void): () => void;
+};
+
+export function createSubscribable(): Subscribable {
 	const subscribers: (() => void)[] = [];
 	return {
 		trigger() {
@@ -14,7 +21,13 @@ export function createSubscribable() {
 	};
 }
 
-export function createSubscribableValue<T>(initial: T) {
+export type SubscribableValue<T> = {
+	get(): T;
+	set(value: T): void;
+	subscribe(callback: () => void): () => void;
+};
+
+export function createSubscribableValue<T>(initial: T): SubscribableValue<T> {
 	let value = initial;
 	const subscribable = createSubscribable();
 	return {
@@ -45,4 +58,13 @@ export function createSubscribableList<T>() {
 		},
 		subscribe: subscribable.subscribe.bind(subscribable),
 	};
+}
+
+export function useSubscribable<T>(subscribable: SubscribableValue<T>) {
+	const current = useSyncExternalStore(
+		(cb) => subscribable.subscribe(cb),
+		() => subscribable.get(),
+		() => null
+	);
+	return [current, subscribable.set] as const;
 }
