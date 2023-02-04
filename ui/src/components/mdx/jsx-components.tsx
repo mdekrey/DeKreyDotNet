@@ -12,7 +12,9 @@ export const rowTemplate = mergeStyles(
 );
 export const infoFontTemplate = mergeStyles(<i className="font-info" />);
 
-export const components: ComponentProps<typeof MDXProvider>['components'] = {
+export const internalComponents: ComponentProps<
+	typeof MDXProvider
+>['components'] = {
 	...Headings.stepDown(0),
 	p: mergeComponent(<p className="my-2" />),
 	table: ({

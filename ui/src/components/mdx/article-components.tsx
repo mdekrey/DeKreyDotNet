@@ -1,14 +1,14 @@
 import type { MDXProvider } from '@mdx-js/react';
 import type { ComponentProps } from 'react';
 import type { ImageMetadata } from '@astrojs/image/dist/vite-plugin-astro-image';
-import { components } from './components';
+import { internalComponents } from './jsx-components';
 import { Headings } from '../headings';
 import { mergeComponent } from '@/core/jsx/mergeComponent';
 
-export const articleComponents: ComponentProps<
+export const internalArticleComponents: ComponentProps<
 	typeof MDXProvider
 >['components'] = {
-	...components,
+	...internalComponents,
 	...Headings.stepDown(1),
 	img: ({ src, ...props }) => {
 		const source =
