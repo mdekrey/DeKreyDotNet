@@ -10,6 +10,12 @@ param (
 
 # see https://aka.ms/create-secrets-for-GitHub-workflows
 # version when written: https://github.com/Azure/actions-workflow-samples/blob/9a151eaa180e20378c308bcb24a3dcad7d49f22c/assets/create-secrets-for-GitHub-workflows.md
+$list = (az ad sp list --display-name $appName | ConvertFrom-Json)
+if ($list -ne $nil) {
+    $appId = $list[0].servicePrincipalNames[0]
+    az ad sp delete --id $appId
+}
+# --sdk-auth is required for the azure/login@v1 script, but will change later
 $details = az ad sp create-for-rbac --name "$appName" --role contributor --scopes /subscriptions/$($subscription)/resourceGroups/$azureResourceGroup --sdk-auth | ConvertFrom-Json
 
 # order is alphabetical to reflect what it shows in github, each key is its own secret
