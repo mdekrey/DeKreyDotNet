@@ -1,0 +1,39 @@
+---
+import type { ImageMetadata } from '@astrojs/image/dist/vite-plugin-astro-image';
+import { Picture } from '@astrojs/image/components';
+
+export type Props = {
+	src: string | undefined | ImageMetadata;
+};
+
+const { src, ...props } = Astro.props;
+const metadata = typeof src === 'string' ? undefined : src;
+const imgSrc = typeof src === 'string' ? src : src?.src;
+
+const expand: object = props;
+
+console.log(src);
+
+const maxWidth = metadata?.width ?? 590;
+---
+
+<span class="relative flex justify-center">
+	{
+		metadata ? (
+			<Picture
+				class="max-w-[590px]"
+				src={metadata}
+				alt=""
+				{expand}
+				sizes={
+					maxWidth > 480
+						? '(min-width: 640px) ${maxWidth}px, 480px'
+						: `${maxWidth}px`
+				}
+				widths={maxWidth > 480 ? [maxWidth, 480] : [maxWidth]}
+			/>
+		) : (
+			<img class="max-w-[590px]" alt="" src={imgSrc} {expand} />
+		)
+	}
+</span>

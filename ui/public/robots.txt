@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# TODO: add a sitemap (https://developers.google.com/search/docs/crawling-indexing/sitemaps/overview)
+# Sitemap: https://www.example.com/sitemap.xml

@@ -1,0 +1,28 @@
+---
+title: 'WebGL Particles'
+date: '2022-12-12'
+draft: false
+author: Matthew DeKrey
+tags:
+  - webgl
+  - 3d
+  - frontend
+---
+
+import { ExplosionScene } from '@/3d/explosion-scene';
+import { SourceLink } from './sourceLink';
+import ogImage from '@/3d/explosion-screenshot.png';
+export { ogImage };
+
+I started out my career in video games, but recently I've feeling the pull to play around again. It's been interesting
+re-learning so much of what I used to know... both humbling and thrilling. Anyway, have a particle system explosion,
+running in real-time on your machine:
+
+<ExplosionScene client:load />
+
+This is done using a 7x7 sprite map for the particles (source from the
+[Unity Particle Pack](https://assetstore.unity.com/packages/essentials/tutorial-projects/unity-particle-pack-127325))
+completed by a custom-built particle engine for [three.js](https://threejs.org/)... and custom GLSL shaders.
+That means it's a pretty good test of what modern devices can do even in a browser. Let me know how it works for you!
+
+If you're interested in the source code... <SourceLink isTree={true} path="ui/src/3d">here you go!</SourceLink>

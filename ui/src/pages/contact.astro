@@ -1,0 +1,35 @@
+---
+import Layout from '@/components/layout.astro';
+import headshotUrl from '@/images/headshot.jpg';
+import { linkClassName } from '@/components/styles';
+---
+
+<Layout
+	title="Contact Matt DeKrey"
+	ogImage={headshotUrl.src}
+	ogDescription="Contact information for Matt DeKrey"
+>
+	<section class="text-gray-700">
+		<div class="flex flex-col w-full mb-12 leading-relaxed">
+			<h1 class="sm:text-3xl text-2xl font-medium mb-4 text-gray-900">
+				Contact Me
+			</h1>
+			<p>
+				I could maintain a functionless app with ReCaptcha to allow you to
+				pseudo-anonymously send me spam, but we all know that I&rsquo;d forget.
+				You instead would be stuck filling out this form and then getting an
+				error message, telling you to just send an email link anyway. Since
+				Google&rsquo;s filters are better than anything I can maintain, just use
+				the email link below.
+			</p>
+
+			<div class="p-2 w-full py-8 text-center">
+				<a class={linkClassName} href="mailto:matt.dekrey@gmail.com">
+					matt.dekrey@gmail.com
+				</a>
+			</div>
+
+			<p>Or, find me on social media and shoot me a message that way!</p>
+		</div>
+	</section>
+</Layout>

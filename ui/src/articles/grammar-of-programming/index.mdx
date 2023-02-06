@@ -1,0 +1,66 @@
+---
+title: 'Grammar of Programming'
+date: '2017-05-29'
+draft: false
+author: Matthew DeKrey
+tags: []
+source: https://medium.com/@matt.dekrey/grammar-of-programming-9e85856544ba
+---
+
+import FigCaption from '@/components/FigCaption';
+
+The software industry is always learning, which is one of the reasons why software is both my job and my hobby. Many of us professionals came by it as a hobby, more than a few came at it from the necessity of other jobs (manipulating complex excel sheets), and then there's those who came at it through academia. With our profession being as young as it is (less than a century), we're all still learning from each other in different backgrounds. It gives us the benefit and the curse of being able to re-hash old ideas, teasing out the "best" parts and re-using those in completely new ways.
+
+A few things, however, remain constant. Naming is hard. Exception handling is hard. Caching is hard. Problem solving (especially before you know the problem) is hard. Reading another developer's code (or your own after a year) can be hard.
+
+The problem that's been on my mind lately has been naming, and I like solving it by using [domain-driven design](https://en.wikipedia.org/wiki/Domain-driven_design). It's unfortunately been a long time since I've read Eric Evans's book, so I don't follow it quite as closely as I might once have. I've also been giving a lot of thoughts between functional and object-oriented languages, since the push and pull between them seems to have been around since nearly the beginning of computing.
+
+Many of the same terms get used in slightly different ways between various languages, and even language types. So why is that? Well, interestingly, it comes down to language... and I really mean spoken language, not coded language.
+
+<figure>
+	![Man: If you learned to speak Lojban, your communication would be completely
+	unambiguous and logical. Man in black hat: Yeah, but it would all be with the
+	kind of people who learn Lojban.](./VrNJvO2hYP_SKuuw.png)
+	<FigCaption>If you learned to write (insert language here)... Source:
+		[https://xkcd.com/191/](https://xkcd.com/191/)</FigCaption>
+</figure>
+
+## What's in a Language?
+
+Personally, I like my software to actually be able to read like a list of instructions that could be read out loud and make sense:
+
+```js
+if (system.hasErred()) {
+	system.recover();
+} else {
+	system.handle(command);
+}
+```
+
+In this completely arbitrary example, you still need to understand the syntax implies the word "then", but we often do that as programmers talking to programmers anyway. (I, at least, don't pronounce every parenthesis.) You'll also notice that the subroutine calls that have no side effects have linking verbs ("has", "is", etc.) in the names; it makes it very clear that you won't get a side effect, as otherwise it is a verb, which tends to imply an action takes place.
+
+My first struggle with functional languages was that I felt like I was speaking like Yoda when I read it out loud:
+
+```fsharp
+if(hasErred(system), recover(system), handle(command, system))
+```
+
+But, then I remembered some of my language background outside of computer science, and that [not all languages are oriented as subject-verb-object](http://www.livescience.com/16541-original-human-language-yoda-sounded.html). In fact, the very nature of object-oriented languages comes from the fact that we're trying to make the precursor to them more natural to our English-speaking ears. I sometimes feel that we haven't gotten quite there yet, especially when English is basically "subject-oriented", because the actor goes first; the object is what is acted upon.
+
+There is a type of statement in English where the subject takes the background and the object gets more focus: they're imperative statements. As it turns out, another name for procedural languages is "imperative" languages. "Imperative" statements in English leave out the implied subject: "you". In this case, "you" refers to the processor, program, or system at large, since we are instructing the computer.
+
+```js
+if (hasErred(system)) {
+  recover(system);
+} else {
+  handle(command, /\*on:\*/ system);
+}
+```
+
+That looks impressively like our functional language example. Looking back, "functional" languages might also have been called "verb-oriented" if we didn't lift the name "function" from mathematics. On the other hand, "verb" implies something very different from "function", in that verbs have side-effects, whereas in mathematics, functions never do.
+
+## Conclusion
+
+Once you take out the reorganization due to the grammar, the languages are much more similar, and you can start talking about other core features (such as immutability, exceptions, async, null values, statements-as-expressions...) and all the benefits and pain those can cause. However, if only because you orient your mind differently, the problems may become easier or more difficult. I believe that it's possible to take principles learned in one language grammar type and use them in other languages with a different grammar.
+
+It's good to be a polyglot programmer these days, as you'll end up producing better code overall. And don't just stick to one framework; there's good things in all of them, whether Java, Node, .Net, or many others, and the differences in the underlying structure can really help you learn!
