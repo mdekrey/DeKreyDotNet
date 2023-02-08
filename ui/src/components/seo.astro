@@ -1,15 +1,14 @@
 ---
 export interface Props {
 	title: string;
-	ogImage?: string | undefined;
-	ogDescription?: string | undefined;
+	image?: string | undefined;
+	description?: string | undefined;
 }
 
 const {
 	title,
-	ogImage: metaImage,
-	ogDescription:
-		metaDescription = 'Personal articles and profile of Matt DeKrey',
+	image: metaImage,
+	description: metaDescription = 'Personal articles and profile of Matt DeKrey',
 } = Astro.props;
 const canonicalURL = new URL(
 	Astro.url.pathname.replace(/([^/])$/, '$1/'),

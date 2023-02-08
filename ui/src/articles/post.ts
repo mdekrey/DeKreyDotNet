@@ -3,7 +3,6 @@ import type { MDXInstance } from 'astro';
 export type BlogPostFrontmatter = {
 	draft?: boolean;
 	title?: string;
-	image?: string;
 	excerpt?: string;
 	date: string;
 	tags?: string[];
@@ -18,6 +17,7 @@ export type ReadingTime = {
 
 export type BlogPost = {
 	slug: string;
+	image?: ImageMetadata;
 
 	readingTime: ReadingTime;
 	excerpt: string;

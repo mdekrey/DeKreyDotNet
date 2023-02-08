@@ -23,7 +23,6 @@ function useMountedRef<T extends Element>(
 ): LegacyRef<T> {
 	const [currentElement, setCurrentElement] = useState<T | null>(null);
 	useEffect(() => {
-		console.log({ mounting: canvasId, currentElement, window });
 		if (currentElement && typeof window !== 'undefined') {
 			const dispose = effect(currentElement);
 			return dispose;
@@ -100,7 +99,6 @@ function renderThreeJs({
 	}
 
 	return () => {
-		console.log({ disposing: canvasId });
 		renderer.dispose();
 		composer.dispose();
 	};
