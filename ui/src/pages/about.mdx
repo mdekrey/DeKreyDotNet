@@ -1,19 +1,13 @@
+---
+layout: '@/components/layout.astro'
+title: 'About Matt DeKrey'
+description: 'A bit about me, Matt DeKrey, what I believe, and what I do'
+---
+import { Picture } from '@astrojs/image/components';
+
 import headshotUrl from '@/images/headshot.jpg';
-import Layout from '@/components/layout.astro';
 
 import { components as originalComponents } from '@/components/mdx/components.astro';
-
-export default function PageLayout({ children }) {
-	return (
-		<Layout
-			title="About Matt DeKrey"
-			ogImage={headshotUrl.src}
-			ogDescription="A bit about me, Matt DeKrey, what I believe, and what I do"
-		>
-			{children}
-		</Layout>
-	);
-}
 
 export const components = {
 	...originalComponents,
@@ -26,11 +20,12 @@ export const components = {
 	li: ({ children }) => <p className="font-bold my-4">{children}</p>,
 };
 
-<img
-	src={headshotUrl.src}
-	className="rounded-full w-20 h-20 inline-flex items-center justify-center float-left m-2"
+<Picture class="rounded-full w-20 h-20 inline-flex items-center justify-center float-left m-2"
 	alt="Matt DeKrey headshot"
-/>
+	src={headshotUrl}
+	sizes="(min-resolution: 2dppx) 160px, (min-resolution: 1.5dppx) 120px, 80px"
+	widths={[160, 120, 80]}
+	/>
 
 # About Matt DeKrey
 

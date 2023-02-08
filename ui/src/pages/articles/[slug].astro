@@ -16,14 +16,15 @@ export type Props = {
 	readingTime: ReadingTime;
 	title: string;
 	headings: MarkdownHeading[];
-	ogImage?: string;
-	ogDescription?: string;
+	image?: string;
+	description?: string;
 };
 
 export async function getStaticPaths() {
 	const articles = await getAllPosts();
 	return articles.map((article) => {
-		const { image: ogImage, excerpt: ogDescription } = article.frontmatter;
+		const image = article.image;
+		const { excerpt: description } = article.frontmatter;
 
 		return {
 			params: { slug: article.slug },
@@ -32,19 +33,19 @@ export async function getStaticPaths() {
 				frontmatter: article.frontmatter,
 				readingTime: article.readingTime,
 				title: article.frontmatter.title,
-				ogImage,
-				ogDescription,
+				image,
+				description,
 				headings: article.getHeadings(),
 			},
 		};
 	});
 }
 
-const { Component, frontmatter, readingTime, title, ogImage, ogDescription } =
+const { Component, frontmatter, readingTime, title, image, description } =
 	Astro.props;
 ---
 
-<Layout title={title} ogImage={ogImage} ogDescription={ogDescription}>
+<Layout title={title} image={image} description={description}>
 	{
 		/*<RightSidebar slot="secondary-sidebar">
 		<TableOfContents toc={generateToc(headings)} slot="nav" client:idle />
