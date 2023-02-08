@@ -3,6 +3,7 @@ import { pipeJsx } from '@/core/jsx/pipeJsx';
 import { mergeStyles } from '@/core/jsx/mergeStyles';
 import { createElement } from 'react';
 import clamp from 'lodash/fp/clamp';
+import { withIdLink } from './IdLink';
 
 const headerTemplate = mergeStyles(
 	<i
@@ -13,20 +14,21 @@ const headerTemplate = mergeStyles(
 
 type HeaderElements = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
-const header =
-	(elem: HeaderElements, fontSizeClass: string) =>
-	({ children, className, ...props }: JSX.IntrinsicElements['h1']) =>
-		pipeJsx(
-			createElement(
-				elem,
-				{
-					className: twMerge(fontSizeClass, className),
-					...props,
-				},
-				children
-			),
-			headerTemplate
-		);
+const header = (elem: HeaderElements, fontSizeClass: string) =>
+	withIdLink<'h1'>(
+		({ children, className, ...props }: JSX.IntrinsicElements['h1']) =>
+			pipeJsx(
+				createElement(
+					elem,
+					{
+						className: twMerge(fontSizeClass, className),
+						...props,
+					},
+					children
+				),
+				headerTemplate
+			)
+	);
 
 export const Headings = {
 	h1: header('h1', 'text-4xl'),
