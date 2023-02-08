@@ -17,7 +17,7 @@ const { title, image, description, mainClass } = (Astro.props.frontmatter ||
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-pt-12">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
@@ -42,7 +42,7 @@ const { title, image, description, mainClass } = (Astro.props.frontmatter ||
 				<slot />
 			</main>
 
-			<Footer class="bg-white" />
+			<Footer class="bg-white z-10" />
 		</div>
 	</body>
 </html>
