@@ -31,7 +31,9 @@ module.exports = {
 		'plugin:astro/recommended',
 		'plugin:astro/jsx-a11y-strict',
 	],
-	rules: {},
+	rules: {
+		'@typescript-eslint/triple-slash-reference': 'off',
+	},
 	ignorePatterns: ['/*.js*', '/*.cjs*'],
 	overrides: [
 		{

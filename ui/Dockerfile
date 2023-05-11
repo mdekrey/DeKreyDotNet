@@ -14,7 +14,7 @@ RUN npm run build -- --site $DOMAIN
 WORKDIR /src/dist
 
 RUN echo $GIT_HASH > ./git-version.txt
-RUN find . -type f -exec gzip -k "{}" \; -exec brotli -k "{}" \;
+RUN find . -type f -not -regex ".*\.\(avif\|jpg\|jpeg\|gif\|png\|webp\|mp4\|webm\)" -exec gzip -k "{}" \; -exec brotli -k "{}" \;
 
 FROM ghcr.io/mdekrey/static-files-server
 COPY --from=build-node /src/dist ./wwwroot
