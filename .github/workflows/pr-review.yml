@@ -4,7 +4,7 @@ on:
     types: [opened, reopened, synchronize, ready_for_review]
 
 env:
-  azClusterName: DeKreyKubed
+  azClusterName: MyKubical
   azClusterResourceGroup: DeKreyDotNet
 
   registryLoginServer: 'dekreydotnet.azurecr.io'

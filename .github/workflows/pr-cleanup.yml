@@ -4,7 +4,7 @@ on:
     types: [closed]
 
 env:
-  azClusterName: DeKreyKubed
+  azClusterName: MyKubical
   azClusterResourceGroup: DeKreyDotNet
 
   registryLoginServer: 'dekreydotnet.azurecr.io'
