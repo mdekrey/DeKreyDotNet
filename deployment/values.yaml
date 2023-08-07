@@ -1,5 +1,5 @@
 image:
   pullPolicy: Always
 ingress:
-  annotations:
-    "cert-manager.io/cluster-issuer": letsencrypt
+  tls:
+    noSecret: true

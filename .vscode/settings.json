@@ -43,5 +43,6 @@
     "[typescriptreact]": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "esbenp.prettier-vscode",
-    }
+    },
+    "dotnet.defaultSolution": "DeKreyDotNet.sln"
 }

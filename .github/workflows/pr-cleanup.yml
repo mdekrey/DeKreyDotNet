@@ -4,13 +4,13 @@ on:
     types: [closed]
 
 env:
-  azClusterName: TinyKubed
+  azClusterName: MyKubical
   azClusterResourceGroup: DeKreyDotNet
 
   registryLoginServer: 'dekreydotnet.azurecr.io'
   imageName: 'dekreydotnet'
-  k8sNamespacePrefix: 'dekrey-dot-net-pr-'
-  releaseName: 'pr'
+  k8sNamespacePrefix: 'dekrey-dot-net'
+  releaseName: 'pr-${{ github.event.pull_request.number }}'
 
 # Secrets generated via ./deployment/generate-credentials.ps1 - need to be reset regularly
 
@@ -34,5 +34,4 @@ jobs:
 
     - name: 'Clean up Kubernetes'
       run: |
-        helm delete -n ${{ env.k8sNamespacePrefix }}${{ github.event.pull_request.number }} ${{ env.releaseName }} --wait
-        kubectl delete ns ${{ env.k8sNamespacePrefix }}${{ github.event.pull_request.number }}
+        helm delete -n ${{ env.k8sNamespacePrefix }} ${{ env.releaseName }} --wait
