@@ -2,4 +2,4 @@ image:
   pullPolicy: Always
 ingress:
   tls:
-    secretName: wildcard-cert-prod
+    noSecret: true
