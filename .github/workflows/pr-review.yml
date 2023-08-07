@@ -4,13 +4,13 @@ on:
     types: [opened, reopened, synchronize, ready_for_review]
 
 env:
-  azClusterName: TinyKubed
+  azClusterName: DeKreyKubed
   azClusterResourceGroup: DeKreyDotNet
 
   registryLoginServer: 'dekreydotnet.azurecr.io'
   imageName: 'dekreydotnet'
-  k8sNamespacePrefix: 'dekrey-dot-net-pr-'
-  releaseName: 'pr'
+  k8sNamespacePrefix: 'dekrey-dot-net'
+  releaseName: 'pr-${{ github.event.pull_request.number }}'
 
 # Secrets generated via ./deployment/generate-credentials.ps1 - need to be reset regularly
 
@@ -49,7 +49,7 @@ jobs:
 
     - name: 'Deploy'
       run: |
-        helm upgrade --install -n ${{ env.k8sNamespacePrefix }}${{ github.event.pull_request.number }} $releaseName --create-namespace --repo https://mdekrey.github.io/helm-charts single-container --set-string "image.repository=$registryLoginServer/$imageName,image.tag=${{ github.sha }},ingress.hosts[0].host=pr-${{ github.event.pull_request.number }}.dekrey.net" --values ./deployment/values.yaml
+        helm upgrade --install -n ${{ env.k8sNamespacePrefix }} $releaseName --create-namespace --repo https://mdekrey.github.io/helm-charts single-container --set-string "image.repository=$registryLoginServer/$imageName,image.tag=${{ github.sha }},ingress.hosts[0].host=pr-${{ github.event.pull_request.number }}.dekrey.net" --values ./deployment/values.yaml
 
     - name: Report PR url
       uses: actions/github-script@v6
