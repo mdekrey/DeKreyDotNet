@@ -5,22 +5,28 @@ import fullUrl from '@/images/full.jpg';
 ---
 
 <div
-	class={'flex flex-col items-center md:flex-row md:items-start md:justify-center max-h-screen overflow-hidden mx-auto max-w-4xl sticky top-16 px-4 md:px-8 post-blur'}
+	class="post-blur w-full md:h-[60vmin] mx-auto max-w-screen-md"
+	style="clip-path:inset(0 0 0 0)"
+	id="intro-fixed-container"
 >
 	<div
-		class="group flex flex-col flex-shrink-0 mt-8 md:mt-[15vmin] md:mb-[10vmin]"
+		class={'flex flex-col items-center md:flex-row md:items-start md:justify-center max-h-screen mx-auto max-w-screen-md md:px-8 md:fixed top-16'}
+		id="intro-fixed-contents"
 	>
-		<h1 class="text-2xl md:text-left font-bold">
-			Hey, <br />
-			<span class="text-purple-700 text-4xl"> I&rsquo;m Matt DeKrey!</span>
-		</h1>
-		<p class="text-xs">MAT deh-KRAY</p>
-		<p class="text-xs">/mæt d&#x026A;&#x02c8;kre&#x026A;/</p>
-		<p class="text-xs">he/him</p>
+		<div
+			class="group flex flex-col flex-shrink-0 mt-8 md:mt-[15vmin] md:mb-[10vmin]"
+		>
+			<h1 class="text-2xl md:text-left font-bold">
+				Hey, <br />
+				<span class="text-purple-700 text-4xl"> I&rsquo;m Matt DeKrey!</span>
+			</h1>
+			<p class="text-xs">MAT deh-KRAY</p>
+			<p class="text-xs">/mæt d&#x026A;&#x02c8;kre&#x026A;/</p>
+			<p class="text-xs">he/him</p>
 
-		<p class="text-sm">
-			<a href="https://principlestudios.com">
-				<span class="block group-hover:hidden">
+			<p class="text-sm">
+				<!-- <a href="https://principlestudios.com"> -->
+				<span class="block">
 					<svg
 						stroke="currentColor"
 						fill="currentColor"
@@ -37,7 +43,7 @@ import fullUrl from '@/images/full.jpg';
 						></path>
 					</svg>{' '}Not available for contracting
 				</span>
-				<span class="block md:hidden md:group-hover:block">
+				<!-- <span class="block md:hidden md:group-hover:block">
 					<svg
 						stroke="currentColor"
 						fill="currentColor"
@@ -56,20 +62,22 @@ import fullUrl from '@/images/full.jpg';
 					{' '}
 					But <span class="underline">Principle Studios</span> is!
 				</span>
-			</a>
-		</p>
-	</div>
-	<div
-		class="max-w-screen md:flex-shrink-default h-[100vmin] w-[100vmin] md:h-[60vmin] md:w-[80vmin] md:self-end"
-	>
-		<Picture
-			src={fullUrl}
-			class="object-contain h-full w-full mx-auto mt-auto"
-			alt="A photo of Matt DeKrey, smiling and wearing an aloha-style shirt. The print of the shirt is a pattern with Tux wearing an floral aloha-style shirt."
-			formats={['webp', 'jpeg']}
-			sizes="(min-width: 768px) 540px, (min-width: 640px) 577px, 480px"
-			widths={[540, 577, 480]}
-		/>
+			</a> -->
+			</p>
+		</div>
+		<div
+			class="max-w-screen md:flex-shrink-default h-[100vmin] w-[100vmin] md:h-[60vmin] md:w-[80vmin] md:self-end relative"
+		>
+			<Picture
+				id="intro-photo"
+				src={fullUrl}
+				class="object-contain h-full w-full mx-auto mt-auto"
+				alt="A photo of Matt DeKrey, smiling and wearing an aloha-style shirt. The print of the shirt is a pattern with Tux wearing an floral aloha-style shirt."
+				formats={['webp', 'jpeg']}
+				sizes="(min-width: 768px) 540px, (min-width: 640px) 577px, 480px"
+				widths={[540, 577, 480]}
+			/>
+		</div>
 	</div>
 </div>
 <style>
@@ -90,3 +98,15 @@ import fullUrl from '@/images/full.jpg';
 		padding-top: min(10%, 10vh);
 	}
 </style>
+<script>
+	const container = document.getElementById('intro-fixed-container')!;
+	const contents = document.getElementById('intro-fixed-contents')!;
+	const photo = document.getElementById('intro-photo')!;
+	function updateHeight() {
+		container.style.height = `${contents?.getBoundingClientRect().height}px`;
+	}
+	updateHeight();
+	contents.style.position = 'fixed';
+	addEventListener('resize', updateHeight);
+	photo.addEventListener('load', updateHeight);
+</script>
