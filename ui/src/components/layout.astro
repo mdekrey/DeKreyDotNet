@@ -38,14 +38,14 @@ const { title, image, description, mainClass } = (Astro.props.frontmatter ||
 
 			<main
 				class={twMerge(
-					'flex-1 w-full max-w-4xl px-4 py-8 mx-auto md:px-8 md:py-16 bg-white relative',
+					'flex-1 w-full max-w-screen-md px-4 py-8 mx-auto md:px-8 md:py-16 relative',
 					mainClass
 				)}
 			>
 				<slot />
 			</main>
 
-			<Footer class="bg-white z-10" />
+			<Footer class="z-10" />
 		</div>
 	</body>
 </html>
