@@ -69,6 +69,7 @@ import fullUrl from '@/images/full.jpg';
 			class="max-w-screen md:flex-shrink-default h-[100vmin] w-[100vmin] md:h-[60vmin] md:w-[80vmin] md:self-end relative"
 		>
 			<Picture
+				id="intro-photo"
 				src={fullUrl}
 				class="object-contain h-full w-full mx-auto mt-auto"
 				alt="A photo of Matt DeKrey, smiling and wearing an aloha-style shirt. The print of the shirt is a pattern with Tux wearing an floral aloha-style shirt."
@@ -100,10 +101,12 @@ import fullUrl from '@/images/full.jpg';
 <script>
 	const container = document.getElementById('intro-fixed-container')!;
 	const contents = document.getElementById('intro-fixed-contents')!;
+	const photo = document.getElementById('intro-photo')!;
 	function updateHeight() {
 		container.style.height = `${contents?.getBoundingClientRect().height}px`;
 	}
 	updateHeight();
 	contents.style.position = 'fixed';
 	addEventListener('resize', updateHeight);
+	photo.addEventListener('load', updateHeight);
 </script>
