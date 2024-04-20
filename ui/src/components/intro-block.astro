@@ -100,6 +100,10 @@ import fullUrl from '@/images/full.jpg';
 <script>
 	const container = document.getElementById('intro-fixed-container')!;
 	const contents = document.getElementById('intro-fixed-contents')!;
-	container.style.height = `${contents?.getBoundingClientRect().height}px`;
+	function updateHeight() {
+		container.style.height = `${contents?.getBoundingClientRect().height}px`;
+	}
+	updateHeight();
 	contents.style.position = 'fixed';
+	addEventListener('resize', updateHeight);
 </script>
