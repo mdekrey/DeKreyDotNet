@@ -12,7 +12,7 @@ const {
 } = Astro.props;
 const canonicalURL = new URL(
 	Astro.url.pathname.replace(/([^/])$/, '$1/'),
-	Astro.site
+	Astro.site ?? Astro.url
 );
 
 const gitHash = import.meta.env.GIT_HASH ?? 'HEAD';
