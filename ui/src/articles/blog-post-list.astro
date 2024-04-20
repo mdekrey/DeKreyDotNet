@@ -1,0 +1,29 @@
+---
+import BlogPostSummaryDisplay from './blog-post-summary-display.astro';
+import { Paginator } from '@/components/pagination/paginator';
+import type { BlogPostSummary } from './summary';
+
+export type Props = {
+	posts: BlogPostSummary[];
+	page: number;
+	pageCount: number;
+};
+
+const { posts, page, pageCount } = Astro.props;
+---
+
+<div class="divide-y -my-8">
+	{posts.map((blogSummary) => <BlogPostSummaryDisplay post={blogSummary} />)}
+	{
+		pageCount !== 1 ? (
+			<div class="flex flex-col items-center py-8">
+				<p>More results:</p>
+				<Paginator
+					page={page}
+					pageCount={pageCount}
+					path={(v) => `/articles/page/${v}`}
+				/>
+			</div>
+		) : null
+	}
+</div>

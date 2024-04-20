@@ -2,7 +2,7 @@
 import Layout from '@/components/layout.astro';
 import { getArticlesPage, getCountByTag, getPageCount } from '@/articles/pages';
 import { toSummary } from '@/articles/summary';
-import { BlogPostList } from '@/articles/blog-post-list';
+import BlogPostList from '@/articles/blog-post-list.astro';
 
 export type Props = {
 	tag: string;
