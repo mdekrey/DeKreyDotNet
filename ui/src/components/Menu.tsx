@@ -1,4 +1,7 @@
-import { OpenMobileMenu, useMobileMenuState } from '@/core/mobile-menu-state';
+import {
+	type OpenMobileMenu,
+	useMobileMenuState,
+} from '@/core/mobile-menu-state';
 import { twMerge } from 'tailwind-merge';
 
 const Menu = ({

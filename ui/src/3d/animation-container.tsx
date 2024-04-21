@@ -1,7 +1,7 @@
 import {
-	DependencyList,
-	EffectCallback,
-	LegacyRef,
+	type DependencyList,
+	type EffectCallback,
+	type LegacyRef,
 	useEffect,
 	useState,
 } from 'react';

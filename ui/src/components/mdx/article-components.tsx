@@ -1,6 +1,6 @@
 import type { MDXProvider } from '@mdx-js/react';
 import type { ComponentProps } from 'react';
-import type { ImageMetadata } from '@astrojs/image/dist/vite-plugin-astro-image';
+import type { ImageMetadata } from 'astro';
 import { internalComponents } from './jsx-components';
 import { Headings } from '../headings';
 import { mergeComponent } from '@/core/jsx/mergeComponent';

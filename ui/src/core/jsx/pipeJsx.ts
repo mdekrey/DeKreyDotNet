@@ -1,4 +1,4 @@
-import { Children, ReactNode } from 'react';
+import { Children, type ReactNode } from 'react';
 import { isReactElement } from './isReactElement';
 
 export type JsxMutator = (input: JSX.Element) => JSX.Element;

@@ -1,5 +1,5 @@
 ---
-import { Picture } from '@astrojs/image/components';
+import { Picture } from 'astro:assets';
 
 import headshotUrl from '@/images/headshot.jpg';
 ---
@@ -7,7 +7,6 @@ import headshotUrl from '@/images/headshot.jpg';
 <Picture
 	src={headshotUrl}
 	class="rounded-full items-center justify-center w-10 h-10 inline-block"
-	aspectRatio={1}
 	sizes="(min-resolution: 2dppx) 80px, (min-resolution: 1.5dppx) 60px, 40px"
 	widths={[80, 60, 40]}
 	alt=""

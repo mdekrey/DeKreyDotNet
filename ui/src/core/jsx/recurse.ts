@@ -1,6 +1,6 @@
-import { Children, ReactNode, cloneElement, Fragment } from 'react';
+import { Children, type ReactNode, cloneElement, Fragment } from 'react';
 import { isReactElement } from './isReactElement';
-import { pipeJsx, JsxMutator } from './pipeJsx';
+import { pipeJsx, type JsxMutator } from './pipeJsx';
 
 function applyMutatorsToChildren(
 	child: ReactNode,

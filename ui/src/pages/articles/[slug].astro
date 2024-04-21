@@ -1,8 +1,7 @@
 ---
 import Layout from '@/components/layout.astro';
 
-import type { AstroComponentFactory } from 'astro/dist/runtime/server';
-import type { MarkdownHeading } from 'astro';
+import type { MarkdownHeading, AstroInstance } from 'astro';
 import { getAllPosts } from '@/articles/utils';
 import { articleComponents } from '@/components/mdx/components.astro';
 import MarkdownPicture from '@/components/mdx/MarkdownPicture.astro';
@@ -11,7 +10,7 @@ import type { BlogPostFrontmatter, ReadingTime } from '@/articles/post';
 const components = { ...articleComponents, img: MarkdownPicture };
 
 export type Props = {
-	Component: AstroComponentFactory;
+	Component: AstroInstance['default'];
 	frontmatter: BlogPostFrontmatter;
 	readingTime: ReadingTime;
 	title: string;

@@ -27,7 +27,7 @@ const gitHash = import.meta.env.GIT_HASH ?? 'HEAD';
 <meta property={`og:description`} content={metaDescription} />
 {
 	metaImage ? (
-		<meta property={`og:image`} content={new URL(metaImage, Astro.site)} />
+		<meta property={`og:image`} content={new URL(metaImage, Astro.site ?? Astro.url)} />
 	) : null
 }
 <meta property={`og:type`} content={`website`} />
