@@ -32,12 +32,28 @@ const { post: blogSummary } = Astro.props;
 				{blogSummary.frontmatter.title}
 			</h2>
 		</a>
+		<span class="text-xs">
+			{blogSummary.frontmatter.date}
+			{
+				blogSummary.frontmatter.tags &&
+					tagSort(blogSummary.frontmatter.tags).map((tag) => (
+						<a
+							class="border border-purple-900 bg-purple-100 inline-block rounded-full px-1 mr-1"
+							href={`/articles/tagged/${tag}/page/1/`}
+						>
+							{tag}
+						</a>
+					))
+			}
+		</span>
 		<p class="leading-relaxed">{blogSummary.excerpt}</p>
 		<a
 			href={`/articles/${blogSummary.slug}`}
 			class={twMerge('inline-flex items-center mt-4', linkClassName)}
 		>
-			Read More ({blogSummary.readingTime.text})
+			Read More ({blogSummary.readingTime.text}) about {
+				blogSummary.frontmatter.title
+			}
 			<svg
 				class="w-4 h-4 ml-2"
 				viewBox="0 0 24 24"

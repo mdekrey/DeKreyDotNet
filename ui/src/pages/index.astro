@@ -2,14 +2,16 @@
 import Layout from '@/components/layout.astro';
 import { toSummary } from '@/articles/summary';
 import IntroBlock from '@/components/intro-block.astro';
-import { getArticlesPage } from '@/articles/pages';
+import { getArticlesPage, getCountByTag } from '@/articles/pages';
 import BlogPostList from '@/articles/blog-post-list.astro';
+import { twMerge } from 'tailwind-merge';
 import { getThoughtsPage } from '@/thoughts/pages';
 import ThoughtsSection from '@/thoughts/section.astro';
 
 const { articles, totalPageCount: articlePageCount } = (await getArticlesPage(
 	1,
 )) ?? { articles: [], totalPageCount: 0 };
+const tags = await getCountByTag();
 
 const thoughtPageInfo = (await getThoughtsPage(1)) ?? {
 	thoughts: [],
@@ -21,6 +23,27 @@ const thoughtPageInfo = (await getThoughtsPage(1)) ?? {
 	<IntroBlock slot="no-scroll-header" />
 
 	<ThoughtsSection thoughts={thoughtPageInfo} />
+	<p class="flex flex-wrap flex-row gap-1 items-baseline">
+		{
+			Object.entries(tags)
+				.sort(
+					([tagA, countA], [tagB, countB]) =>
+						countB - countA || tagA.localeCompare(tagB),
+				)
+				.map(([tag, count]) => (
+					<a
+						class={twMerge(
+							'border border-purple-900 bg-purple-100 inline-block rounded-full px-1 mr-1 leading-normal',
+							count === 2 && 'text-sm',
+							count === 1 && 'text-xs',
+						)}
+						href={`/articles/tagged/${tag}/page/1/`}
+					>
+						{tag}
+					</a>
+				))
+		}
+	</p>
 	<BlogPostList
 		posts={articles.map(toSummary)}
 		page={1}

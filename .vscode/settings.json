@@ -23,6 +23,7 @@
     "typescript.tsdk": "ui/node_modules/typescript/lib",
     "prettier.requireConfig": true,
     "prettier.documentSelectors": ["**/*.astro"],
+    "prettier.configPath": "ui/.prettierrc",
 
     "[javascript]": {
         "editor.formatOnSave": true,
