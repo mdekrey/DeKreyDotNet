@@ -5,14 +5,14 @@ type PaginationParts = [
 	page: number,
 	postPage: number[],
 	postEllipsis: '...' | number[],
-	bookendEnd: number[]
+	bookendEnd: number[],
 ];
 
 export function createPaginator(
 	aroundCurrentCount = 2,
 	bookendPageCount = 1,
 	ellipsisMinimumCount = 2,
-	bookendFocusCount = 6 // number of pages to always show trailing/end if current page is close to it.
+	bookendFocusCount = 6, // number of pages to always show trailing/end if current page is close to it.
 ) {
 	function boundaries(currentPage: number, lastPage: number) {
 		const startBookendEnd = bookendPageCount + 1;
@@ -26,7 +26,7 @@ export function createPaginator(
 
 		const preEllipsisStart = Math.max(
 			1,
-			Math.min(startBookendEnd, aroundStart, endFocusStart)
+			Math.min(startBookendEnd, aroundStart, endFocusStart),
 		);
 		const preEllipsisEnd = Math.max(Math.min(endFocusStart, aroundStart), 1);
 		const prePageStart = preEllipsisEnd;
@@ -35,12 +35,12 @@ export function createPaginator(
 		const postPageStart = currentPage + 1;
 		const postPageEnd = Math.min(
 			Math.max(startFocusEnd, aroundEnd),
-			lastPage + 1
+			lastPage + 1,
 		);
 		const postEllipsisStart = postPageEnd;
 		const postEllipsisEnd = Math.min(
 			lastPage + 1,
-			Math.max(postPageEnd, aroundEnd, endBookendStart)
+			Math.max(postPageEnd, aroundEnd, endBookendStart),
 		);
 
 		return {

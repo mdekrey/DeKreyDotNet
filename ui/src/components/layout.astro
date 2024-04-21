@@ -17,7 +17,7 @@ const { title, image, description, mainClass } = (Astro.props.frontmatter ||
 	Astro.props) as Props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html
 	lang="en"
 	class="scroll-pt-18 md:scroll-pt-12 scroll-smooth motion-reduce:scroll-auto"
@@ -40,7 +40,7 @@ const { title, image, description, mainClass } = (Astro.props.frontmatter ||
 			<main
 				class={twMerge(
 					'flex-1 w-full max-w-screen-md px-4 py-8 mx-auto md:px-8 md:py-16 relative',
-					mainClass
+					mainClass,
 				)}
 			>
 				<slot />

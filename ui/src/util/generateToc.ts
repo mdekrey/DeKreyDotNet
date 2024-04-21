@@ -27,7 +27,7 @@ export function generateToc(headings: MarkdownHeading[], maxDepth = 3) {
 			if (heading.depth < lastItemInToc.depth) {
 				console.error(
 					'in generateToc, heading depth is less than last item',
-					headings
+					headings,
 				);
 				throw new Error(`Orphan heading found: ${heading.text}.`);
 			}

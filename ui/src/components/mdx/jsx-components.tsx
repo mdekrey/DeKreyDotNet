@@ -8,7 +8,7 @@ import { Headings } from '../headings';
 import { mergeComponent } from '@/core/jsx/mergeComponent';
 
 export const rowTemplate = mergeStyles(
-	<tr className="even:bg-gradient-to-r from-tan-fading to-white odd:bg-tan-accent border-b-2 border-white font-info" />
+	<tr className="even:bg-gradient-to-r from-tan-fading to-white odd:bg-tan-accent border-b-2 border-white font-info" />,
 );
 export const infoFontTemplate = mergeStyles(<i className="font-info" />);
 
@@ -36,7 +36,7 @@ export const internalComponents: ComponentProps<
 		</div>
 	),
 	a: mergeComponent(
-		<a className="hover:underline focus:underline text-purple-700" />
+		<a className="hover:underline focus:underline text-purple-700" />,
 	),
 	thead: mergeComponent(<thead className="bg-theme text-white" />),
 	tbody: ({ children, ...props }: JSX.IntrinsicElements['tbody']) => (
@@ -56,7 +56,7 @@ export const internalComponents: ComponentProps<
 		<blockquote
 			className={twMerge(
 				'bg-gradient-to-r from-tan-fading p-2 my-4',
-				className
+				className,
 			)}
 			style={{ pageBreakInside: 'avoid' }}
 			{...props}

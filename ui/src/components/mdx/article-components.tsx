@@ -28,6 +28,6 @@ export const internalArticleComponents: ComponentProps<
 	ul: mergeComponent(<ul className="my-4 list-disc md:ml-16 ml-8" />),
 	ol: mergeComponent(<ol className="my-4 list-decimal md:ml-16 ml-8" />),
 	blockquote: mergeComponent(
-		<blockquote className="border-l-4 border-gray-300 italic md:mx-8 mx-4 pl-4 md:pl-8" />
+		<blockquote className="border-l-4 border-gray-300 italic md:mx-8 mx-4 pl-4 md:pl-8" />,
 	),
 };

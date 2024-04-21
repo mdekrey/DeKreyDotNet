@@ -104,7 +104,7 @@ export function ExplosionScene({ className }: { className?: string }) {
 				<button
 					className={twMerge(
 						'w-full h-96 bg-black bg-no-repeat text-center text-blue-900 text-3xl font-bold',
-						className
+						className,
 					)}
 					style={{
 						backgroundImage: `url(${screenshotUrl.src})`,

@@ -19,7 +19,7 @@ const canvasId = uniqueId('three');
 
 function useMountedRef<T extends Element>(
 	effect: (element: T) => ReturnType<EffectCallback>,
-	deps?: DependencyList
+	deps?: DependencyList,
 ): LegacyRef<T> {
 	const [currentElement, setCurrentElement] = useState<T | null>(null);
 	useEffect(() => {
@@ -41,7 +41,7 @@ function useThreeJs({
 }: Omit<Parameters<typeof renderThreeJs>[0], 'canvas'>) {
 	return useMountedRef<HTMLCanvasElement>(
 		(canvas) => renderThreeJs({ canvas, onFrame }),
-		[onFrame]
+		[onFrame],
 	);
 }
 

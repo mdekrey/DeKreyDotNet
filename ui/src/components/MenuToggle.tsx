@@ -19,7 +19,7 @@ const MenuToggle = ({
 		<button
 			className={twMerge(
 				'border rounded-md border-transparent bg-transparent p-2 md:hidden',
-				isActive && 'border-slate-500 bg-slate-200'
+				isActive && 'border-slate-500 bg-slate-200',
 			)}
 			type="button"
 			aria-pressed={isActive ? 'true' : 'false'}

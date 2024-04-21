@@ -26,7 +26,7 @@ const Menu = ({
 			className={twMerge(
 				className,
 				isActive && openClass,
-				!isActive && closedClass
+				!isActive && closedClass,
 			)}
 		>
 			{children}

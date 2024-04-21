@@ -12,6 +12,6 @@ export function pipeJsxChildren(
 	...jsxMutate: JsxMutator[]
 ) {
 	return Children.map(children, (child) =>
-		isReactElement(child) ? pipeJsx(child, ...jsxMutate) : child
+		isReactElement(child) ? pipeJsx(child, ...jsxMutate) : child,
 	);
 }

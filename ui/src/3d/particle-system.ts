@@ -10,7 +10,7 @@ export type ParticleSystemOptions<TStructureKey extends string> = {
 	updateParticle: (
 		particleVertexBuffer: Float32Array,
 		index: Record<TStructureKey, number>,
-		deltaSeconds: number
+		deltaSeconds: number,
 	) => void;
 	material: THREE.ShaderMaterial;
 	geometry: THREE.BufferGeometry;
@@ -22,7 +22,7 @@ type ParticleStructureEntry = {
 };
 
 export class ParticleSystem<
-	TStructureKey extends string = string
+	TStructureKey extends string = string,
 > extends THREE.Object3D {
 	private readonly options: Readonly<
 		ParticleSystemOptions<TStructureKey | 'isActive'>
@@ -52,7 +52,7 @@ export class ParticleSystem<
 			const target = record[structureName];
 			if (index > 0 && arr[index - 1] !== structureName && target)
 				throw new Error(
-					`Particle structure invalid. All instances of '${structureName}' must be adjacent.`
+					`Particle structure invalid. All instances of '${structureName}' must be adjacent.`,
 				);
 			if (arr[index - 1] === structureName && target) target.size++;
 			else record[structureName] = { offset: index, size: 1 };
@@ -60,19 +60,19 @@ export class ParticleSystem<
 		}, {});
 
 		this.particleVertexBuffer = new Float32Array(
-			this.options.particleCount * this.offsetSize
+			this.options.particleCount * this.offsetSize,
 		);
 
 		for (let i = 0; i < this.options.particleCount; i++) {
 			this.particleVertexBuffer.set(
 				Array(this.offsetSize).fill(0),
-				i * this.offsetSize
+				i * this.offsetSize,
 			);
 		}
 
 		this.particleBuffer = new THREE.InstancedInterleavedBuffer(
 			this.particleVertexBuffer,
-			this.offsetSize
+			this.offsetSize,
 		);
 
 		const geometry = new THREE.InstancedBufferGeometry();
@@ -85,8 +85,8 @@ export class ParticleSystem<
 				new THREE.InterleavedBufferAttribute(
 					this.particleBuffer,
 					details.size,
-					details.offset
-				)
+					details.offset,
+				),
 			);
 			console.log('initialize ' + entryName);
 		}
@@ -94,7 +94,7 @@ export class ParticleSystem<
 		const mesh = new THREE.InstancedMesh(
 			geometry,
 			this.options.material,
-			this.options.particleCount
+			this.options.particleCount,
 		);
 		this.add(mesh);
 	}
@@ -115,7 +115,7 @@ export class ParticleSystem<
 				this.options.updateParticle(
 					this.particleVertexBuffer,
 					mapObjectValues(this.particleStructure, (_, v) => v.offset + idx),
-					deltaSeconds
+					deltaSeconds,
 				);
 			}
 			if (toEmit && !this.particleVertexBuffer[activeIndex]) {
@@ -124,7 +124,7 @@ export class ParticleSystem<
 				const target = [1, ...this.options.initializeParticle()];
 				if (target.length > this.offsetSize)
 					throw new Error(
-						`Incorrect offset, expected ${this.offsetSize} but got ${target.length}`
+						`Incorrect offset, expected ${this.offsetSize} but got ${target.length}`,
 					);
 				this.particleVertexBuffer.set(target, i * this.offsetSize);
 			}
@@ -144,15 +144,15 @@ export class ParticleSystem<
 
 function mapObjectValues<
 	T extends Record<string, unknown>,
-	TResult extends Record<keyof T, unknown>
+	TResult extends Record<keyof T, unknown>,
 >(
 	someObj: T,
-	map: <K extends keyof T>(key: K, value: T[K]) => TResult[K]
+	map: <K extends keyof T>(key: K, value: T[K]) => TResult[K],
 ): TResult {
 	return Object.fromEntries(
 		Object.entries(someObj).map(([key, value]) => [
 			key,
 			map(key, value as T[string]),
-		])
+		]),
 	) as TResult;
 }

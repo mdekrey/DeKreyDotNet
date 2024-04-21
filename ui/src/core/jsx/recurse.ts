@@ -19,8 +19,8 @@ export function recurse(...operations: JsxMutator[]): JsxMutator {
 			? cloneElement(c, {
 					...c.props,
 					children: Children.map(c.props.children, (child) =>
-						applyMutatorsToChildren(child, ...operations)
+						applyMutatorsToChildren(child, ...operations),
 					),
-			  })
+				})
 			: c;
 }
