@@ -46,7 +46,6 @@
   },
   "devDependencies": {
     "@mdx-js/react": "^2.2.1",
-    "@types/html-escaper": "^3.0.0",
     "@types/node": "^18.11.18",
     "@typescript-eslint/eslint-plugin": "^7.7.0",
     "@typescript-eslint/parser": "^7.7.0",
