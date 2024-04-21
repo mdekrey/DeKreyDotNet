@@ -1,0 +1,39 @@
+---
+import Layout from '@/components/layout.astro';
+import {
+	getThoughtsPage,
+	getThoughtCountByTag,
+	getThoughtsPageCount,
+} from '@/thoughts/pages';
+import ThoughtList from '@/thoughts/thought-list.astro';
+
+export type Props = {
+	tag: string;
+	page: number;
+};
+
+export async function getStaticPaths() {
+	const tags = Object.keys(await getThoughtCountByTag());
+
+	return (
+		await Promise.all(
+			tags.map(async (tag) =>
+				Array(await getThoughtsPageCount(tag))
+					.fill(0)
+					.map((_, index) => ({
+						params: { tag, page: (index + 1).toFixed(0) },
+						props: { tag, page: index + 1 },
+					})),
+			),
+		)
+	).flatMap((v) => v);
+}
+
+const { tag, page } = Astro.props;
+
+const thoughtPageInfo = await getThoughtsPage(page, tag);
+---
+
+<Layout title={`Thoughts tagged ${tag} - Page ${page}`}>
+	<ThoughtList thoughts={thoughtPageInfo!} page={1} />
+</Layout>

@@ -18,7 +18,4 @@ export type ReadingTime = {
 export type BlogPost = {
 	slug: string;
 	image?: ImageMetadata;
-
-	readingTime: ReadingTime;
-	excerpt: string;
 } & MDXInstance<BlogPostFrontmatter>;

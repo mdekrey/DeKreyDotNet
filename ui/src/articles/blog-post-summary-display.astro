@@ -15,12 +15,23 @@ const { post: blogSummary } = Astro.props;
 ---
 
 <div class="py-8 flex flex-wrap md:flex-nowrap">
+	<div class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
+		{
+			blogSummary.frontmatter.tags &&
+				tagSort(blogSummary.frontmatter.tags).map((tag) => (
+					<span class="tracking-widest font-medium text-gray-900">{tag}</span>
+				))
+		}
+		<span class="mt-1 text-gray-500 text-sm">
+			{blogSummary.frontmatter.date}
+		</span>
+	</div>
 	<div class="md:flex-grow">
-		<h2 class={twMerge('text-2xl font-medium mb-2', linkClassName)}>
-			<a href={`/articles/${blogSummary.slug}`}>
+		<a href={`/articles/${blogSummary.slug}`}>
+			<h2 class={twMerge('text-2xl font-medium mb-2', linkClassName)}>
 				{blogSummary.frontmatter.title}
-			</a>
-		</h2>
+			</h2>
+		</a>
 		<span class="text-xs">
 			{blogSummary.frontmatter.date}
 			{

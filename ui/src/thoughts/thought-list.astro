@@ -1,0 +1,37 @@
+---
+import type { Thought } from './thought';
+import ThoughtDisplay from './thought-display.astro';
+import { Paginator } from '@/components/pagination/paginator';
+
+export type Props = {
+	thoughts: { thoughts: Thought[]; totalPageCount: number };
+	page: number;
+};
+
+const {
+	thoughts: { totalPageCount, thoughts },
+	page,
+} = Astro.props;
+---
+
+<div class="flex flex-col gap-8">
+	{
+		thoughts.map((thought) => (
+			<div>
+				<ThoughtDisplay thought={thought} />
+			</div>
+		))
+	}
+	{
+		totalPageCount !== 1 ? (
+			<div class="flex flex-col items-center py-8">
+				<p>More results:</p>
+				<Paginator
+					page={page}
+					pageCount={totalPageCount}
+					path={(v) => `/thoughts/page/${v}`}
+				/>
+			</div>
+		) : null
+	}
+</div>

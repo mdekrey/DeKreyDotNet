@@ -1,0 +1,25 @@
+---
+import type { Thought } from './thought';
+import { format } from 'date-fns';
+import { thoughtComponents } from '@/components/mdx/thought-components';
+import MarkdownPicture from '@/components/mdx/MarkdownPicture.astro';
+
+export type Props = {
+	thought: Thought;
+};
+
+const components = { ...thoughtComponents, img: MarkdownPicture };
+
+const { thought } = Astro.props;
+
+const { Content } = thought;
+---
+
+<article class="contents">
+	<a href={`/thoughts/${format(thought.date, 'yyyy-MM-ddThhmmss')}`}>
+		<h2 class={'text-xs font-medium mb-2'}>
+			{format(thought.date, `h:mm aaaa' on 'd MMM, yyyy`)}
+		</h2>
+	</a>
+	<Content components={components} />
+</article>

@@ -4,12 +4,13 @@ import type { ImageMetadata } from 'astro';
 import { internalComponents } from './jsx-components';
 import { Headings } from '../headings';
 import { mergeComponent } from '@/core/jsx/mergeComponent';
+import { linkClassName } from '../styles';
 
-export const articleComponents: ComponentProps<
+export const thoughtComponents: ComponentProps<
 	typeof MDXProvider
 >['components'] = {
 	...internalComponents,
-	...Headings.stepDown(1),
+	...Headings.stepDown(2),
 	img: ({ src, ...props }) => {
 		const source =
 			typeof src === 'string' || typeof src === 'undefined'
@@ -21,10 +22,10 @@ export const articleComponents: ComponentProps<
 			</span>
 		);
 	},
-	a: mergeComponent(<a className="font-bold underline" />),
+	a: mergeComponent(<a className={linkClassName} />),
 	pre: mergeComponent(<pre className="my-8 p-4 overflow-hidden rounded-lg" />),
-	p: mergeComponent(<p className="my-4 font-serif font-normal text-xl" />),
-	li: mergeComponent(<li className="my-4 font-serif font-normal text-xl" />),
+	p: mergeComponent(<p className="my-4 font-normal" />),
+	li: mergeComponent(<li className="my-4 font-normal" />),
 	ul: mergeComponent(<ul className="my-4 list-disc md:ml-16 ml-8" />),
 	ol: mergeComponent(<ol className="my-4 list-decimal md:ml-16 ml-8" />),
 	blockquote: mergeComponent(

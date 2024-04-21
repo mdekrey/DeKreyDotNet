@@ -5,17 +5,24 @@ import IntroBlock from '@/components/intro-block.astro';
 import { getArticlesPage, getCountByTag } from '@/articles/pages';
 import BlogPostList from '@/articles/blog-post-list.astro';
 import { twMerge } from 'tailwind-merge';
+import { getThoughtsPage } from '@/thoughts/pages';
+import ThoughtsSection from '@/thoughts/section.astro';
 
-const pageInfo = await getArticlesPage(1);
+const { articles, totalPageCount: articlePageCount } = (await getArticlesPage(
+	1,
+)) ?? { articles: [], totalPageCount: 0 };
 const tags = await getCountByTag();
 
-const posts = pageInfo?.articles.map(toSummary) ?? [];
-const pageCount = pageInfo?.totalPageCount ?? 0;
+const thoughtPageInfo = (await getThoughtsPage(1)) ?? {
+	thoughts: [],
+	totalPageCount: 0,
+};
 ---
 
 <Layout title="Home">
 	<IntroBlock slot="no-scroll-header" />
 
+	<ThoughtsSection thoughts={thoughtPageInfo} />
 	<p class="flex flex-wrap flex-row gap-1 items-baseline">
 		{
 			Object.entries(tags)
@@ -37,5 +44,9 @@ const pageCount = pageInfo?.totalPageCount ?? 0;
 				))
 		}
 	</p>
-	<BlogPostList posts={posts} page={1} pageCount={pageCount} />
+	<BlogPostList
+		posts={articles.map(toSummary)}
+		page={1}
+		pageCount={articlePageCount}
+	/>
 </Layout>
