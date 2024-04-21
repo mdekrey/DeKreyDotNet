@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { compareAsc, parse } from 'date-fns';
+import { compareDesc, parse } from 'date-fns';
 import { processSrcRoot } from '@/util/paths';
 import type { Thought, ThoughtFrontmatter } from './thought';
 import type { MDXInstance } from 'astro';
@@ -28,11 +28,11 @@ export async function getAllThoughts(): Promise<Thought[]> {
 			};
 		})
 		.filter((post) => post.date)
-		.sort((a, b) => compareAsc(a.date, b.date));
+		.sort((a, b) => compareDesc(a.date, b.date));
 
 	return result;
 }
 
 export function compareThoughts(a: Thought, b: Thought) {
-	return compareAsc(a.date, b.date);
+	return compareDesc(a.date, b.date);
 }

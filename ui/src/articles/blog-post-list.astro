@@ -12,7 +12,7 @@ export type Props = {
 const { posts, page, pageCount } = Astro.props;
 ---
 
-<div class="divide-y -my-8">
+<div class="divide-y">
 	{posts.map((blogSummary) => <BlogPostSummaryDisplay post={blogSummary} />)}
 	{
 		pageCount !== 1 ? (

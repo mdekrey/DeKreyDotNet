@@ -49,13 +49,13 @@ const { post: blogSummary } = Astro.props;
 		<p class="leading-relaxed">{blogSummary.excerpt}</p>
 		<a
 			href={`/articles/${blogSummary.slug}`}
-			class={twMerge('inline-flex items-center mt-4', linkClassName)}
+			class={twMerge('inline-flex items-center mt-4 group', linkClassName)}
 		>
 			Read More ({blogSummary.readingTime.text}) about {
 				blogSummary.frontmatter.title
 			}
 			<svg
-				class="w-4 h-4 ml-2"
+				class="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform"
 				viewBox="0 0 24 24"
 				stroke="currentColor"
 				stroke-width="2"
