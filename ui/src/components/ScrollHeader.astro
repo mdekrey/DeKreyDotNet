@@ -21,13 +21,17 @@ const { className, showHeaderClass, hideHeaderClass } = Astro.props;
 </header>
 <script>
 	const header = document.getElementById('scroll-header');
+	const main = document.getElementsByTagName('main')[0]!;
 	const showHeaderClass = header?.dataset.showHeaderClass ?? '';
 	const hideHeaderClass = header?.dataset.hideHeaderClass ?? '';
 
 	let scrollPosition = window.scrollY;
 	function onScroll() {
 		const newScrollPosition = window.scrollY;
-		if (newScrollPosition < scrollPosition || newScrollPosition <= 0)
+		if (
+			newScrollPosition < scrollPosition ||
+			newScrollPosition <= main.offsetTop
+		)
 			showHeader();
 		else if (newScrollPosition > scrollPosition) hideHeader();
 
