@@ -1,4 +1,4 @@
-FROM node:18-alpine AS build-node
+FROM node:20-alpine AS build-node
 RUN apk add --no-cache brotli
 
 WORKDIR /src
