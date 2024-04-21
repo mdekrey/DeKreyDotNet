@@ -1,0 +1,51 @@
+---
+import { twMerge } from 'tailwind-merge';
+
+export type Props = {
+	className?: string;
+	showHeaderClass: string;
+	hideHeaderClass: string;
+};
+
+const { className, showHeaderClass, hideHeaderClass } = Astro.props;
+---
+
+<header
+	class={twMerge('shadow', className, showHeaderClass)}
+	style={{ top: 0 }}
+	data-show-header-class={showHeaderClass}
+	data-hide-header-class={hideHeaderClass}
+	id="scroll-header"
+>
+	<slot />
+</header>
+<script>
+	const header = document.getElementById('scroll-header')!;
+	const main = document.getElementsByTagName('main')[0]!;
+	const showHeaderClass = header?.dataset.showHeaderClass ?? '';
+	const hideHeaderClass = header?.dataset.hideHeaderClass ?? '';
+
+	let scrollPosition = window.scrollY;
+	function onScroll() {
+		const newScrollPosition = window.scrollY;
+		if (
+			newScrollPosition < scrollPosition ||
+			newScrollPosition + header.offsetHeight <= main.offsetTop
+		)
+			showHeader();
+		else if (newScrollPosition > scrollPosition) hideHeader();
+
+		scrollPosition = newScrollPosition;
+	}
+
+	window.addEventListener('scroll', onScroll);
+
+	function hideHeader() {
+		header?.classList.remove(showHeaderClass);
+		header?.classList.add(hideHeaderClass);
+	}
+	function showHeader() {
+		header?.classList.add(showHeaderClass);
+		header?.classList.remove(hideHeaderClass);
+	}
+</script>
