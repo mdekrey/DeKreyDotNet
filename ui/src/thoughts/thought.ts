@@ -10,5 +10,5 @@ export type Thought = {
 } & MDXInstance<ThoughtFrontmatter>;
 
 export function toUrlTimestamp({ date }: Thought) {
-	return format(date, 'yyyy-MM-ddThhmmss');
+	return format(date, `yyyy-MM-dd'T'HH:mm:ss`);
 }
