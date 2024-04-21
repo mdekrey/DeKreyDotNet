@@ -13,7 +13,7 @@ import {
 	RenderPass,
 	EffectPass,
 	BloomEffect,
-} from 'postprocessing/module';
+} from 'postprocessing';
 
 const canvasId = uniqueId('three');
 
@@ -67,7 +67,6 @@ function renderThreeJs({
 	renderer.toneMapping = THREE.ReinhardToneMapping;
 	renderer.setAnimationLoop(animation);
 	renderer.autoClear = false;
-	renderer.outputEncoding = THREE.sRGBEncoding;
 
 	const composer = new EffectComposer(renderer);
 	const renderPass = new RenderPass();
