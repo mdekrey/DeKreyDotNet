@@ -23,7 +23,6 @@ const { className, showHeaderClass, hideHeaderClass } = Astro.props;
 	const header = document.getElementById('scroll-header');
 	const showHeaderClass = header?.dataset.showHeaderClass ?? '';
 	const hideHeaderClass = header?.dataset.hideHeaderClass ?? '';
-	console.log({ header, showHeaderClass, hideHeaderClass });
 
 	let scrollPosition = window.scrollY;
 	function onScroll() {
@@ -36,8 +35,6 @@ const { className, showHeaderClass, hideHeaderClass } = Astro.props;
 	}
 
 	window.addEventListener('scroll', onScroll);
-	if (scrollPosition <= 0) showHeader();
-	if (scrollPosition) hideHeader();
 
 	function hideHeader() {
 		header?.classList.remove(showHeaderClass);
