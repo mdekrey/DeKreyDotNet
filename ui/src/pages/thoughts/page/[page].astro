@@ -26,6 +26,6 @@ const { page } = Astro.props;
 const thoughtPageInfo = await getThoughtsPage(page);
 ---
 
-<Layout title="Home">
+<Layout title={`Thoughts - Page ${page}`}>
 	<ThoughtList thoughts={thoughtPageInfo!} page={1} />
 </Layout>

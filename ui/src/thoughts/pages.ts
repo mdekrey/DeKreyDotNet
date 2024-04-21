@@ -32,7 +32,8 @@ export async function getThoughtsPage(page: number, tag?: string) {
 }
 
 export async function getFilteredThoughts(tag?: string) {
-	const result = await getAllThoughts();
-	if (tag) result.filter((post) => post.frontmatter.tags?.includes(tag));
+	let result = await getAllThoughts();
+	if (tag)
+		result = result.filter((post) => post.frontmatter.tags?.includes(tag));
 	return result;
 }
