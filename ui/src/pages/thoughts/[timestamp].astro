@@ -1,0 +1,35 @@
+---
+import Layout from '@/components/layout.astro';
+import { format } from 'date-fns';
+import { getAllThoughts } from '@/thoughts/all';
+import { toUrlTimestamp, type Thought } from '@/thoughts/thought';
+import ThoughtDisplay from '@/thoughts/thought-display.astro';
+
+export type Props = {
+	thought: Thought;
+};
+
+export async function getStaticPaths() {
+	const thoughts = await getAllThoughts();
+	return thoughts.map(
+		(thought): { params: Record<string, string>; props: Props } => {
+			return {
+				params: { timestamp: toUrlTimestamp(thought) },
+				props: {
+					thought,
+				},
+			};
+		},
+	);
+}
+
+const { thought } = Astro.props;
+---
+
+<Layout
+	title={`Thought at ${format(thought.date, `hh:mmaaaa' on 'dd MMM, yyyy`)}`}
+	image={undefined}
+	description={thought.excerpt}
+>
+	<ThoughtDisplay thought={thought} />
+</Layout>

@@ -10,8 +10,10 @@ const { thought } = Astro.props;
 ---
 
 <article class="contents">
-	<h2 class={'text-xs font-medium mb-2'}>
-		{format(thought.date, 'yyyy-MM-dd')}
-	</h2>
+	<a href={`/thoughts/${format(thought.date, 'yyyy-MM-ddThhmmss')}`}>
+		<h2 class={'text-xs font-medium mb-2'}>
+			{format(thought.date, 'yyyy-MM-dd')}
+		</h2>
+	</a>
 	<thought.Content />
 </article>
