@@ -1,7 +1,7 @@
 import { twMerge } from 'tailwind-merge';
 
 export function mergeComponent<
-	T extends keyof JSX.IntrinsicElements = keyof JSX.IntrinsicElements
+	T extends keyof JSX.IntrinsicElements = keyof JSX.IntrinsicElements,
 >({
 	type: Type,
 	props: { className: templateClassName, ...originalProps },

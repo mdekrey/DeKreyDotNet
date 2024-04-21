@@ -64,7 +64,7 @@ export function useSubscribable<T>(subscribable: SubscribableValue<T>) {
 	const current = useSyncExternalStore(
 		(cb) => subscribable.subscribe(cb),
 		() => subscribable.get(),
-		() => null
+		() => null,
 	);
 	return [current, subscribable.set] as const;
 }

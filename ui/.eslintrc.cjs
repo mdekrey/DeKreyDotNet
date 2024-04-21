@@ -41,6 +41,7 @@ module.exports = {
 			rules: {
 				// Pending https://github.com/microsoft/TypeScript/issues/36440 - TS cannot go in MDX
 				'react/prop-types': 'off',
+				'react/no-unescaped-entities': 'off',
 			},
 		},
 		{

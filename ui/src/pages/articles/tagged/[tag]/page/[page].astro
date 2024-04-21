@@ -2,7 +2,7 @@
 import Layout from '@/components/layout.astro';
 import { getArticlesPage, getCountByTag, getPageCount } from '@/articles/pages';
 import { toSummary } from '@/articles/summary';
-import { BlogPostList } from '@/articles/blog-post-list';
+import BlogPostList from '@/articles/blog-post-list.astro';
 
 export type Props = {
 	tag: string;
@@ -12,16 +12,18 @@ export type Props = {
 export async function getStaticPaths() {
 	const tags = Object.keys(await getCountByTag());
 
-	return await Promise.all(
-		tags.map(async (tag) =>
-			Array(await getPageCount(tag))
-				.fill(0)
-				.map((_, index) => ({
-					params: { tag, page: (index + 1).toFixed(0) },
-					props: { tag, page: index + 1 },
-				}))
+	return (
+		await Promise.all(
+			tags.map(async (tag) =>
+				Array(await getPageCount(tag))
+					.fill(0)
+					.map((_, index) => ({
+						params: { tag, page: (index + 1).toFixed(0) },
+						props: { tag, page: index + 1 },
+					})),
+			),
 		)
-	);
+	).flatMap((v) => v);
 }
 
 const { tag, page } = Astro.props;

@@ -50,7 +50,7 @@ export function ScrollHeader({
 		<header
 			className={twMerge(
 				className,
-				shouldShowHeader.current ? showHeaderClass : hideHeaderClass
+				shouldShowHeader.current ? showHeaderClass : hideHeaderClass,
 			)}
 			style={{ top: 0 }}
 			ref={headerRef}

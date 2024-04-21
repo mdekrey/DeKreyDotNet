@@ -9,7 +9,7 @@ export default function FigCaption({
 			{...props}
 			className={twMerge(
 				'mt-2 font-serif text-center text-gray-600 text-sm',
-				className
+				className,
 			)}
 		/>
 	);

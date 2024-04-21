@@ -10,8 +10,8 @@ export const contentUrlRoot = pathToFileURL(contentFsRoot).href;
 export async function getAllPosts(): Promise<BlogPost[]> {
 	const articles = await Promise.all(
 		Object.values(
-			import.meta.glob<MDXInstance<BlogPostFrontmatter>>('./*/index.mdx')
-		).map((v) => v())
+			import.meta.glob<MDXInstance<BlogPostFrontmatter>>('./*/index.mdx'),
+		).map((v) => v()),
 	);
 
 	const result = articles

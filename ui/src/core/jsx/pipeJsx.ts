@@ -1,4 +1,4 @@
-import { Children, ReactNode } from 'react';
+import { Children, type ReactNode } from 'react';
 import { isReactElement } from './isReactElement';
 
 export type JsxMutator = (input: JSX.Element) => JSX.Element;
@@ -12,6 +12,6 @@ export function pipeJsxChildren(
 	...jsxMutate: JsxMutator[]
 ) {
 	return Children.map(children, (child) =>
-		isReactElement(child) ? pipeJsx(child, ...jsxMutate) : child
+		isReactElement(child) ? pipeJsx(child, ...jsxMutate) : child,
 	);
 }

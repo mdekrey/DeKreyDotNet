@@ -4,7 +4,6 @@ import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
 import mdx from '@astrojs/mdx';
-import image from '@astrojs/image';
 import glslify from 'rollup-plugin-glslify';
 
 export default defineConfig({
@@ -22,6 +21,5 @@ export default defineConfig({
 				[(await import('./remark-excerpt.mjs')).default],
 			],
 		}),
-		image(),
 	],
 });

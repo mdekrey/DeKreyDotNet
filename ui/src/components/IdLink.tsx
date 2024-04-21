@@ -12,7 +12,7 @@ export function IdLink({ id }: { id?: string | undefined }) {
 }
 
 export function withIdLink<K extends keyof JSX.IntrinsicElements>(
-	Component: ComponentType<JSX.IntrinsicElements[K]> | K
+	Component: ComponentType<JSX.IntrinsicElements[K]> | K,
 ) {
 	return function ComponentWithIdLink({
 		id,

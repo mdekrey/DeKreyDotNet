@@ -7,7 +7,7 @@ export async function getCountByTag() {
 	const allTags = allPosts.flatMap((post) => post.frontmatter.tags ?? []);
 
 	const entries = Object.entries(groupBy(identity, allTags)).map(
-		([tag, tags]) => [tag, tags.length] as const
+		([tag, tags]) => [tag, tags.length] as const,
 	);
 
 	return Object.fromEntries(entries);

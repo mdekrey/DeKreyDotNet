@@ -1,4 +1,7 @@
-import { OpenMobileMenu, useMobileMenuState } from '@/core/mobile-menu-state';
+import {
+	type OpenMobileMenu,
+	useMobileMenuState,
+} from '@/core/mobile-menu-state';
 import { twMerge } from 'tailwind-merge';
 
 const Menu = ({
@@ -23,7 +26,7 @@ const Menu = ({
 			className={twMerge(
 				className,
 				isActive && openClass,
-				!isActive && closedClass
+				!isActive && closedClass,
 			)}
 		>
 			{children}

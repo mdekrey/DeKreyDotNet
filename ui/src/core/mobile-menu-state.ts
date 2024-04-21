@@ -9,7 +9,7 @@ export function useMobileMenuState() {
 	const current = useSyncExternalStore(
 		(cb) => mobileMenuState.subscribe(cb),
 		() => mobileMenuState.get(),
-		() => null
+		() => null,
 	);
 	return [current, mobileMenuState.set] as const;
 }

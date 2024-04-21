@@ -3,7 +3,7 @@ import Layout from '@/components/layout.astro';
 import { toSummary } from '@/articles/summary';
 import IntroBlock from '@/components/intro-block.astro';
 import { getArticlesPage } from '@/articles/pages';
-import { BlogPostList } from '@/articles/blog-post-list';
+import BlogPostList from '@/articles/blog-post-list.astro';
 
 const pageInfo = await getArticlesPage(1);
 

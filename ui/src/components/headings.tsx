@@ -9,7 +9,7 @@ const headerTemplate = mergeStyles(
 	<i
 		className={twMerge('font-header font-bold', 'mt-4 first:mt-0')}
 		style={{ pageBreakAfter: 'avoid' }}
-	/>
+	/>,
 );
 
 type HeaderElements = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
@@ -24,10 +24,10 @@ const header = (elem: HeaderElements, fontSizeClass: string) =>
 						className: twMerge(fontSizeClass, className),
 						...props,
 					},
-					children
+					children,
 				),
-				headerTemplate
-			)
+				headerTemplate,
+			),
 	);
 
 export const Headings = {

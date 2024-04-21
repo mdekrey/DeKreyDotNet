@@ -21,7 +21,7 @@ const PaginationLink = ({
 		className={twMerge(
 			baseClassName,
 			linkClassName,
-			'transition hover:bg-purple-700 hover:text-white'
+			'transition hover:bg-purple-700 hover:text-white',
 		)}
 	>
 		{children}
