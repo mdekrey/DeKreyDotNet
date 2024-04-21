@@ -10,6 +10,7 @@ export interface Props {
 	image?: string | ImageMetadata | undefined;
 	description?: string | undefined;
 	mainClass?: string;
+	frontmatter?: Props;
 }
 
 const { title, image, description, mainClass } = (Astro.props.frontmatter ||
