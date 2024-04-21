@@ -2,12 +2,15 @@
 import Layout from '@/components/layout.astro';
 
 import type { MarkdownHeading, AstroInstance } from 'astro';
+import identity from 'lodash/fp/identity';
+import sortBy from 'lodash/fp/sortBy';
 import { getAllPosts } from '@/articles/utils';
 import { articleComponents } from '@/components/mdx/components.astro';
 import MarkdownPicture from '@/components/mdx/MarkdownPicture.astro';
 import type { BlogPostFrontmatter, ReadingTime } from '@/articles/post';
 
 const components = { ...articleComponents, img: MarkdownPicture };
+const tagSort = sortBy<string>(identity);
 
 export type Props = {
 	Component: AstroInstance['default'];
@@ -57,6 +60,19 @@ const { Component, frontmatter, readingTime, title, image, description } =
 			</h1>
 			<p class="text-gray-500 text-sm">
 				{frontmatter.date} &mdash; {readingTime?.text}
+				<span class="text-xs">
+					{
+						frontmatter.tags &&
+							tagSort(frontmatter.tags).map((tag) => (
+								<a
+									class="border border-purple-900 text-black bg-purple-100 inline-block rounded-full px-1 mr-1"
+									href={`/articles/tagged/${tag}/page/1/`}
+								>
+									{tag}
+								</a>
+							))
+					}
+				</span>
 			</p>
 		</header>
 		<Component components={components} />
