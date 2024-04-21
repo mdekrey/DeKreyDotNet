@@ -33,7 +33,7 @@ export async function GET(context: APIContext) {
 		description: 'Personal articles and profile of Matt DeKrey',
 		// Pull in your project "site" from the endpoint context
 		// https://docs.astro.build/en/reference/api-reference/#contextsite
-		site: (context.site ?? new URL('https://dekrey.net')).href,
+		site: (context.site ?? context.url).href,
 		// Array of `<item>`s in output xml
 		// See "Generating items" section for examples using content collections and glob imports
 		items: [...allThoughts, ...allPosts].sort((a, b) =>
