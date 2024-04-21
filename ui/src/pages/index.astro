@@ -4,15 +4,26 @@ import { toSummary } from '@/articles/summary';
 import IntroBlock from '@/components/intro-block.astro';
 import { getArticlesPage } from '@/articles/pages';
 import BlogPostList from '@/articles/blog-post-list.astro';
+import { getThoughtsPage } from '@/thoughts/pages';
+import ThoughtsSection from '@/thoughts/section.astro';
 
-const pageInfo = await getArticlesPage(1);
+const { articles, totalPageCount: articlePageCount } = (await getArticlesPage(
+	1,
+)) ?? { articles: [], totalPageCount: 0 };
 
-const posts = pageInfo?.articles.map(toSummary) ?? [];
-const pageCount = pageInfo?.totalPageCount ?? 0;
+const thoughtPageInfo = (await getThoughtsPage(1)) ?? {
+	thoughts: [],
+	totalPageCount: 0,
+};
 ---
 
 <Layout title="Home">
 	<IntroBlock slot="no-scroll-header" />
 
-	<BlogPostList posts={posts} page={1} pageCount={pageCount} />
+	<ThoughtsSection thoughts={thoughtPageInfo} />
+	<BlogPostList
+		posts={articles.map(toSummary)}
+		page={1}
+		pageCount={articlePageCount}
+	/>
 </Layout>

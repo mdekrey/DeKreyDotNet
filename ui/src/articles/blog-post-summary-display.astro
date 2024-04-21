@@ -27,11 +27,11 @@ const { post: blogSummary } = Astro.props;
 		</span>
 	</div>
 	<div class="md:flex-grow">
-		<h2 class={twMerge('text-2xl font-medium mb-2', linkClassName)}>
-			<a href={`/articles/${blogSummary.slug}`}>
+		<a href={`/articles/${blogSummary.slug}`}>
+			<h2 class={twMerge('text-2xl font-medium mb-2', linkClassName)}>
 				{blogSummary.frontmatter.title}
-			</a>
-		</h2>
+			</h2>
+		</a>
 		<p class="leading-relaxed">{blogSummary.excerpt}</p>
 		<a
 			href={`/articles/${blogSummary.slug}`}

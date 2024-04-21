@@ -1,0 +1,33 @@
+---
+import { twMerge } from 'tailwind-merge';
+import type { Thought } from './thought';
+import ThoughtDisplay from './thought-display.astro';
+import { linkClassName } from '@/components/styles';
+
+export type Props = {
+	thoughts: { thoughts: Thought[]; totalPageCount: number };
+};
+
+const {
+	thoughts: { thoughts },
+} = Astro.props;
+---
+
+<section class="pb-8 mb-8 border-b">
+	<a href={`/thoughts/`}>
+		<h2 class={twMerge('text-2xl font-medium mb-2', linkClassName)}>
+			Recent Thoughts
+		</h2>
+	</a>
+	<div class="flex flex-row-reverse gap-8">
+		{
+			thoughts
+				.filter((_, i) => i < 3)
+				.map((t) => (
+					<div class="flex flex-col">
+						<ThoughtDisplay thought={t} />
+					</div>
+				))
+		}
+	</div>
+</section>

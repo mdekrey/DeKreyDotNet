@@ -1,0 +1,17 @@
+---
+import type { Thought } from './thought';
+import { format } from 'date-fns';
+
+export type Props = {
+	thought: Thought;
+};
+
+const { thought } = Astro.props;
+---
+
+<article class="contents">
+	<h2 class={'text-xs font-medium mb-2'}>
+		{format(thought.date, 'yyyy-MM-dd')}
+	</h2>
+	<thought.Content />
+</article>
