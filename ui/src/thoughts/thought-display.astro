@@ -1,5 +1,5 @@
 ---
-import type { Thought } from './thought';
+import { toUrlTimestamp, type Thought } from './thought';
 import { format } from 'date-fns';
 import { thoughtComponents } from '@/components/mdx/thought-components';
 import MarkdownPicture from '@/components/mdx/MarkdownPicture.astro';
@@ -16,7 +16,7 @@ const { Content } = thought;
 ---
 
 <article class="contents">
-	<a href={`/thoughts/${format(thought.date, 'yyyy-MM-ddThhmmss')}`}>
+	<a href={`/thoughts/${toUrlTimestamp(thought)}`}>
 		<h2
 			class={'text-xs font-medium mb-1 invisible'}
 			data-datetime={thought.date.getTime()}
