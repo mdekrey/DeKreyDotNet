@@ -19,7 +19,7 @@ const { Content } = thought;
 	<a href={`/thoughts/${format(thought.date, 'yyyy-MM-ddThhmmss')}`}>
 		<h2
 			class={'text-xs font-medium mb-1 invisible'}
-			data-date={thought.date.getTime()}
+			data-datetime={thought.date.getTime()}
 		>
 			{format(thought.date, `h:mm aaaa' on 'd MMM, yyyy`)}
 		</h2>

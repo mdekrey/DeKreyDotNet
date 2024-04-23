@@ -14,58 +14,47 @@ const tagSort = sortBy<string>(identity);
 const { post: blogSummary } = Astro.props;
 ---
 
-<div class="py-8 flex flex-wrap md:flex-nowrap">
-	<div class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
+<div class="py-8">
+	<a href={`/articles/${blogSummary.slug}`}>
+		<h2 class={twMerge('text-2xl font-medium mb-2', linkClassName)}>
+			{blogSummary.frontmatter.title}
+		</h2>
+	</a>
+	<span class="text-xs">
+		<span data-date={blogSummary.frontmatter.date}>
+			{blogSummary.frontmatter.date}
+		</span>
 		{
 			blogSummary.frontmatter.tags &&
 				tagSort(blogSummary.frontmatter.tags).map((tag) => (
-					<span class="tracking-widest font-medium text-gray-900">{tag}</span>
+					<a
+						class="border border-purple-900 bg-purple-100 inline-block rounded-full px-1 mr-1"
+						href={`/articles/tagged/${tag}/page/1/`}
+					>
+						{tag}
+					</a>
 				))
 		}
-		<span class="mt-1 text-gray-500 text-sm">
-			{blogSummary.frontmatter.date}
-		</span>
-	</div>
-	<div class="md:flex-grow">
-		<a href={`/articles/${blogSummary.slug}`}>
-			<h2 class={twMerge('text-2xl font-medium mb-2', linkClassName)}>
-				{blogSummary.frontmatter.title}
-			</h2>
-		</a>
-		<span class="text-xs">
-			{blogSummary.frontmatter.date}
-			{
-				blogSummary.frontmatter.tags &&
-					tagSort(blogSummary.frontmatter.tags).map((tag) => (
-						<a
-							class="border border-purple-900 bg-purple-100 inline-block rounded-full px-1 mr-1"
-							href={`/articles/tagged/${tag}/page/1/`}
-						>
-							{tag}
-						</a>
-					))
-			}
-		</span>
-		<p class="leading-relaxed">{blogSummary.excerpt}</p>
-		<a
-			href={`/articles/${blogSummary.slug}`}
-			class={twMerge('inline-flex items-center mt-4 group', linkClassName)}
+	</span>
+	<p class="leading-relaxed">{blogSummary.excerpt}</p>
+	<a
+		href={`/articles/${blogSummary.slug}`}
+		class={twMerge('inline-flex items-center mt-4 group', linkClassName)}
+	>
+		Read More ({blogSummary.readingTime.text}) about {
+			blogSummary.frontmatter.title
+		}
+		<svg
+			class="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform"
+			viewBox="0 0 24 24"
+			stroke="currentColor"
+			stroke-width="2"
+			fill="none"
+			stroke-linecap="round"
+			stroke-linejoin="round"
 		>
-			Read More ({blogSummary.readingTime.text}) about {
-				blogSummary.frontmatter.title
-			}
-			<svg
-				class="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-				stroke-width="2"
-				fill="none"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-			>
-				<path d="M5 12h14"></path>
-				<path d="M12 5l7 7-7 7"></path>
-			</svg>
-		</a>
-	</div>
+			<path d="M5 12h14"></path>
+			<path d="M12 5l7 7-7 7"></path>
+		</svg>
+	</a>
 </div>
