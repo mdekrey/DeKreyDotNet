@@ -24,6 +24,7 @@
     "prettier.requireConfig": true,
     "prettier.documentSelectors": ["**/*.astro"],
     "prettier.configPath": "ui/.prettierrc",
+    "prettier.ignorePath": "ui/.prettierignore",
 
     "[javascript]": {
         "editor.formatOnSave": true,
