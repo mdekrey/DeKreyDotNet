@@ -27,7 +27,7 @@ const { thought } = Astro.props;
 ---
 
 <Layout
-	title={`Thought at ${format(thought.date, `h:mm aaaa' on 'd MMM, yyyy`)}`}
+	title={`Thought at ${format(thought.date, `h:mm aaaa' GMT on 'd MMM, yyyy`)}`}
 	image={undefined}
 	description={thought.excerpt}
 >
