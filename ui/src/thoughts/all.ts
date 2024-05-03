@@ -20,7 +20,8 @@ export async function getAllThoughts(): Promise<Thought[]> {
 			const path = article.file.substring(contentFsRoot.length + 1);
 
 			const dateStr = /^(.+)\.mdx?$/g.exec(path)![1]!;
-			const date = parse(dateStr, `yyyy-MM/dd'T'HHmmss`, new Date());
+			const date = parse(dateStr + 'Z', `yyyy-MM/dd'T'HHmmssX`, new Date());
+			console.log(`${dateStr} - ${date.getTime()} (${date})`);
 
 			return {
 				date,
