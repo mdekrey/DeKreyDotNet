@@ -1,0 +1,135 @@
+---
+title: 'Scaled Git Flow: Hardening Branches'
+date: '2024-05-22'
+draft: false
+author: Matthew DeKrey
+tags:
+  - git
+  - release-management
+  - automation
+---
+
+The principle of [Isolation until Finalized][isolation] from the Scaled Git Flow
+branching model is new for many developers: between trunk-based development,
+GitFlow, and standard Continuous Deployment workflows, developers don't often
+gain the habit of thinking about dependencies between features. As a result,
+when teams start developing a large amount of work-in-progress (such as due to a
+QA bottleneck or an upstream stability issue), the team chooses to customize
+their workflow to reduce isolation. This comes in a form similar to an _epic
+branch_.
+
+# The common problem: A moving target
+
+Unfortunately, epics often are released piece-by-piece over time, while branches
+are released as a unit. Shortly after creating these branches, they run into an
+issue: an incomplete feature was merged into the epic branch, often after the
+branch had started QA, both invalidating much of the QA already done (at least,
+in strict QA scenarios) and making the branch unsuitable to release.
+
+## The Solution: Hardening Branches
+
+Instead of releasing the epic directly if there are any outstanding features or
+stories to contribute to it, create a _hardening branch_ between the epic branch
+and its upstream branches. This hardening branch can have as much or as little
+of the epic branch's code added to it; ideally, it should be created at a commit
+already from the history of the epic branch. Bugfixes, etc. can then be applied
+to the hardening branch which will [propagate downstream][propagate] into the
+epic branch. This hardening branch can then be used in the release candidate.
+
+More importantly, because this is a new branch, developers already working on
+features for the epic in future releases do not need to change their workflow
+when a release is created.
+
+Reintegration branches should be retired when either the release is finalized or
+cancelled.
+
+## [Scalable Git Branchnig Tools][git-tools]
+
+There is a [set of tools for working with the Scalable Git Branching
+Model][git-tools] that we created at Principle Studios. When using these tools,
+follow these steps to create a hardening branch:
+
+1. Locate the commit from which to create the hardening branch. (This is similar
+   to starting a release branch in GitFlow.) Create the new branch on your
+   remote; in this case, let's say my epic was `epic/cms-reorganization` and I'm
+   releasing on May 28, 2024, so my command would look something like:
+
+   ```sh
+   git push origin COMMIT:refs/heads/epic/cms-reorganization-2024-05-28
+   ```
+
+2. Add upstreams to the new branch. This should probably be all of the upstreams
+   of the epic from before, but if you chose an older commit, maybe not
+   everything was already in at that time.
+
+   ```sh
+   git add-upstream -target epic/cms-reorganization-2024-05-28 infra/modal-framework,infra/cms-migration-framework
+   ```
+
+3. Add the new branch upstream of the old epic. This should result in
+   simplifying its upstreams.
+
+   ```sh
+   git add-upstream -target epic/cms-reorganization epic/cms-reorganization-2024-05-28
+   ```
+
+That's all there is to it! The hardening branch may be safely added to the
+release candidate, bugfixes will propagate to the original epic branch via `git
+pull-upstream`, and developers working on the epic rather than the release can
+continue to work as they have been.
+
+# A new problem: Short-term fixes
+
+Sometimes, a hardening branch needs a short-term fix that should not apply to
+the full epic. (This can also happen beween service lines, too.) This can take
+place in a handful of scenarios:
+
+- an infrastructure branch was not ready to be released with the current release
+  and can't be fixed,
+- a specific feature needed to be disabled manually rather than via a feature
+  flag, such as a button leading to the half-complete feature on the homepage, or
+- a process needs to work one way in the short term but overall the epic intends
+  to change the process.
+
+## Another solution: Reintegration Branches
+
+In this case, we need yet another branch - a _reintegration branch_. This is yet
+another new type of branch that is very similar to an integration branch, but it
+will go between two branches rather than combining two branches. In this case,
+we put the reintegration branch between the hardening branch and the epic.
+
+Using the git tools, it would look like this:
+
+```sh
+git new epic/cms-reorganization-2024-05-28-reintegrate -u epic/cms-reorganization-2024-05-28
+git add-upstream -target epic/cms-reorganization epic/cms-reorganization-2024-05-28-reintegrate
+```
+
+The purpose of the reintegrate branch is to _undo_ the unwanted changes from the
+tracked upstream.
+
+A common scenario: An unwanted feature was added to the hardening branch before
+it was created.
+1. Identify the commit in the hardening branch.
+2. Run `git revert` on the offending commit.
+3. Merge the hardening branch into the reintegration branch (such as via `git
+   pull-upstream`).
+4. Run `git revert` on the newly created revert commit to restore the functionality
+   back.
+5. Merge the reintegration branch into its downstream.
+
+Reintegration branches may also be used between service lines (such as when
+preserving a change for the next major version), but merges into the downstream
+service line may require pull-requests of their own!
+
+Reintegration branches may be retired when their upstream branch is retired.
+
+# Conclusion: Two new branch types
+
+The two new branch types for "hardening" and "reintegration" branches allow for
+a much wider variety of use-cases within the Scalable Git Branching Model. I
+hope this article helps implementing them within your team!
+
+[isolation]: /articles/scaled-git-flow/#isolation-until-finalized
+[propagate]: /articles/scaled-git-flow/#immediate-downstream-propagation
+[git-tools]: https://github.com/PrincipleStudios/scalable-git-branching-tools
