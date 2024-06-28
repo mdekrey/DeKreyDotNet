@@ -109,7 +109,8 @@ import fullUrl from '@/images/full.jpg';
 	const contents = document.getElementById('intro-fixed-contents')!;
 	const photo = document.getElementById('intro-photo')!;
 	function updateHeight() {
-		container.style.height = `${contents?.getBoundingClientRect().height}px`;
+		const { height } = contents.getBoundingClientRect();
+		container.style.height = `${Math.min(height, 560)}px`;
 	}
 	updateHeight();
 	contents.style.position = 'fixed';
