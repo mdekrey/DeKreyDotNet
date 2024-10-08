@@ -1,0 +1,171 @@
+---
+title: 'Engineering Culture: Interviews'
+date: '2024-10-07'
+draft: false
+author: Matthew DeKrey
+tags:
+  - api
+  - error-handling
+  - debugging
+source: https://principlestudios.com/article/2023-02-24/engineering-culture-interviews/
+---
+
+_**Note:** This is a repost of my Engineering Culture: Interviews article from
+when I was Principle Architect at Principle Studios. My process has changed
+(there is always room to learn!) a bit, but the core concepts will remain the
+same._
+
+Here at Principle Studios, we know that interviewing for a new job can be
+intimidating, especially for software engineers. From whiteboard coding,
+“gotcha” questions, and even “how would you solve this problem that we
+encountered recently,” there’s a lot of really unpleasant interview practices
+within the software engineering industry. For instance, a previous employer
+asked me this during an interview:
+
+> On the whiteboard, can you write out the algorithm you’d use to tally a count
+> of each unique word in a given text file? The file can be up to 4GB in size.
+
+Given questions like these, researching the interview process for a company
+you’re applying for (if it’s a big one) is critical, but that implies that
+“interviewing” is a special skill… which leads us to believe that the best
+candidates may not “interview” well based on the industry standard. Needless to
+say, we were curious if there was a better way.
+
+Understanding why something has been developed is a key part of being a good
+software engineer. After I joined the company with the above interview question,
+I started asking questions… I realized that someone had to solve the problem at
+some point in the history of the team, and they’d been using it as an interview
+question ever since.
+
+After examining the problem space for a bit, I realized that much of interview
+processes were almost the result of an “overfitting” algorithm - companies write
+a test that existing employees pass, and ensures new employees can solve the old
+problems… but this can lead to a troublesome situation when new issues arise,
+since everyone approaches the problems the same way.
+
+# Designing Something Better
+
+I rarely like re-inventing the wheel, but sometimes it’s important to do it to
+achieve something better, especially after researching why something came about
+in the first place. As a result, I spent some time finding the goal of an
+interview process - which I decided, put simply, is “to find the ideal candidate
+for the role.” Unfortunately, that definition was too broad to be useful. I
+worked with our team and, after some iteration of interview processes (and some
+successful hires!), we arrived at four key qualities for an ideal software
+engineer:
+
+- Be aligned with our company cultural values
+- Have the skills necessary to do the current job today
+- Have the potential to grow to one of the best in the industry
+- Be flexible enough in their work process to accomodate our clients’
+  sometimes-unusual workflows
+
+Initially, we didn’t have the fourth point, but we wanted each interviewer to be
+able to focus on just one of these qualities, and it’d be easy to find a
+software engineer or manager to interview for each aspect.
+
+# Cross-Cutting Concerns
+
+We had to acknowledge that there’s more to an interview than just that. One of
+the great things I’d experienced at a previous employer (the same one with the
+interview question I shared above) was a “cross-department” interview - from
+that, I could see what the other departments thought of the engineering team.
+Along with that, we established a few other aspects of the process:
+
+- Make sure our best candidates can work well with other departments
+- Give candidates the opportunity to interview us
+- Make the entire process enjoyable
+
+To address these points, we make sure that non-engineers participate as
+interviewers as much as we can (and give them equal weight in the decision
+making process), allow for plenty of time in the interview for candidates to ask
+us about Principle and our work (usually at the front and after the main parts),
+and try to make the interviews as conversational as possible.
+
+That last bit - making the interviews conversational - brings out another
+exciting portion… as one of our newest hires, Megan Kossa, puts it:
+
+One of the best things about meeting new devs is shooting the breeze with some
+inspiring and interesting ideas. Why can’t that be part of the interview process
+too?
+
+Sometimes interviews are so fun that I’ve gotten feedback at the end of the
+interview that the candidate got caught so off guard by our conversation that
+they didn’t realize the interview was over and they felt they may have said the
+wrong thing by being too honest or not sticking to “interview culture.” As much
+as I don’t want someone to be worried that they bombed an interview with us, the
+advice I share: seeing your true and honest self during the interview process
+gets us excited to work with you.
+
+# Putting It All Together
+
+Between the qualities and aspects, we wanted to cover, we had our work cut out
+for us and our interviewers.
+
+Ultimately, each interviewer is encouraged to conduct their interview in nearly
+any way they choose to be able to answer their particular question. That being
+said, we have a few rules for the technical interviewers, some of which include:
+no “trivia” questions, no whiteboard coding, encourage creative solutions.
+
+We ended up with four overall interviews. We always do the “cultural values”
+interview first, but the other three could happen in any order, though we
+usually have the technical interviews 2nd and 3rd so that candidates can be
+clear that those will be technical.
+
+## Cultural values
+
+Our first interview always addresses our core cultural values. Presently, one of
+our executive board members runs this interview, making sure everyone’s
+expectations match, including what internal culture is like and how that blends
+with the expectations from our clients.
+
+## Skilled For Today
+
+To see if a candidate has the skills we’re looking for currently, we invite them
+to share code they’re passionate about that they’ve written! We ask them to walk
+one of us through it, allowing us to ask questions and dive into the parts
+they’re most excited about. Seeing another developer get excited is infectious
+for our team, and gets us to see the candidate at their best: worries tend to
+wash away and we all have a great time, knowing exactly how someone can fit into
+our existing team.
+
+## Potential To Grow
+
+To see if a candidate has the potential to grow, we share some of our
+(non-client) code and treat it like an onboarding session! We believe that code
+should be read dozens of times more often than it is written, so having
+candidates read code during the interview sets that trend early. After a canned
+bit of onboarding, we let them look anywhere in that codebase, answering any
+questions or highlighting some of the parts we’re most excited about. The way
+they move through the codebase, dig into and talk about boilerplate, and even
+what kinds of things they find interesting and exciting tells our interviewer a
+lot about how the candidate will want to grow in the future.
+
+## Flexible For Clients
+
+Usually our last interview, one of our project managers usually leads a
+conversation about the candidate’s needs in a work environment. Here we look for
+flexibility - a strict adherance to a particular SDLC (software development life
+cycle), tool, or other development practice usually means that we wouldn’t be an
+ideal long-term fit for the candidate; they would not stay happy here for long.
+This is partly because our clients each have their own process requirements; in
+the consulting realm, some clients practice waterfall, many do not value
+automated tests, and some prefer manual deployments. However, some of it is also
+due to our curious nature: we like to try new things, sometimes often, to see if
+they’ll help us. That said, when we do find those candidates who are hungry to
+learn about how other teams do things, try it out, and even have other ideas to
+try out… we get excited to work with them, too!
+
+## Closing Notes
+
+In my humble opinion, the best part of our interview process is that, by meeting
+our candidates in areas that get us all excited, we can get past the nervousness
+and really see the best in each person who applies. Sometimes we meet a great
+engineer and know that, while they may not be a fit for the current position,
+they will be a fit in the future, and it’s not uncommon for us to reach out
+again later and ask if they’re still interested.
+
+Anyway, I hope that demystifies our interview process a bit for you and
+encourages just a few of you who are nervous about looking for your next career
+move to reach out and see that an interview process can actually be enjoyable!
+
