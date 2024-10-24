@@ -116,6 +116,8 @@ are theorems.
 * **Move infrastructure out.** Infrastructure changes, such as updates to CI/CD
   processes, package dependencies, etc. should be tracked as their own changes
   to have dependants of their own.
+* **Limit dependencies.** Also part of "Isolation until Finalized", don't take
+  on a dependency for a change that isn't needed.
 
 ## Considerations for your Branching Strategy
 
@@ -172,20 +174,95 @@ releases to support ("v1.0", "v1.1", and "v2.0"), or you may have only one
 * **Deletion**: A service line should be deleted when it is no longer
   maintained. Remember that the previous history will still exist, and can be
   referenced through tags.
-* **Dependencies**: Service lines should have only two types of dependencies:
-    * Other service lines; or
-    * An integration branch, where incoming conflicts from another
-      service line may be resolved. One example of this is maintaining a fork of
-      another repository: their `main` may be a service line, but you'll need to
-      resolve conflicts by merging it into your integration branch, first.
+* **Dependencies**: Service lines should have only one type of dependency:
+    * Other service lines
+* **Dependants**: Feature branches, integration branches, and release candidates
+  may all be dependants of service lines, but a service line when it is the only
+  service line in a project typically has no dependants.
 * **Sub-types**: Service lines can be `main`, a long-term-support branch, a
   seasonal version of the website, or a short-lived demo.
+* **Examples**
+    * **`main` or `trunk`**:
+        * Created when the project is started.
+        * Deleted/archived when the project is no longer maintained.
+        * Dependencies: All features.
+        * Dependants: None.
+    * **`line/5.2`**:
+        * Created when v5.2.0 is released.
+        * Deleted/archived when 5.2.x is no longer maintained.
+        * Dependencies: `line/5.1`.
+        * Dependants: `line/5.3` or `line/6.0`, depending on which exists, and
+          any features intended for `line/5.2` or a new line based on this
+          branch (such as when preparing for `line/6.0`).
+    * **`line/2024-black-friday-sale`**:
+        * Created from `main` when features specific to the 2024 Black Friday
+          Sale are ready for release.
+        * Deleted/archived after `main` replaces the 2024 Black Friday Sale
+          version of the site (such as when the Cyber Monday line is released).
+        * Dependencies: `main`.
+        * Dependants: Features intended only for the Black Fridy Sale.
 
 ### Feature Branches
 
-A feature branch is any branch where changes are actively made. This can be for
-any reason: adding features, modifying features, updating code infrastructure,
-etc.
+A "feature branch" is any branch where changes are actively made. This can be
+for any reason: adding features, modifying features, bug fixes, updating package
+dependencies, improving application framework or reducing boilerplate, etc.
+These branches even can be used for collections of changes (epics, etc.) that
+will be released as a unit, with descendant feature branches that represent
+either sub-features or even sub-tasks!
+
+* **Creation**: A feature branch is created when there is a reason to change
+  code. This usually corresponds to a ticket in your team's ticket-tracking
+  system, but some teams prefer "infrastructure" changes to be entirely internal
+  to the dev team.
+
+    _Note:_ If you don't track "infrastructure" changes as tickets, it reduces
+    your project management's team ability to help manage dependency. As tech
+    leaders, we should always be leveraging our full teams, even those outside
+    of the engineers, to their strenghts!
+* **Deletion**: A feature should be removed when it is integrated to its
+  destination, either into a service line or to its parent feature branch. (Be
+  cautious when removing it if only moved into another feature branch, as some
+  organizations will change their minds and want to roll out a feature on its
+  own.)
+* **Dependencies**: Features typically only have two types of dependencies, but
+  occasionally have others:
+    * A service line, typically where the feature will eventually reside or
+      where the bug originated.
+    * Other feature branches, as in the case of using epic branches, or
+      infrastructure changes.
+    * An integration branch may be added as a dependency of a feature branch if
+      two or more dependencies have conflicts and neither is in the dependency
+      tree of the other.
+* **Dependants**: Feature branches will typically have feature branches,
+  integration branches, and release candidates as dependants.
+* **Sub-types**: Bug fix branches, task branches, and infrastructure branches
+  all count as feature branches.
+* **Examples**:
+    * **`feature/login-page`**:
+        * Created when the login page epic is started.
+        * Deleted when the login page epic is released to its respective service
+          line.
+        * Dependency is `feature/login-apis` from the backend team, which has a
+          dependency on `main`. There may also be a dependency on
+          `infra/router-upgrade`.
+        * Dependants include `task/login-page-validation` and
+          `feature/forgot-password-page`, and possibly a release candidate
+          branch.
+    * **`infra/router-upgrade`**:
+        * Created when the front-end team starts upgrading the router packages
+          and other routing changes.
+        * Deleted when released to the appropriate service line.
+        * The only dependency is `main`, but could include other feature branches.
+        * Dependants include `feature/login-page` and other feature branches. If
+          team leadership chooses, it could be added to a release candiate
+          branch.
+    * **`task/login-page-validation`**:
+        * Created when a developer starts working on the subtask to add
+          validation to the login page.
+        * Removed when merged into `feature/login-page`.
+        * Dependency is the `feature/login-page`.
+        * A dependant  could include `task/submit-login-form`.
 
 ### Integration Branches
 
@@ -214,13 +291,17 @@ process. To name a few, in no particular order:
   version of the branching model.
 * Dan Kurfirst, who taught me several things about how to diagnose and identify
   conflicts to create integration branches.
+* Michael Geise, who contributed updates to the [command line
+  tools][scalable-git-branching-tools] to allow them to work with Azure DevOps.
 * Jordan Rhode, who contributed frequently to the [command line
   tools][scalable-git-branching-tools] and led a team to use the model entirely
   without my guidance.
-* Michael Geise, who contributed updates to the [command line
-  tools][scalable-git-branching-tools] to allow them to work with Azure DevOps.
 * Josh Berres, who wrote a significant amount of automation to check and verify
   merging rules for one project's strategy.
+* Shelly Brill, a project manager who learned the model's old terms well enough
+  that she helped multiple teams manage "upstreams", aka dependencies.
+* Kris Henderson, who learned the model well enough that he helped me implement
+  it on smaller projects.
 
 [scaled-git-flow]: /articles/scaled-git-flow/
 [scalable-git-branching-tools]: https://github.com/PrincipleStudios/scalable-git-branching-tools/
