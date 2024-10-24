@@ -1,0 +1,199 @@
+---
+title: 'A scalable Git branching model, Revisited'
+date: '2024-10-23'
+draft: false
+author: Matthew DeKrey
+tags:
+  - git
+excerpt: Explanation of and updates to the Scaled Git Branching Model
+---
+
+Recently, I had a discussion with Abraham French, one of the original co-authors
+of the Scalable Git Branching Model, and we realized that it is time for some
+updates.
+
+In the seven years since I wrote up the original definitive article on the
+[Scalable Git Branching Model][scaled-git-flow], I've led dozens of teams in
+thinking through branching using it, developing custom processes for each. To
+name a few:
+
+* Small projects that developers use in mentorship can leverage the Scalable Git
+  Branching model in a way that mostly looks like a CI/CD workflow, with `main`
+  being the latest working code.
+* Small professional projects through a prototype-to-release phase where the
+  project did not have a production environment initially.
+* Medium-sized projects with a small number of teams of developers using a
+  "release train"-like process with "release candidates", including pre-planned
+  cascading releases.
+* One large project with many teams, each with their own release candidates, all
+  keeping them isolated.
+
+The common thread in all of them is that the Scalable Git Branching Model
+assists developers in thinking about dependency management at the branch level.
+Unfortunately, the original analogy used to explain how dependencies work was
+incorporated into the terminology of the model, which warrants updates.
+
+## The Analogy
+
+Imagine your codebase like a river. We mark a few pools and lakes along the way
+as "branches", but code ultimately flows downstream over time. Each time a
+developer makes a change, it's like dye being added to the water - it's really
+hard to remove once it's been combined with other code. Tributaries from other
+teams flow in and can affect significantly the quality and shape of our river,
+so we want to keep our water as pure as we can until we know it's safe to use.
+Eventually, the "safe" code should flow into a spot where QA can check it (like
+a release candidate branch) before it is released.
+
+This analogy really is a way to think about dependency management, and while the
+analogy is useful, for those classically trained in dependency management
+(especially project managers), the branching model was unnecessarily difficult
+to understand and help direct.
+
+## The Business Case
+
+In addition to standard Git features like working collaboratively, this
+branching model supports:
+
+* Common scenarios:
+    * Gated releases with QA/management final approval.
+    * Tracking features in a release.
+    * Tagged releases for auditing.
+* Unique scenarios that other branching models don't usually support include:
+    * Planning for future releases.
+    * Supporting multiple past releases.
+    * Dropping features from a release.
+    * Framework/infrastructure branches that do not correspond to a single
+      feature.
+
+## An Aside: Model vs. Strategy
+
+This article refers to a "branching model", but most developers want to know
+what the "branching strategy" is for a team. What's the difference between a
+model and a strategy?
+
+* A model is a way to think about a particular problem set. By having a common
+  model for a problem set, people can be assured they're using the same terms
+  the same way and can construct solutions that may not have been outlined by a
+  strategy.
+* A strategy, in this sense, is more of a collection of playbooks, intended to
+  help team members follow a set of proceedures without needing to reason about
+  every decision.
+
+Having both a model and a strategy is important in both debugging issues that
+arise and in keeping cognitive load low on the team.
+
+## The Changes
+
+Previous versions of the branching model talked about upstream/downstream, but
+this version will use dependencies/dependants. We'll also highlight a couple of
+strategies using this model at the end of the article.
+
+## The branching model: The Principles
+
+The following principles are the main tenants of the branching model:
+
+* **Isolation until Finalized**: Keep changes isolated from unrelated changes
+  until both timeline and quality have been confirmed or that the change is not
+  unrelated and is actually a dependency.
+* **Multiple Dependencies**: Any change may have multiple dependency tasks.
+* **Immediate Propagation to Dependents**: Any new change to a task should be
+  immediately reflected in dependant tasks.
+    * Further note: this should also not skip dependency levels; if there is a
+      dependency chain such that C depends on B and B depends on A, do not merge
+      A directly into C, but ensure that A is merged into B first, then B into C.
+
+The following principles come as a course of understanding the above principles
+thoroughly, but are worth stating directly; for the math-major readers, these
+are theorems.
+
+* **No backwards propagation.** Once a change is code-complete, do not
+  automatically merge it into its dependencies; this breaks the "Isolation until
+  Finalized" principle. Instead, keep it separated until your team's strategy
+  dictates that it is sufficiently tested to be merged into a dependency.
+* **No branch is sacred.** Once a branch has outlived its usefulness (either
+  because it is merged or if it is corrupted with untested code), it should be
+  removed. In your strategy, every branch should have a clear start and end.
+* **Move infrastructure out.** Infrastructure changes, such as updates to CI/CD
+  processes, package dependencies, etc. should be tracked as their own changes
+  to have dependants of their own.
+
+## Considerations for your Branching Strategy
+
+Writing a branching strategy is a critical part of ensuring a healthy software
+development life-cycle. You may want to make some changes, but here are some
+pointers to keep in mind.
+
+1. **How many versions do you need to maintain?** Most projects only need to
+   maintain the latest release, but sometimes you need to maintain multiple back
+   releases, or multiple related product lines, such as a "community" version
+   and a "professional" version. If you can say "professional has everything
+   community has plus..." then your community version is a dependency of your
+   professional version, and you could use multiple Service Lines (below) to
+   track that.
+2. **How frequently do you release?** If you release every feature as soon as it
+   is ready, you don't need a separate branch type to represent "release
+   candidates". However, if you release once every other week with a batch of
+   changes, take a look at the Release Candidate (below) branch types to track
+   them.
+3. **Are there fixed environments, other than your production environment(s)?**
+   If you have stable "QA", "Staging", "Dev", "Training", or "Demo"
+   environments, rather than using a branch to track them, consider using a tag
+   that points to a commit when deployed. By not having a branch for each
+   environment, you can avoid that branch from deviating from any service line;
+   it only becomes out of date.
+
+Keep in mind that these are actually business-related questions, not technology
+questions. If you are a technical decision-maker writing the branching strategy,
+make sure you take into account the needs of the business as you write the
+process.
+
+Also, keep in mind that, because this branching model lends itself to designing
+strategies, you do not need to design every edge case at the beginning of the
+project: keep it super simple at first, and add extra workflows as needed.
+
+## Common Branch Types
+
+The following are a few branch type definitions; include the ones you need in
+your own branching strategy, and consider the rest for future expansions. See
+the Common Workflows section below for typical development workflows.
+
+### Service Lines
+
+A "service line" represents a line of your product, application, or library that
+is actively maintained. This could represent a version of the codebase (such as
+the "community" and "professional" example above), a handful of the most recent
+releases to support ("v1.0", "v1.1", and "v2.0"), or you may have only one
+"main" service line. Either way, a service line has the following characteristics:
+
+* **Creation**: A service line branch should be created when it is apparent that
+  a different version of the software needs to be maintained. This is likely a
+  business decision, but can correlate to making a new product or a release of
+  new features separately from an existing product line.
+* **Deletion**: A service line should be deleted when it is no longer
+  maintained. Remember that the previous history will still exist, and can be
+  referenced through tags.
+* **Dependencies**: Service lines should have only two types of dependencies:
+    * Other service lines; or
+    * An integration branch, where incoming conflicts from another
+      service line may be resolved. One example of this is maintaining a fork of
+      another repository: their `main` may be a service line, but you'll need to
+      resolve conflicts by merging it into your integration branch, first.
+* **Sub-types**: Service lines can be `main`, a long-term-support branch, a
+  seasonal version of the website, or a short-lived demo.
+
+### Feature Branches
+
+A feature branch is any branch where changes are actively made. This can be for
+any reason: adding features, modifying features, updating code infrastructure,
+etc.
+
+### Integration Branches
+
+### Release Candidates
+
+## Common Workflows
+
+
+
+
+[scaled-git-flow]: /articles/scaled-git-flow/
