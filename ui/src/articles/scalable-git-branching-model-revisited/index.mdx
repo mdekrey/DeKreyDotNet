@@ -224,7 +224,7 @@ either sub-features or even sub-tasks!
   destination, either into a service line or to its parent feature branch. (Be
   cautious when removing it if only moved into another feature branch, as some
   organizations will change their minds and want to roll out a feature on its
-  own.)
+  own.) A feature should also be removed if the change is no longer desired.
 * **Dependencies**: Features typically only have two types of dependencies, but
   occasionally have others:
     * A service line, typically where the feature will eventually reside or
@@ -263,8 +263,67 @@ either sub-features or even sub-tasks!
         * Removed when merged into `feature/login-page`.
         * Dependency is the `feature/login-page`.
         * A dependant  could include `task/submit-login-form`.
+    * **`bugfix/homepage-typo`**:
+        * Created when a typo is detected on the homepage, which was already
+          released to main.
+        * Deleted when released to main.
+        * The only dependency is `main`.
+        * No dependants.
 
 ### Integration Branches
+
+An "integration branch" is any branch where two (or more) dependencies are
+integrated together; no changes should be made on an integration branch other
+than to make sure those dependencies work well together. These should be created
+any time there are either code conflicts or business logic that requires
+additional changes for the two changes to work together.
+
+* **Creation**: Integration branches are created whenever two dependencies
+  slated for the same dependant have issues working together, either technical
+  (such as a merge conflict) or logical (such as needing to handle both OAuth
+  and password-based logins.)
+* **Deletion**: An integration branch is deleted when it only has one branch as
+  a dependency, such as when one dependency takes on a direct dependency of the
+  other(s). When this happens, the integration branch should be "integrated"
+  into the other dependency (unless the reason for deletion was cancelling a
+  feature.)
+* **Dependencies**: An integration branch can have any other branch type (other
+  than release candidates) as a dependency. An integration branch should either
+  have exactly two dependencies unless all dependencies are integration
+  branches.
+* **Dependants**: An integration branch can have any other branch type as a
+  dependant.
+* **Examples**:
+    * **`integrate/homepage-router-upgrade`**:
+        * Creation: The team decided that the homepage feature (while in
+          progress) should not add a dependency to the `infra/router-upgrade`
+          before its release, so an integration branch was created to prevent
+          conflicts when releasing either.
+        * Deletion: When either `infra/router-upgrade` or `feature/homepage` are
+          released to `main`, this branch can be merged into the other branch
+          then deleted.
+        * Dependencies: `infra/router-upgrade` and `feature/homepage`.
+        * Dependants: Any release candidate branch, or features that need to
+          depend on both the homepage and router upgrade.
+    * **`integrate/lines-5.1-5.2`**:
+        * Creation: A bugfix to `line/5.1` conflicts with a refactoring applied
+          only to `line/5.2`, so an integration branch is made between the two
+          to resolve the issue.
+        * Deletion: This branch is deleted either when `line/5.1` is no longer
+          maintained (and the bug fix is not relevant) or when merged into
+          `line/5.2`. (Or if `line/5.2` is also deleted.)
+        * Dependencies: `line/5.1` and `line/5.2`.
+        * Dependants: Only a release candidate for 5.2 should be a dependant of
+          this integration branch.
+    * **`integrate/features-a-b-c`**:
+        * Creation: `integrate/a-b`, `integrate/b-c`, and `integrate/a-c` all
+          needed to be created, so to put them into the same release, all must
+          be merged together.
+        * Deletion: When any of feature A, B, or C is released, it will cause a
+          cascading deletion of integration branches. For example, if C is released first:
+            * `integrate/a-c` should be merged into feature A's branch and deleted.
+            * `integrate/b-c` should be merged into feature B's branch and deleted.
+            * `integrate/a-b-c` should be merged into `integrate/a-b` and deleted.
 
 ### Release Candidates
 
