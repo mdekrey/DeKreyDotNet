@@ -327,6 +327,40 @@ additional changes for the two changes to work together.
 
 ### Release Candidates
 
+Release candidates are special branch types used for gathering multiple changes
+together into one release. A release candidate is only useful so long as it is a
+realistic location to test the changes; if it is not actually a "candidate for
+release", it is probably not useful. However, some teams like to test all
+features in an integrated environment (such as a `develop` branch); a release
+candidate pattern may be used for that, too.
+
+* **Creation**: Release candidates may be created any time two or more changes
+  need to be tested together.
+* **Deletion**: A release candidate should be deleted when merged to the service
+  line. This merge may also be tagged.
+
+    _Note:_ A release candidate should be replaced whenever its dependencies
+    change; do not make modifications to a release candidate.
+* **Dependencies**: Any branch type, including other release candidates, may be
+  a dependency of a release candidate.
+* **Dependants**: No branches other than release candidates should be a
+  dependant of a release candidate.
+* **Examples**:
+    * **`rc/1.0.1`**:
+        * Created when features are ready for an update to `line/1.0`
+        * Deleted when merged into `line/1.0` or deleted and recreated when any
+          dependency changes.
+        * Dependencies should be all features slated for `line/1.0`. These feaures should either have a
+          dependency of `line/1.0` or `line/1.0` should also be a dependency
+          here, too.
+        * `rc/1.1.0` may be a dependant of `rc/1.0.1`.
+    * **`rc/2024-11-01`**:
+        * Created when the first feature for the Nov 1 release is ready for testing.
+        * Deleted when merged into `main` or deleted and recreated when any
+          dependency changes.
+        * Dependencies should be all features slated for the next release.
+        * The only dependants should be other future release candidates.
+
 ## Common Workflows
 
 
