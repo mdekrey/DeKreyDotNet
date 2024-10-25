@@ -334,6 +334,11 @@ release", it is probably not useful. However, some teams like to test all
 features in an integrated environment (such as a `develop` branch); a release
 candidate pattern may be used for that, too.
 
+Also, **not all teams need release candidates**. If you're following a CI/CD
+workflow where every time code is merged to the service line it deployed to the
+production environment (or packaged for installation by end users), you do not
+need Release Candidates; just test a feature branch for deployment.
+
 * **Creation**: Release candidates may be created any time two or more changes
   need to be tested together.
 * **Deletion**: A release candidate should be deleted when merged to the service
@@ -363,6 +368,118 @@ candidate pattern may be used for that, too.
 
 ## Common Workflows
 
+Currently these workflows are written to leverage the [Scalable Git Branching
+Tools][scalable-git-branching-tools], though the naming conventions match the
+old style. I'll update this article with an update to the tool that uses the new
+terminology... hopefully soon.
+
+### All devs should know these workflows
+
+* Frequently (every day? after coming back from a meeting?) devs should be
+  immediately propagating dependencies:
+
+    ```sh
+    git pull-upstream -recurse
+    ```
+
+    This will error if there are merge conflicts; team leads should be notified
+    and conflicts should be resolved swiftly, ideally via integration branches
+    to be added as dependencies.
+
+* Create a new feature branch with only the service line as the only dependency:
+
+    ```sh
+    git new feature/new-feature
+    ```
+
+* Create a new feature or integration branch with other dependencies:
+
+    ```sh
+    git new feature/new-feature -upstreamBranches branch1,branch2,branch3
+    ```
+
+    This will succeed even if there are conflicts, but those should be manually
+    resolved swiftly.
+
+* Combine branch depenencies, such as when a sub-feature has been merged into its parent
+  feature
+
+    ```sh
+    git refactor-upstream -source feature/login-form-validation -target feature/login-page -combine
+    ```
+
+    If there were any other dependencies in `feature/login-form-validation`,
+    they will get added to `feature/login-page`.
+
+### Uncommon flows that may be used by most devs:
+
+* Replace branch dependencies, such as after renaming a branch
+
+    ```sh
+    git refactor-upstream -source old-branch-name -target new-branch-name -rename
+    ```
+
+    This will replace the new branch with the old branch, transferring all dependencies.
+
+* List dependencies of a branch, recursively:
+
+    ```sh
+    git show-upstream branch-name -recurse
+    ```
+
+    `-recurse` may be left out if you only want immediate dependencies.
+
+* List dependants of a branch, recursively:
+
+    ```sh
+    git show-downstream branch-name -recurse
+    ```
+
+    `-recurse` may be left out if you only want immediate dependants.
+
+* Change your local default dependency:
+
+    ```sh
+    git tool-config -defaultServiceLine line/6.0
+    ```
+
+* Allow use with Azure DevOps or other git server that gives errors about atomic
+  pushes (must be done for each developer on installation if this is needed):
+
+    ```sh
+    git tool-config -disableAtomicPush
+    ```
+
+### "Branch managers" or team leads:
+
+* Create a release candidate from multiple dependencies:
+
+    ```sh
+    git rc rc/2024-11-01 -upstreamBranches branch1,branch2,branch3
+    ```
+
+    This will fail if there are conflicts; integration branches should be used
+    to resolve these. `-force` may be added to overwrite an existing release
+    candidate.
+
+* Update a release candidate with changes to dependencies:
+
+    ```sh
+    git rebuild-rc rc/2024-11-01 -with branch4,branch5 -without branch2,branch3
+    ```
+
+    This will fail if there are conflicts; integration branches should be used
+    to resolve these. Both `-with` and `-without` are optional.
+
+* Remove a branch from dependency lists, redirecting all dependencies that were
+  on it to the target.
+
+    ```sh
+    git refactor-upstream -source old-branch-name -target new-branch-name -remove
+    ```
+
+    This can be used to "remove" a merged infrastructure branch that was merged
+    directy into a service line. Use the more standard "Combine" above in most cases.
 
 ## Special Thanks
 
