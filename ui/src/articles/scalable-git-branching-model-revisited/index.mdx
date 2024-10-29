@@ -1,0 +1,517 @@
+---
+title: 'A scalable Git branching model, Revisited'
+date: '2024-10-23'
+draft: false
+author: Matthew DeKrey
+tags:
+  - git
+excerpt: Explanation of and updates to the Scaled Git Branching Model
+---
+
+Recently, I had a discussion with Abraham French, one of the original co-authors
+of the Scalable Git Branching Model, and we realized that it is time for some
+updates.
+
+In the seven years since I wrote up the original definitive article on the
+[Scalable Git Branching Model][scaled-git-flow], I've led dozens of teams in
+thinking through branching using it, developing custom processes for each. To
+name a few:
+
+* Small projects that developers use in mentorship can leverage the Scalable Git
+  Branching model in a way that mostly looks like a CI/CD workflow, with `main`
+  being the latest working code.
+* Small professional projects through a prototype-to-release phase where the
+  project did not have a production environment initially.
+* Medium-sized projects with a small number of teams of developers using a
+  "release train"-like process with "release candidates", including pre-planned
+  cascading releases.
+* One large project with many teams, each with their own release candidates, all
+  keeping them isolated.
+
+The common thread in all of them is that the Scalable Git Branching Model
+assists developers in thinking about dependency management at the branch level.
+Unfortunately, the original analogy used to explain how dependencies work was
+incorporated into the terminology of the model, which warrants updates.
+
+## The Analogy
+
+Imagine your codebase like a river. We mark a few pools and lakes along the way
+as "branches", but code ultimately flows downstream over time. Each time a
+developer makes a change, it's like dye being added to the water - it's really
+hard to remove once it's been combined with other code. Tributaries from other
+teams flow in and can affect significantly the quality and shape of our river,
+so we want to keep our water as pure as we can until we know it's safe to use.
+Eventually, the "safe" code should flow into a spot where QA can check it (like
+a release candidate branch) before it is released.
+
+This analogy really is a way to think about dependency management, and while the
+analogy is useful, for those classically trained in dependency management
+(especially project managers), the branching model was unnecessarily difficult
+to understand and help direct.
+
+## The Business Case
+
+In addition to standard Git features like working collaboratively, this
+branching model supports:
+
+* Common scenarios:
+    * Gated releases with QA/management final approval.
+    * Tracking features in a release.
+    * Tagged releases for auditing.
+* Unique scenarios that other branching models don't usually support include:
+    * Planning for future releases.
+    * Supporting multiple past releases.
+    * Dropping features from a release.
+    * Framework/infrastructure branches that do not correspond to a single
+      feature.
+
+## An Aside: Model vs. Strategy
+
+This article refers to a "branching model", but most developers want to know
+what the "branching strategy" is for a team. What's the difference between a
+model and a strategy?
+
+* A model is a way to think about a particular problem set. By having a common
+  model for a problem set, people can be assured they're using the same terms
+  the same way and can construct solutions that may not have been outlined by a
+  strategy.
+* A strategy, in this sense, is more of a collection of playbooks, intended to
+  help team members follow a set of proceedures without needing to reason about
+  every decision.
+
+Having both a model and a strategy is important in both debugging issues that
+arise and in keeping cognitive load low on the team.
+
+## The Changes
+
+Previous versions of the branching model talked about upstream/downstream, but
+this version will use dependencies/dependants. We'll also highlight a couple of
+strategies using this model at the end of the article.
+
+## The branching model: The Principles
+
+The following principles are the main tenants of the branching model:
+
+* **Isolation until Finalized**: Keep changes isolated from unrelated changes
+  until both timeline and quality have been confirmed or that the change is not
+  unrelated and is actually a dependency.
+* **Multiple Dependencies**: Any change may have multiple dependency tasks.
+* **Immediate Propagation to Dependents**: Any new change to a task should be
+  immediately reflected in dependant tasks.
+    * Further note: this should also not skip dependency levels; if there is a
+      dependency chain such that C depends on B and B depends on A, do not merge
+      A directly into C, but ensure that A is merged into B first, then B into C.
+
+The following principles come as a course of understanding the above principles
+thoroughly, but are worth stating directly; for the math-major readers, these
+are theorems.
+
+* **No backwards propagation.** Once a change is code-complete, do not
+  automatically merge it into its dependencies; this breaks the "Isolation until
+  Finalized" principle. Instead, keep it separated until your team's strategy
+  dictates that it is sufficiently tested to be merged into a dependency.
+* **No branch is sacred.** Once a branch has outlived its usefulness (either
+  because it is merged or if it is corrupted with untested code), it should be
+  removed. In your strategy, every branch should have a clear start and end.
+* **Move infrastructure out.** Infrastructure changes, such as updates to CI/CD
+  processes, package dependencies, etc. should be tracked as their own changes
+  to have dependants of their own.
+* **Limit dependencies.** Also part of "Isolation until Finalized", don't take
+  on a dependency for a change that isn't needed.
+
+## Considerations for your Branching Strategy
+
+Writing a branching strategy is a critical part of ensuring a healthy software
+development life-cycle. You may want to make some changes, but here are some
+pointers to keep in mind.
+
+1. **How many versions do you need to maintain?** Most projects only need to
+   maintain the latest release, but sometimes you need to maintain multiple back
+   releases, or multiple related product lines, such as a "community" version
+   and a "professional" version. If you can say "professional has everything
+   community has plus..." then your community version is a dependency of your
+   professional version, and you could use multiple Service Lines (below) to
+   track that.
+2. **How frequently do you release?** If you release every feature as soon as it
+   is ready, you don't need a separate branch type to represent "release
+   candidates". However, if you release once every other week with a batch of
+   changes, take a look at the Release Candidate (below) branch types to track
+   them.
+3. **Are there fixed environments, other than your production environment(s)?**
+   If you have stable "QA", "Staging", "Dev", "Training", or "Demo"
+   environments, rather than using a branch to track them, consider using a tag
+   that points to a commit when deployed. By not having a branch for each
+   environment, you can avoid that branch from deviating from any service line;
+   it only becomes out of date.
+
+Keep in mind that these are actually business-related questions, not technology
+questions. If you are a technical decision-maker writing the branching strategy,
+make sure you take into account the needs of the business as you write the
+process.
+
+Also, keep in mind that, because this branching model lends itself to designing
+strategies, you do not need to design every edge case at the beginning of the
+project: keep it super simple at first, and add extra workflows as needed.
+
+## Common Branch Types
+
+The following are a few branch type definitions; include the ones you need in
+your own branching strategy, and consider the rest for future expansions. See
+the Common Workflows section below for typical development workflows.
+
+### Service Lines
+
+A "service line" represents a line of your product, application, or library that
+is actively maintained. This could represent a version of the codebase (such as
+the "community" and "professional" example above), a handful of the most recent
+releases to support ("v1.0", "v1.1", and "v2.0"), or you may have only one
+"main" service line. Either way, a service line has the following characteristics:
+
+* **Creation**: A service line branch should be created when it is apparent that
+  a different version of the software needs to be maintained. This is likely a
+  business decision, but can correlate to making a new product or a release of
+  new features separately from an existing product line.
+* **Deletion**: A service line should be deleted when it is no longer
+  maintained. Remember that the previous history will still exist, and can be
+  referenced through tags.
+* **Dependencies**: Service lines should have only one type of dependency:
+    * Other service lines
+* **Dependants**: Feature branches, integration branches, and release candidates
+  may all be dependants of service lines, but a service line when it is the only
+  service line in a project typically has no dependants.
+* **Sub-types**: Service lines can be `main`, a long-term-support branch, a
+  seasonal version of the website, or a short-lived demo.
+* **Examples**
+    * **`main` or `trunk`**:
+        * Created when the project is started.
+        * Deleted/archived when the project is no longer maintained.
+        * Dependencies: All features.
+        * Dependants: None.
+    * **`line/5.2`**:
+        * Created when v5.2.0 is released.
+        * Deleted/archived when 5.2.x is no longer maintained.
+        * Dependencies: `line/5.1`.
+        * Dependants: `line/5.3` or `line/6.0`, depending on which exists, and
+          any features intended for `line/5.2` or a new line based on this
+          branch (such as when preparing for `line/6.0`).
+    * **`line/2024-black-friday-sale`**:
+        * Created from `main` when features specific to the 2024 Black Friday
+          Sale are ready for release.
+        * Deleted/archived after `main` replaces the 2024 Black Friday Sale
+          version of the site (such as when the Cyber Monday line is released).
+        * Dependencies: `main`.
+        * Dependants: Features intended only for the Black Fridy Sale.
+
+### Feature Branches
+
+A "feature branch" is any branch where changes are actively made. This can be
+for any reason: adding features, modifying features, bug fixes, updating package
+dependencies, improving application framework or reducing boilerplate, etc.
+These branches even can be used for collections of changes (epics, etc.) that
+will be released as a unit, with descendant feature branches that represent
+either sub-features or even sub-tasks!
+
+* **Creation**: A feature branch is created when there is a reason to change
+  code. This usually corresponds to a ticket in your team's ticket-tracking
+  system, but some teams prefer "infrastructure" changes to be entirely internal
+  to the dev team.
+
+    _Note:_ If you don't track "infrastructure" changes as tickets, it reduces
+    your project management's team ability to help manage dependency. As tech
+    leaders, we should always be leveraging our full teams, even those outside
+    of the engineers, to their strenghts!
+* **Deletion**: A feature should be removed when it is integrated to its
+  destination, either into a service line or to its parent feature branch. (Be
+  cautious when removing it if only moved into another feature branch, as some
+  organizations will change their minds and want to roll out a feature on its
+  own.) A feature should also be removed if the change is no longer desired.
+* **Dependencies**: Features typically only have two types of dependencies, but
+  occasionally have others:
+    * A service line, typically where the feature will eventually reside or
+      where the bug originated.
+    * Other feature branches, as in the case of using epic branches, or
+      infrastructure changes.
+    * An integration branch may be added as a dependency of a feature branch if
+      two or more dependencies have conflicts and neither is in the dependency
+      tree of the other.
+* **Dependants**: Feature branches will typically have feature branches,
+  integration branches, and release candidates as dependants.
+* **Sub-types**: Bug fix branches, task branches, and infrastructure branches
+  all count as feature branches.
+* **Examples**:
+    * **`feature/login-page`**:
+        * Created when the login page epic is started.
+        * Deleted when the login page epic is released to its respective service
+          line.
+        * Dependency is `feature/login-apis` from the backend team, which has a
+          dependency on `main`. There may also be a dependency on
+          `infra/router-upgrade`.
+        * Dependants include `task/login-page-validation` and
+          `feature/forgot-password-page`, and possibly a release candidate
+          branch.
+    * **`infra/router-upgrade`**:
+        * Created when the front-end team starts upgrading the router packages
+          and other routing changes.
+        * Deleted when released to the appropriate service line.
+        * The only dependency is `main`, but could include other feature branches.
+        * Dependants include `feature/login-page` and other feature branches. If
+          team leadership chooses, it could be added to a release candiate
+          branch.
+    * **`task/login-page-validation`**:
+        * Created when a developer starts working on the subtask to add
+          validation to the login page.
+        * Removed when merged into `feature/login-page`.
+        * Dependency is the `feature/login-page`.
+        * A dependant  could include `task/submit-login-form`.
+    * **`bugfix/homepage-typo`**:
+        * Created when a typo is detected on the homepage, which was already
+          released to main.
+        * Deleted when released to main.
+        * The only dependency is `main`.
+        * No dependants.
+
+### Integration Branches
+
+An "integration branch" is any branch where two (or more) dependencies are
+integrated together; no changes should be made on an integration branch other
+than to make sure those dependencies work well together. These should be created
+any time there are either code conflicts or business logic that requires
+additional changes for the two changes to work together.
+
+* **Creation**: Integration branches are created whenever two dependencies
+  slated for the same dependant have issues working together, either technical
+  (such as a merge conflict) or logical (such as needing to handle both OAuth
+  and password-based logins.)
+* **Deletion**: An integration branch is deleted when it only has one branch as
+  a dependency, such as when one dependency takes on a direct dependency of the
+  other(s). When this happens, the integration branch should be "integrated"
+  into the other dependency (unless the reason for deletion was cancelling a
+  feature.)
+* **Dependencies**: An integration branch can have any other branch type (other
+  than release candidates) as a dependency. An integration branch should either
+  have exactly two dependencies unless all dependencies are integration
+  branches.
+* **Dependants**: An integration branch can have any other branch type as a
+  dependant.
+* **Examples**:
+    * **`integrate/homepage-router-upgrade`**:
+        * Creation: The team decided that the homepage feature (while in
+          progress) should not add a dependency to the `infra/router-upgrade`
+          before its release, so an integration branch was created to prevent
+          conflicts when releasing either.
+        * Deletion: When either `infra/router-upgrade` or `feature/homepage` are
+          released to `main`, this branch can be merged into the other branch
+          then deleted.
+        * Dependencies: `infra/router-upgrade` and `feature/homepage`.
+        * Dependants: Any release candidate branch, or features that need to
+          depend on both the homepage and router upgrade.
+    * **`integrate/lines-5.1-5.2`**:
+        * Creation: A bugfix to `line/5.1` conflicts with a refactoring applied
+          only to `line/5.2`, so an integration branch is made between the two
+          to resolve the issue.
+        * Deletion: This branch is deleted either when `line/5.1` is no longer
+          maintained (and the bug fix is not relevant) or when merged into
+          `line/5.2`. (Or if `line/5.2` is also deleted.)
+        * Dependencies: `line/5.1` and `line/5.2`.
+        * Dependants: Only a release candidate for 5.2 should be a dependant of
+          this integration branch.
+    * **`integrate/features-a-b-c`**:
+        * Creation: `integrate/a-b`, `integrate/b-c`, and `integrate/a-c` all
+          needed to be created, so to put them into the same release, all must
+          be merged together.
+        * Deletion: When any of feature A, B, or C is released, it will cause a
+          cascading deletion of integration branches. For example, if C is released first:
+            * `integrate/a-c` should be merged into feature A's branch and deleted.
+            * `integrate/b-c` should be merged into feature B's branch and deleted.
+            * `integrate/a-b-c` should be merged into `integrate/a-b` and deleted.
+
+### Release Candidates
+
+Release candidates are special branch types used for gathering multiple changes
+together into one release. A release candidate is only useful so long as it is a
+realistic location to test the changes; if it is not actually a "candidate for
+release", it is probably not useful. However, some teams like to test all
+features in an integrated environment (such as a `develop` branch); a release
+candidate pattern may be used for that, too.
+
+Also, **not all teams need release candidates**. If you're following a CI/CD
+workflow where every time code is merged to the service line it deployed to the
+production environment (or packaged for installation by end users), you do not
+need Release Candidates; just test a feature branch for deployment.
+
+* **Creation**: Release candidates may be created any time two or more changes
+  need to be tested together.
+* **Deletion**: A release candidate should be deleted when merged to the service
+  line. This merge may also be tagged.
+
+    _Note:_ A release candidate should be replaced whenever its dependencies
+    change; do not make modifications to a release candidate.
+* **Dependencies**: Any branch type, including other release candidates, may be
+  a dependency of a release candidate.
+* **Dependants**: No branches other than release candidates should be a
+  dependant of a release candidate.
+* **Examples**:
+    * **`rc/1.0.1`**:
+        * Created when features are ready for an update to `line/1.0`
+        * Deleted when merged into `line/1.0` or deleted and recreated when any
+          dependency changes.
+        * Dependencies should be all features slated for `line/1.0`. These feaures should either have a
+          dependency of `line/1.0` or `line/1.0` should also be a dependency
+          here, too.
+        * `rc/1.1.0` may be a dependant of `rc/1.0.1`.
+    * **`rc/2024-11-01`**:
+        * Created when the first feature for the Nov 1 release is ready for testing.
+        * Deleted when merged into `main` or deleted and recreated when any
+          dependency changes.
+        * Dependencies should be all features slated for the next release.
+        * The only dependants should be other future release candidates.
+
+## Common Workflows
+
+Currently these workflows are written to leverage the [Scalable Git Branching
+Tools][scalable-git-branching-tools], though the naming conventions match the
+old style. I'll update this article with an update to the tool that uses the new
+terminology... hopefully soon.
+
+### All devs should know these workflows
+
+* Frequently (every day? after coming back from a meeting?) devs should be
+  immediately propagating dependencies:
+
+    ```sh
+    git pull-upstream -recurse
+    ```
+
+    This will error if there are merge conflicts; team leads should be notified
+    and conflicts should be resolved swiftly, ideally via integration branches
+    to be added as dependencies.
+
+* Create a new feature branch with only the service line as the only dependency:
+
+    ```sh
+    git new feature/new-feature
+    ```
+
+* Create a new feature or integration branch with other dependencies:
+
+    ```sh
+    git new feature/new-feature -upstreamBranches branch1,branch2,branch3
+    ```
+
+    This will succeed even if there are conflicts, but those should be manually
+    resolved swiftly.
+
+* Combine branch depenencies, such as when a sub-feature has been merged into its parent
+  feature
+
+    ```sh
+    git refactor-upstream -source feature/login-form-validation -target feature/login-page -combine
+    ```
+
+    If there were any other dependencies in `feature/login-form-validation`,
+    they will get added to `feature/login-page`.
+
+### Uncommon flows that may be used by most devs:
+
+* Replace branch dependencies, such as after renaming a branch
+
+    ```sh
+    git refactor-upstream -source old-branch-name -target new-branch-name -rename
+    ```
+
+    This will replace the new branch with the old branch, transferring all dependencies.
+
+* List dependencies of a branch, recursively:
+
+    ```sh
+    git show-upstream branch-name -recurse
+    ```
+
+    `-recurse` may be left out if you only want immediate dependencies.
+
+* List dependants of a branch, recursively:
+
+    ```sh
+    git show-downstream branch-name -recurse
+    ```
+
+    `-recurse` may be left out if you only want immediate dependants.
+
+* Change your local default dependency:
+
+    ```sh
+    git tool-config -defaultServiceLine line/6.0
+    ```
+
+* Allow use with Azure DevOps or other git server that gives errors about atomic
+  pushes (must be done for each developer on installation if this is needed):
+
+    ```sh
+    git tool-config -disableAtomicPush
+    ```
+
+### "Branch managers" or team leads:
+
+* Create a release candidate from multiple dependencies:
+
+    ```sh
+    git rc rc/2024-11-01 -upstreamBranches branch1,branch2,branch3
+    ```
+
+    This will fail if there are conflicts; integration branches should be used
+    to resolve these. `-force` may be added to overwrite an existing release
+    candidate.
+
+* Update a release candidate with changes to dependencies:
+
+    ```sh
+    git rebuild-rc rc/2024-11-01 -with branch4,branch5 -without branch2,branch3
+    ```
+
+    This will fail if there are conflicts; integration branches should be used
+    to resolve these. Both `-with` and `-without` are optional.
+
+* Remove a branch from dependency lists, redirecting all dependencies that were
+  on it to the target.
+
+    ```sh
+    git refactor-upstream -source old-branch-name -target new-branch-name -remove
+    ```
+
+    This can be used to "remove" a merged infrastructure branch that was merged
+    directy into a service line. Use the more standard "Combine" above in most cases.
+
+## Special Thanks
+
+Special thanks to the many developers over the past years who have participated
+in code review, contributions to automation, and simply given feedback about the
+process. To name a few, in no particular order:
+
+* Abraham French, an original co-author of this branching model initially who
+  helped formulate this update.
+* Adam Brill, an original co-author of this branching model who encouraged its
+  use at Principle Studios.
+* Dan Andresen, who has helped several teams use this process and talk about it
+  at length.
+* Andrew Owen, who taught me the glories of `git merge-tree`, without which the
+  [command line tools][scalable-git-branching-tools] would be significantly slower.
+* Tony Mishler, who has led a team with the project and contributed features to
+  the [command line tools][scalable-git-branching-tools].
+* Phillip Jacobs, who was one of the most recent "branch managers" on the latest
+  version of the branching model.
+* Dan Kurfirst, who taught me several things about how to diagnose and identify
+  conflicts to create integration branches.
+* Michael Geise, who contributed updates to the [command line
+  tools][scalable-git-branching-tools] to allow them to work with Azure DevOps.
+* Jordan Rhode, who contributed frequently to the [command line
+  tools][scalable-git-branching-tools] and led a team to use the model entirely
+  without my guidance.
+* Josh Berres, who wrote a significant amount of automation to check and verify
+  merging rules for one project's strategy.
+* Shelly Brill, a project manager who learned the model's old terms well enough
+  that she helped multiple teams manage "upstreams", aka dependencies.
+* Kris Henderson, who learned the model well enough that he helped me implement
+  it on smaller projects.
+
+[scaled-git-flow]: /articles/scaled-git-flow/
+[scalable-git-branching-tools]: https://github.com/PrincipleStudios/scalable-git-branching-tools/
